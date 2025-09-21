@@ -1,0 +1,11 @@
+{
+  # Override values used by the flake. Rename/copy this file to `_personal.nix`
+  # (gitignored) and fill in your real details.
+
+  user = {
+    username = "alice";
+    name = "Alice Example";
+    email = "alice@example.com";
+    timeZone = "Etc/UTC";
+  };
+}

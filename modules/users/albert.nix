@@ -1,5 +1,9 @@
 let
-  userName = "albert";
+  _p = builtins.pathExists ./_personal.nix;
+  personal = if _p then import ./_personal.nix else { };
+  userName = personal.user.username or "albert";
+  name = personal.user.name or "Joe Mama";
+  email = personal.user.email or "albert@example.com";
 in
 {
   flake.modules.nixos.${userName} = {
@@ -11,7 +15,7 @@ in
         "audio"
         "video"
       ];
-      description = "Albert";
+      description = "${name}";
     };
   };
 
@@ -24,8 +28,8 @@ in
 
       programs.git = {
         enable = true;
-        userName = lib.mkDefault "Albert";
-        userEmail = lib.mkDefault "albert@example.com";
+        userName = lib.mkDefault "${name}";
+        userEmail = lib.mkDefault "${email}";
       };
     };
 }
