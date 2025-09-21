@@ -24,15 +24,6 @@
       ];
     };
 
-  flake.modules.homeManager.essential-pkgs =
-    { ... }:
-    {
-      home.packages = [
-        # Additional user-space tools can go here
-        # These tools are available per-user rather than system-wide
-      ];
-    };
-
   # Expose a package bundle for this aspect
   perSystem =
     { pkgs, ... }:

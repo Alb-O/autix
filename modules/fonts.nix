@@ -59,7 +59,7 @@
 
       fonts.fontconfig = {
         enable = true;
-        defaultFonts = fontDefs.defaultFonts;
+        inherit (fontDefs) defaultFonts;
       };
     };
 }

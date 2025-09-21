@@ -1,6 +1,10 @@
 {
   flake.modules.nixos.thermal =
-    { lib, pkgs, ... }:
+    {
+      lib,
+      pkgs,
+      ...
+    }:
     {
       hardware.fancontrol = {
         enable = true;

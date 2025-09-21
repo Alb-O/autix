@@ -36,8 +36,8 @@
         enable = true;
         fonts = [
           {
-            name = fonts.mono.name;
-            package = fonts.mono.package;
+            inherit (fonts.mono) name;
+            inherit (fonts.mono) package;
           }
         ];
         extraConfig = "font-size=${toString fonts.mono.size.large}";

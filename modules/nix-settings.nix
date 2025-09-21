@@ -1,6 +1,10 @@
 {
   flake.modules.nixos.nix-settings =
-    { pkgs, config, ... }:
+    {
+      pkgs,
+      config,
+      ...
+    }:
     {
       nix = {
         optimise.automatic = true;
