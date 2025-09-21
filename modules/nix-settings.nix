@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.settings =
+  flake.modules.nixos.nix-settings =
     { pkgs, config, ... }:
     {
       nix = {
