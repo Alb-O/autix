@@ -6,6 +6,14 @@
 > - Automatic updates: Regenerate your `flake.nix` with a single command (`nix run ".#write-flake"`) whenever your options change.
 > - Flake as dependency manifest: Use `flake.nix` only for declaring dependencies, not for complex Nix code.
 
-- All nix files insde the `modules` directory are recursively imported using `import-tree` and output automatically.
+- All nix files inside the `modules` directory are recursively imported using `import-tree` and output automatically.
 
-- During flake evals, if `tree-fmt` continues to complain about the flake.lock or flake.nix, try `nix run ".#write-flake"`
+- Files with `_` anywhere in their path are ignored by `import-tree`. Use this for hardware configs or files that should not be auto-imported.
+
+- All files in `modules/` must be valid flake-parts modules. Regular NixOS modules should be placed in `_` prefixed directories (or outside of `modules/`) and imported manually.
+
+- Arguments like `pkgs` must be declared at the module function level, not at the flake-parts module level. Use `{ ... }: { flake.modules.nixos.aspect = { pkgs, ... }: { ... }; }` not `{ pkgs, ... }: { flake.modules.nixos.aspect = { ... }; }`.
+
+- New files must be added to git before Nix can see them in flake evaluations. Use `git mv` if renaming/moving files.
+
+- Import paths in dendritic modules are relative to the file location, not the flake root.

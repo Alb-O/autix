@@ -2,17 +2,22 @@
 let
   inherit (inputs.nixpkgs.lib) nixosSystem;
 
-  linux =
+  desktopLinux =
     system: name:
     nixosSystem {
       inherit system;
-      modules = [
-        inputs.self.modules.nixos.boot
-        inputs.self.modules.nixos.networking
-        inputs.self.modules.nixos.i18n
-        inputs.self.modules.nixos.nix-settings
-        inputs.self.modules.nixos.system-packages
-        inputs.self.modules.nixos.${name}
+      modules = with inputs.self.modules.nixos; [
+        boot
+        networking
+        i18n
+        nix-settings
+        essential-pkgs
+        graphics
+        display-manager
+        thermal
+        ssh
+        fonts
+
         inputs.self.modules.nixos.${name}
         {
           networking.hostName = name;
@@ -24,6 +29,6 @@ let
 in
 {
   flake.nixosConfigurations = {
-    example = linux "x86_64-linux" "example";
+    desktop = desktopLinux "x86_64-linux" "desktop";
   };
 }
