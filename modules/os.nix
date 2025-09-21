@@ -8,7 +8,7 @@ let
       inherit system;
       modules = [
         inputs.self.modules.nixos.nixos
-        (import ../../hosts/${name}/configuration.nix)
+        (import ../hosts/${name}/configuration.nix)
         {
           networking.hostName = name;
           nixpkgs.hostPlatform = system;

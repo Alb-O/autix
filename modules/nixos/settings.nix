@@ -1,6 +1,5 @@
 {
-
-  flake.modules.nixos.nix-settings =
+  flake.modules.nixos.settings =
     { pkgs, config, ... }:
     {
       nix = {
@@ -19,7 +18,8 @@
           automatic = true;
           options = "--delete-older-than 7d";
         };
+        channel.enable = false;
       };
+      nixpkgs.config.allowUnfree = true;
     };
-
 }
