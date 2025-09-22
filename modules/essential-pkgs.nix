@@ -1,27 +1,38 @@
+_:
+let
+  essentialPackages =
+    pkgs: with pkgs; [
+      # Text editors
+      vim
+      nano
+
+      # Git
+      git
+
+      # Network tools
+      curl
+      wget
+
+      # Development tools
+      just
+      jq
+
+      # The 'just accidently booted into niri with no config' start pack
+      firefox
+      alacritty
+    ];
+in
 {
   flake.modules.nixos.essential-pkgs =
     { pkgs, ... }:
     {
-      environment.systemPackages = with pkgs; [
-        # Text editors
-        vim
-        nano
+      environment.systemPackages = essentialPackages pkgs;
+    };
 
-        # Git
-        git
-
-        # Network tools
-        curl
-        wget
-
-        # Development tools
-        just
-        jq
-
-        # The 'just accidently booted into niri with no config' start pack
-        firefox
-        alacritty
-      ];
+  flake.modules.homeManager.essential-pkgs =
+    { pkgs, lib, ... }:
+    {
+      home.packages = lib.mkDefault (essentialPackages pkgs);
     };
 
   # Expose a package bundle for this aspect
@@ -30,17 +41,7 @@
     {
       packages.essential-pkgs-bundle = pkgs.symlinkJoin {
         name = "essential-pkgs";
-        paths = with pkgs; [
-          vim
-          nano
-          git
-          curl
-          wget
-          just
-          jq
-          firefox
-          alacritty
-        ];
+        paths = essentialPackages pkgs;
       };
     };
 }

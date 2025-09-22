@@ -1,3 +1,4 @@
+_:
 let
   _p = builtins.pathExists ./_personal.nix;
   personal = if _p then import ./_personal.nix else { };
