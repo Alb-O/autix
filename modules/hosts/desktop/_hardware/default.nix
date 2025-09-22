@@ -1,12 +1,12 @@
 {
-  ...
-}:
-{
   imports = [
     ./boot
-    ./cpu/amd.nix
+    ./cpu
     ./filesystem
+    ./gpu
     ./kernel
-    ./system.nix
+    ./networking
+    ./system
+    ./thermal
   ];
 }

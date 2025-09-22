@@ -1,4 +1,4 @@
-_: {
+{
   boot = {
     # Disable USB autosuspend to prevent mouse detection issues
     # Force use of acpi-cpufreq instead of amd_pstate to prevent initialization errors

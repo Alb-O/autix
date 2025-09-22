@@ -18,13 +18,8 @@
 #⣿⡇⣿⠀⠀⠀⠀⠀⠀⠈⠉⠉⢉⡹⣿⣿⡟⣉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⢰⣥
 #
 {
-  description = "The cure to my autixm";
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
-
-  nixConfig = {
-    warn-dirty = false;
-  };
 
   inputs = {
     allfollow = {
@@ -46,6 +41,9 @@
     };
     import-tree = {
       url = "github:vic/import-tree";
+    };
+    nix-auto-follow = {
+      url = "github:fzakaria/nix-auto-follow";
     };
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixpkgs-unstable";

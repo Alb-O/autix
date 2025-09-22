@@ -3,9 +3,7 @@
     { pkgs, ... }:
     {
       imports = [
-        ./_hardware/desktop.nix
-        ./_hardware/gpu/nvidia.nix
-        ./_hardware/thermal/fancontrol.nix
+        ./_hardware
       ];
       networking.hostName = "desktop";
       environment.systemPackages = with pkgs; [

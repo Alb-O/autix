@@ -7,8 +7,6 @@ let
     nixosSystem {
       inherit system;
       modules = with inputs.self.modules.nixos; [
-        boot
-        networking
         i18n
         nix-settings
         essential-pkgs
