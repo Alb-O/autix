@@ -12,9 +12,7 @@ let
         i18n
         nix-settings
         essential-pkgs
-        graphics
         display-manager
-        thermal
         ssh
         fonts
 
