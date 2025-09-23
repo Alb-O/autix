@@ -17,6 +17,8 @@ in
         "video"
       ];
       description = "${name}";
+      hashedPassword = personal.user.hashedPassword or null;
+      initialPassword = personal.user.initialPassword or "changeme";
     };
   };
 

@@ -18,6 +18,7 @@
           ".leaderrc"
           "**/.gitignore"
           "*.example"
+          "*.kdl"
         ];
       };
     };

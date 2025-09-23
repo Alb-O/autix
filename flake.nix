@@ -42,6 +42,14 @@
     import-tree = {
       url = "github:vic/import-tree";
     };
+    niri-flake = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:sodiboo/niri-flake";
+    };
     nix-auto-follow = {
       url = "github:fzakaria/nix-auto-follow";
     };

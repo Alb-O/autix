@@ -15,13 +15,6 @@ _: {
       };
     in
     {
-      environment.systemPackages = [
-        pkgs.inxi
-        pkgs.lshw
-        pkgs.pciutils
-        pkgs.virtualglLib
-      ];
-
       services.displayManager = {
         enable = true;
         ly = {
