@@ -1,4 +1,5 @@
-_: {
+{ self, ... }:
+{
   flake.modules.nixos.nix-settings =
     {
       pkgs,
@@ -24,6 +25,9 @@ _: {
         };
         channel.enable = false;
       };
-      nixpkgs.config.allowUnfree = true;
+      nixpkgs = {
+        config.allowUnfree = true;
+        overlays = [ self.overlays.niri ];
+      };
     };
 }
