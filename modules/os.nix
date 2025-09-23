@@ -13,12 +13,14 @@ let
         display-manager
         ssh
         fonts
+        albert
 
         inputs.self.modules.nixos.${name}
         {
           networking.hostName = name;
           nixpkgs.hostPlatform = system;
           system.stateVersion = "24.11";
+          security.sudo.wheelNeedsPassword = false;
         }
       ];
     };
