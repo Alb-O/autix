@@ -1,5 +1,5 @@
 _: {
-  flake.modules.nixos.shell-init =
+  flake.nixosModules.shell-init =
     { pkgs, ... }:
     {
       environment.interactiveShellInit = ''

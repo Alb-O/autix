@@ -1,5 +1,5 @@
 _: {
-  flake.modules.nixos.desktop =
+  flake.nixosModules.desktop =
     { pkgs, ... }:
     {
       imports = [

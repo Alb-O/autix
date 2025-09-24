@@ -1,5 +1,5 @@
 _: {
-  flake.modules.nixos.keyring =
+  flake.nixosModules.keyring =
     { pkgs, ... }:
     {
       services.gnome.gnome-keyring.enable = true;

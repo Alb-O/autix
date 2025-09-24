@@ -4,6 +4,7 @@ _: {
     graphical = true;
     system = "x86_64-linux";
     modules = [
+      "niri"
       "tooling-cli"
       "tooling-dev"
       "tooling-graphical"

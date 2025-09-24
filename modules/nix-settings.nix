@@ -1,6 +1,6 @@
 { self, ... }:
 {
-  flake.modules.nixos.nix-settings =
+  flake.nixosModules.nix-settings =
     {
       pkgs,
       config,

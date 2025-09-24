@@ -125,6 +125,11 @@ let
         };
       };
 
+      accounts = {
+        calendar.basePath = lib.mkDefault "${dataHome}/calendar";
+        contact.basePath = lib.mkDefault "${dataHome}/contacts";
+      };
+
       targets.genericLinux.enable = lib.mkForce false;
       programs.man.enable = false;
     };

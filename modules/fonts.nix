@@ -81,11 +81,21 @@ let
       };
     in
     {
-      inherit families packages defaults roles;
+      inherit
+        families
+        packages
+        defaults
+        roles
+        ;
     };
 
   hmModule =
-    { pkgs, config, lib, ... }:
+    {
+      pkgs,
+      config,
+      lib,
+      ...
+    }:
     let
       cfg = config.autix.fonts;
     in
@@ -108,7 +118,7 @@ let
 in
 {
   config = {
-    flake.modules.nixos.fonts =
+    flake.nixosModules.fonts =
       { pkgs, config, ... }:
       let
         cfg = config.autix.fonts;

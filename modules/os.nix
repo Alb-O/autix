@@ -6,7 +6,7 @@ let
     system: name:
     nixosSystem {
       inherit system;
-      modules = with inputs.self.modules.nixos; [
+      modules = with inputs.self.nixosModules; [
         i18n
         niri
         nix-settings
@@ -18,7 +18,7 @@ let
         fonts
         albert
 
-        inputs.self.modules.nixos.${name}
+        inputs.self.nixosModules.${name}
         {
           networking.hostName = name;
           nixpkgs.hostPlatform = system;
@@ -33,7 +33,7 @@ let
     system: name:
     nixosSystem {
       inherit system;
-      modules = with inputs.self.modules.nixos; [
+      modules = with inputs.self.nixosModules; [
         i18n
         nix-settings
         shell-init
@@ -42,7 +42,7 @@ let
         fonts
         albert
 
-        inputs.self.modules.nixos.${name}
+        inputs.self.nixosModules.${name}
         {
           networking.hostName = name;
           nixpkgs.hostPlatform = system;

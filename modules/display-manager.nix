@@ -1,6 +1,5 @@
-_:
-{
-  flake.modules.nixos.display-manager =
+_: {
+  flake.nixosModules.display-manager =
     { config, pkgs, ... }:
     let
       fontBundle = config.autix.fonts;

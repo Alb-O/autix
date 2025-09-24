@@ -1,5 +1,5 @@
 _: {
-  flake.modules.nixos.i18n = {
+  flake.nixosModules.keyboard = {
     services.keyd = {
       enable = true;
       keyboards = {

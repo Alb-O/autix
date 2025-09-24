@@ -8,7 +8,7 @@ let
 in
 {
   config = {
-    flake.modules.nixos.networking = {
+    flake.nixosModules.networking = {
       networking = {
         networkmanager.enable = lib.mkDefault true;
         firewall.enable = lib.mkDefault true;

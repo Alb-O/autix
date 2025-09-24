@@ -30,7 +30,7 @@ let
 in
 {
   config = {
-    flake.modules.nixos."essential-pkgs" =
+    flake.nixosModules."essential-pkgs" =
       { pkgs, ... }:
       {
         environment.systemPackages = essentialPackages pkgs;

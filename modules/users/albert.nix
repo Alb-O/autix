@@ -72,7 +72,7 @@ let
 in
 {
   config = {
-    flake.modules.nixos.${userName} = {
+    flake.nixosModules.${userName} = {
       users.users.${userName} = {
         isNormalUser = true;
         extraGroups = [
