@@ -35,6 +35,10 @@ in
       home.packages = lib.mkDefault (essentialPackages pkgs);
     };
 
+  _module.args.autixPackages = {
+    essential = essentialPackages;
+  };
+
   # Expose a package bundle for this aspect
   perSystem =
     { pkgs, ... }:

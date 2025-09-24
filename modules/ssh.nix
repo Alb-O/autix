@@ -13,6 +13,7 @@
   flake.modules.homeManager.ssh = {
     programs.ssh = {
       enable = true;
+      enableDefaultConfig = false;
       controlMaster = lib.mkDefault "auto";
       controlPersist = lib.mkDefault "10m";
       serverAliveInterval = lib.mkDefault 60;
@@ -22,6 +23,8 @@
         AddKeysToAgent yes
         IdentityFile ~/.ssh/id_ed25519
       '';
+
+      matchBlocks."*".addKeysToAgent = "yes";
     };
   };
 }
