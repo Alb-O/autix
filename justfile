@@ -66,7 +66,7 @@ home-build target=home_default:
     nix run github:nix-community/home-manager/master -- build --flake "path:.#${TARGET}" --impure
 
 home-switch-wsl:
-    just home-switch target=albert-wsl
+    just home-switch albert-wsl
 
 
 # ================================
