@@ -19,6 +19,7 @@
           "**/.gitignore"
           "*.example"
           "*.kdl"
+          "justfile"
         ];
       };
     };
