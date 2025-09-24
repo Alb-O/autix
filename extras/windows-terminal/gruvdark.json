@@ -1,0 +1,27 @@
+{
+  "name": "Gruvdark",
+
+  "cursorColor": "#E6E3DE",
+  "selectionBackground": "#2A404F",
+
+  "background": "#1E1E1E",
+  "foreground": "#E6E3DE",
+
+  "black": "#1E1E1E",
+  "red": "#E16464",
+  "green": "#72BA62",
+  "yellow": "#D19F66",
+  "blue": "#579DD4",
+  "purple": "#9266DA",
+  "cyan": "#00A596",
+  "white": "#D6CFC4",
+
+  "brightBlack": "#9D9A94",
+  "brightRed": "#F19A9A",
+  "brightGreen": "#9AD58B",
+  "brightYellow": "#E6BB88",
+  "brightBlue": "#8AC0EA",
+  "brightPurple": "#B794F0",
+  "brightCyan": "#2FCAB9",
+  "brightWhite": "#E6E3DE"
+}
