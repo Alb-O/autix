@@ -8,7 +8,9 @@ let
       inherit system;
       modules = with inputs.self.modules.nixos; [
         i18n
+        niri
         nix-settings
+        shell-init
         essential-pkgs
         display-manager
         ssh
@@ -34,6 +36,7 @@ let
       modules = with inputs.self.modules.nixos; [
         i18n
         nix-settings
+        shell-init
         essential-pkgs
         ssh
         fonts

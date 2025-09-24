@@ -1,18 +1,11 @@
-_: {
+_:
+{
   flake.modules.nixos.display-manager =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     let
-      fonts = {
-        mono = {
-          name = "JetBrainsMono Nerd Font";
-          package = pkgs.nerd-fonts.jetbrains-mono;
-          size = {
-            small = 11;
-            normal = 13;
-            large = 15;
-          };
-        };
-      };
+      fontBundle = config.autix.fonts;
+      displayFont = fontBundle.roles.displayManager;
+      monoFamily = displayFont.family;
     in
     {
       services.displayManager = {
@@ -29,11 +22,11 @@ _: {
         enable = true;
         fonts = [
           {
-            inherit (fonts.mono) name;
-            inherit (fonts.mono) package;
+            inherit (monoFamily) name;
+            inherit (monoFamily) package;
           }
         ];
-        extraConfig = "font-size=${toString fonts.mono.size.large}";
+        extraConfig = "font-size=${toString displayFont.size}";
       };
 
       programs.dconf.enable = true;

@@ -1,84 +1,132 @@
 { lib, ... }:
 let
-  mkFontDefs = pkgs: rec {
-    mono = {
-      name = "JetBrainsMono Nerd Font";
-      package = pkgs.nerd-fonts.jetbrains-mono;
-      size = {
-        small = 11;
-        normal = 13;
-        large = 15;
-      };
-    };
+  inherit (lib) mkOption types;
 
-    sansSerif = {
-      name = "Fira Sans";
-      package = pkgs.fira-sans;
-      size = {
-        small = 11;
-        normal = 12;
-        large = 14;
-      };
-    };
-
-    serif = {
-      name = "Crimson Pro";
-      package = pkgs.crimson-pro;
-      size = {
-        small = 12;
-        normal = 13;
-        large = 15;
-      };
-    };
-
-    packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk-sans
-      noto-fonts-emoji
-      nerd-fonts.jetbrains-mono
-      inter
-      crimson-pro
-      fira-sans
-    ];
-
-    defaultFonts = {
-      monospace = [ mono.name ];
-      sansSerif = [
-        sansSerif.name
-        "Inter"
-      ];
-      serif = [ serif.name ];
-      emoji = [ "Noto Color Emoji" ];
-    };
-  };
-
-  hmModule =
-    { pkgs, ... }:
+  mkFontBundle =
+    pkgs:
     let
-      fontDefs = mkFontDefs pkgs;
+      families = {
+        mono = {
+          name = "JetBrainsMono Nerd Font";
+          package = pkgs.nerd-fonts.jetbrains-mono;
+          sizes = {
+            small = 11;
+            normal = 13;
+            large = 15;
+          };
+        };
+
+        sans = {
+          name = "Fira Sans";
+          package = pkgs.fira-sans;
+          sizes = {
+            small = 11;
+            normal = 12;
+            large = 14;
+          };
+        };
+
+        serif = {
+          name = "Crimson Pro";
+          package = pkgs.crimson-pro;
+          sizes = {
+            small = 12;
+            normal = 13;
+            large = 15;
+          };
+        };
+      };
+
+      packages = with pkgs; [
+        noto-fonts
+        noto-fonts-cjk-sans
+        noto-fonts-emoji
+        nerd-fonts.jetbrains-mono
+        inter
+        crimson-pro
+        fira-sans
+      ];
+
+      defaults = {
+        monospace = [ families.mono.name ];
+        sansSerif = [
+          families.sans.name
+          "Inter"
+        ];
+        serif = [ families.serif.name ];
+        emoji = [ "Noto Color Emoji" ];
+      };
+
+      roles = {
+        terminal = {
+          family = families.mono;
+          size = families.mono.sizes.normal;
+        };
+        terminalCompact = {
+          family = families.mono;
+          size = families.mono.sizes.small;
+        };
+        notifications = {
+          family = families.sans;
+          size = families.sans.sizes.normal;
+        };
+        displayManager = {
+          family = families.mono;
+          size = families.mono.sizes.large;
+        };
+        ui = {
+          family = families.sans;
+          size = families.sans.sizes.normal;
+        };
+      };
     in
     {
-      home.packages = lib.mkAfter fontDefs.packages;
+      inherit families packages defaults roles;
+    };
 
-      fonts.fontconfig = {
-        enable = true;
-        inherit (fontDefs) defaultFonts;
+  hmModule =
+    { pkgs, config, lib, ... }:
+    let
+      cfg = config.autix.fonts;
+    in
+    {
+      options.autix.fonts = mkOption {
+        type = types.attrs;
+        default = mkFontBundle pkgs;
+        description = "autix font bundle available to home aspects.";
+      };
+
+      config = {
+        home.packages = lib.mkAfter cfg.packages;
+
+        fonts.fontconfig = {
+          enable = true;
+          defaultFonts = cfg.defaults;
+        };
       };
     };
 in
 {
   config = {
     flake.modules.nixos.fonts =
-      { pkgs, ... }:
+      { pkgs, config, ... }:
       let
-        fontDefs = mkFontDefs pkgs;
+        cfg = config.autix.fonts;
       in
       {
-        fonts.packages = fontDefs.packages;
+        options.autix.fonts = mkOption {
+          type = types.attrs;
+          default = mkFontBundle pkgs;
+          description = "autix font bundle available to NixOS aspects.";
+        };
 
-        fonts.fontconfig = {
-          enable = true;
-          inherit (fontDefs) defaultFonts;
+        config = {
+          fonts.packages = cfg.packages;
+
+          fonts.fontconfig = {
+            enable = true;
+            defaultFonts = cfg.defaults;
+          };
         };
       };
 

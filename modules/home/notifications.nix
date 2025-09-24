@@ -4,9 +4,10 @@ let
     { config, ... }:
     let
       isGraphical = config.autix.home.profile.graphical or false;
-      fontChoices = config.fonts.fontconfig.defaultFonts.monospace or [ "JetBrainsMono Nerd Font" ];
-      fontName = lib.head fontChoices;
-      fontSize = 13;
+      fontBundle = config.autix.fonts;
+      notificationFont = fontBundle.roles.notifications;
+      fontName = notificationFont.family.name;
+      fontSize = notificationFont.size;
     in
     lib.mkIf isGraphical {
       services.mako = {
