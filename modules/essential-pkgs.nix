@@ -21,6 +21,8 @@ let
       # The 'just accidently booted into niri with no config' start pack
       firefox
       alacritty
+
+      # xdg-terminal
       (pkgs.writeShellApplication {
         name = "xdg-terminal";
         text = ''
@@ -39,6 +41,15 @@ let
 
           echo "xdg-terminal: no terminal emulator found (set $TERMINAL)" >&2
           exit 1
+        '';
+      })
+
+      # wget wrapper with HSTS file location changed
+      (pkgs.writeShellApplication {
+        name = "wget";
+        text = ''
+          data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
+          exec -a "$0" "${pkgs.wget}/bin/wget" --hsts-file="$data_home/wget-hsts" "$@"
         '';
       })
     ];
