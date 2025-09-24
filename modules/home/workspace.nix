@@ -28,18 +28,20 @@ let
         })
       ];
 
+      programs.direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+      };
+
+      programs.fish.enable = lib.mkDefault true;
       programs.zoxide = {
         enable = true;
-        enableBashIntegration = true;
+        enableBashIntegration = lib.mkDefault true;
+        enableFishIntegration = lib.mkDefault true;
         options = [
           "--cmd"
           "cd"
         ];
-      };
-
-      programs.direnv = {
-        enable = true;
-        nix-direnv.enable = true;
       };
 
       programs.bash.enable = lib.mkForce false;

@@ -12,6 +12,7 @@ let
         essential-pkgs
         display-manager
         ssh
+        keyring
         fonts
         albert
 

@@ -24,6 +24,7 @@ let
     "workspace"
     "xdg"
     "fzf"
+    "zoxide"
     "opencode"
   ];
 
