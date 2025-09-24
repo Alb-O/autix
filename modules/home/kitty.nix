@@ -8,10 +8,15 @@ let
       terminalFont = fontBundle.roles.terminal;
       fontName = terminalFont.family.name;
       fontSize = terminalFont.size;
+      fontStyle = terminalFont.family.style;
     in
     lib.mkIf isGraphical {
       programs.kitty = {
         enable = true;
+
+        extraConfig = ''
+          font_family family='${fontName}' style='${fontStyle}'
+          font_size=${toString fontSize}'';
 
         settings = {
           # Terminal behavior

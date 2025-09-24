@@ -7,8 +7,9 @@ let
     let
       families = {
         mono = {
-          name = "JetBrainsMono Nerd Font";
-          package = pkgs.nerd-fonts.jetbrains-mono;
+          name = "JetBrains Mono NL";
+          package = pkgs.jetbrains-mono;
+          style = "ExtraLight";
           sizes = {
             small = 11;
             normal = 13;
@@ -19,6 +20,7 @@ let
         sans = {
           name = "Fira Sans";
           package = pkgs.fira-sans;
+          style = "Regular";
           sizes = {
             small = 11;
             normal = 12;
@@ -29,6 +31,7 @@ let
         serif = {
           name = "Crimson Pro";
           package = pkgs.crimson-pro;
+          style = "Regular";
           sizes = {
             small = 12;
             normal = 13;
