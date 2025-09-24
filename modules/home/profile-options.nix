@@ -60,10 +60,24 @@ let
 
   profileOptionsModule = {
     options.autix.home.profile = profileOptionSet;
+    options.autix.home.modules = mkOption {
+      type = types.attrsOf types.raw;
+      default = { };
+      description = "Registry of home-manager aspect modules keyed by aspect name.";
+    };
+
+    config.autix.home.modules.profileOptions = _: { };
   };
 in
 {
-  options.autix.home.profile = profileOptionSet;
+  options.autix.home = {
+    profile = profileOptionSet;
+    modules = mkOption {
+      type = types.attrsOf types.raw;
+      default = { };
+      description = "Registry of home-manager aspect modules keyed by aspect name.";
+    };
+  };
 
   config.flake.modules.homeManager.profileOptions = _: profileOptionsModule;
 }

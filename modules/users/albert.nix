@@ -5,24 +5,7 @@ let
   userName = personal.user.username or "albert";
   name = personal.user.name or "Joe Mama";
   email = personal.user.email or "albert@example.com";
-in
-{
-  flake.modules.nixos.${userName} = {
-    users.users.${userName} = {
-      isNormalUser = true;
-      extraGroups = [
-        "wheel"
-        "networkmanager"
-        "audio"
-        "video"
-      ];
-      description = "${name}";
-      hashedPassword = personal.user.hashedPassword or null;
-      initialPassword = personal.user.initialPassword or "changeme";
-    };
-  };
-
-  flake.modules.homeManager.${userName} =
+  hmModule =
     { lib, pkgs, ... }:
     {
       home.username = lib.mkDefault userName;
@@ -86,4 +69,25 @@ in
         };
       };
     };
+in
+{
+  config = {
+    flake.modules.nixos.${userName} = {
+      users.users.${userName} = {
+        isNormalUser = true;
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+          "audio"
+          "video"
+        ];
+        description = "${name}";
+        hashedPassword = personal.user.hashedPassword or null;
+        initialPassword = personal.user.initialPassword or "changeme";
+      };
+    };
+
+    flake.modules.homeManager.${userName} = hmModule;
+    autix.home.modules.${userName} = hmModule;
+  };
 }

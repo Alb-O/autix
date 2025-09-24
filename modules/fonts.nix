@@ -51,23 +51,8 @@ let
       emoji = [ "Noto Color Emoji" ];
     };
   };
-in
-{
-  flake.modules.nixos.fonts =
-    { pkgs, ... }:
-    let
-      fontDefs = mkFontDefs pkgs;
-    in
-    {
-      fonts.packages = fontDefs.packages;
 
-      fonts.fontconfig = {
-        enable = true;
-        inherit (fontDefs) defaultFonts;
-      };
-    };
-
-  flake.modules.homeManager.fonts =
+  hmModule =
     { pkgs, ... }:
     let
       fontDefs = mkFontDefs pkgs;
@@ -80,4 +65,24 @@ in
         inherit (fontDefs) defaultFonts;
       };
     };
+in
+{
+  config = {
+    flake.modules.nixos.fonts =
+      { pkgs, ... }:
+      let
+        fontDefs = mkFontDefs pkgs;
+      in
+      {
+        fonts.packages = fontDefs.packages;
+
+        fonts.fontconfig = {
+          enable = true;
+          inherit (fontDefs) defaultFonts;
+        };
+      };
+
+    flake.modules.homeManager.fonts = hmModule;
+    autix.home.modules.fonts = hmModule;
+  };
 }

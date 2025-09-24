@@ -1,31 +1,31 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
+{ lib, ... }:
 let
-  isGraphical = config.autix.home.profile.graphical or false;
-in
-{
-  flake.modules.homeManager.polkit = lib.mkIf isGraphical {
-    systemd.user.services.polkit-gnome-authentication-agent-1 = {
-      Unit = {
-        Description = "polkit-gnome-authentication-agent-1";
-        Wants = [ "graphical-session.target" ];
-        WantedBy = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 1;
-      };
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
+  hmModule =
+    { config, pkgs, ... }:
+    lib.mkIf (config.autix.home.profile.graphical or false) {
+      systemd.user.services.polkit-gnome-authentication-agent-1 = {
+        Unit = {
+          Description = "polkit-gnome-authentication-agent-1";
+          Wants = [ "graphical-session.target" ];
+          WantedBy = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+        Service = {
+          Type = "simple";
+          ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+          Restart = "on-failure";
+          RestartSec = 1;
+          TimeoutStopSec = 1;
+        };
+        Install = {
+          WantedBy = [ "graphical-session.target" ];
+        };
       };
     };
+in
+{
+  config = {
+    flake.modules.homeManager.polkit = hmModule;
+    autix.home.modules.polkit = hmModule;
   };
 }

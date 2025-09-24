@@ -5,35 +5,32 @@
   ...
 }:
 let
-  hmAspects = lib.attrByPath [ "flake" "modules" "homeManager" ] { } config;
+  hmAspects = lib.attrByPath [ "autix" "home" "modules" ] { } config;
 
   requireAspect =
     name:
-    lib.assertMsg (lib.hasAttr name hmAspects) "Home-manager aspect '${name}' is not defined"
-      hmAspects.${name};
+    if lib.hasAttr name hmAspects then
+      hmAspects.${name}
+    else
+      throw "Home-manager aspect '${name}' is not defined";
+
+  optionsModule = lib.attrByPath [ "flake" "modules" "homeManager" "profileOptions" ] null config;
 
   commonAspectNames = [
-    "profileOptions"
     "fonts"
     "essential-pkgs"
     "networking"
     "ssh"
     "workspace"
-    "tooling-cli"
-    "tooling-dev"
-    "tooling-graphical"
     "xdg"
     "fzf"
-    "clipboard"
-    "notifications"
-    "polkit"
     "opencode"
-    "sillytavern"
   ];
 
   selectAspects = names: map requireAspect names;
 
-  commonModules = selectAspects commonAspectNames;
+  commonModules =
+    (lib.optional (optionsModule != null) optionsModule) ++ selectAspects commonAspectNames;
 
   modulesForProfile =
     profileName: profile:

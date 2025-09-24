@@ -1,5 +1,6 @@
-_: {
-  flake.modules.homeManager.opencode = {
+_:
+let
+  hmModule = _: {
     programs.opencode = {
       enable = true;
       settings = {
@@ -184,5 +185,11 @@ _: {
         };
       };
     };
+  };
+in
+{
+  config = {
+    flake.modules.homeManager.opencode = hmModule;
+    autix.home.modules.opencode = hmModule;
   };
 }

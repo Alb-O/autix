@@ -1,16 +1,21 @@
 { lib, ... }:
-{
-  flake.modules.nixos.networking = {
-    networking = {
-      networkmanager.enable = lib.mkDefault true;
-      # Keep a permissive default firewall that aspects can extend later.
-      firewall.enable = lib.mkDefault true;
-    };
-  };
-
-  flake.modules.homeManager.networking = {
+let
+  hmModule = _: {
     home.sessionVariables = {
       BROWSER = lib.mkDefault "firefox";
     };
+  };
+in
+{
+  config = {
+    flake.modules.nixos.networking = {
+      networking = {
+        networkmanager.enable = lib.mkDefault true;
+        firewall.enable = lib.mkDefault true;
+      };
+    };
+
+    flake.modules.homeManager.networking = hmModule;
+    autix.home.modules.networking = hmModule;
   };
 }

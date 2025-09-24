@@ -53,6 +53,14 @@
     nix-auto-follow = {
       url = "github:fzakaria/nix-auto-follow";
     };
+    nixos-wsl = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:nix-community/NixOS-WSL";
+    };
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixpkgs-unstable";
     };

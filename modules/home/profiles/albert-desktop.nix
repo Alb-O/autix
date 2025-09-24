@@ -3,6 +3,14 @@ _: {
     user = "albert";
     graphical = true;
     system = "x86_64-linux";
-    modules = [ ];
+    modules = [
+      "tooling-cli"
+      "tooling-dev"
+      "tooling-graphical"
+      "clipboard"
+      "notifications"
+      "polkit"
+      "sillytavern"
+    ];
   };
 }

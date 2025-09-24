@@ -21,31 +21,33 @@ let
       firefox
       alacritty
     ];
-in
-{
-  flake.modules.nixos.essential-pkgs =
-    { pkgs, ... }:
-    {
-      environment.systemPackages = essentialPackages pkgs;
-    };
 
-  flake.modules.homeManager.essential-pkgs =
+  hmModule =
     { pkgs, lib, ... }:
     {
       home.packages = lib.mkDefault (essentialPackages pkgs);
     };
-
-  _module.args.autixPackages = {
-    essential = essentialPackages;
-  };
-
-  # Expose a package bundle for this aspect
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.essential-pkgs-bundle = pkgs.symlinkJoin {
-        name = "essential-pkgs";
-        paths = essentialPackages pkgs;
+in
+{
+  config = {
+    flake.modules.nixos."essential-pkgs" =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = essentialPackages pkgs;
       };
+
+    flake.modules.homeManager."essential-pkgs" = hmModule;
+    autix.home.modules."essential-pkgs" = hmModule;
+    _module.args.autixPackages = {
+      essential = essentialPackages;
     };
+    perSystem =
+      { pkgs, ... }:
+      {
+        packages.essential-pkgs-bundle = pkgs.symlinkJoin {
+          name = "essential-pkgs";
+          paths = essentialPackages pkgs;
+        };
+      };
+  };
 }
