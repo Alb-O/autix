@@ -18,6 +18,7 @@ let
 
   commonAspectNames = [
     "fonts"
+    "kitty"
     "essential-pkgs"
     "networking"
     "ssh"
