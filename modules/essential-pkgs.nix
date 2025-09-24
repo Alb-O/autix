@@ -16,6 +16,7 @@ let
       # Development tools
       just
       jq
+      mprocs
 
       # The 'just accidently booted into niri with no config' start pack
       firefox
@@ -25,7 +26,7 @@ let
         text = ''
           set -euo pipefail
 
-          term="${TERMINAL:-}"
+          term="''${TERMINAL:-}"
           if [[ -n "$term" ]]; then
             exec "$term" "$@"
           fi

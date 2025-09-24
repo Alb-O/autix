@@ -16,6 +16,7 @@ let
         ssh
         keyring
         fonts
+        keyboard
         albert
 
         inputs.self.nixosModules.${name}
