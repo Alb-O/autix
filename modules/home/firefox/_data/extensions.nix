@@ -1,6 +1,7 @@
 # Firefox extensions configuration
 # Managed extensions and their installation settings
-{...}: {
+_:
+{
   extensionSettings = {
     "addon@darkreader.org" = {
       # Dark Reader

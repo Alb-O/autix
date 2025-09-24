@@ -1,6 +1,7 @@
 # Firefox policies configuration
 # Security, privacy, and extension management
-{...}: {
+_:
+{
   policies = {
     AppAutoUpdate = false; # Disable automatic application update
     BackgroundAppUpdate = false; # Disable automatic application update in the background, when the application is not running.

@@ -1,13 +1,19 @@
-{ lib, ... }:
+_:
 let
   hmModule =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
       homeCfg = config.home;
       username =
         homeCfg.username or (throw "firefox-module: set home.username before importing this module");
       homeDir =
-        homeCfg.homeDirectory or (throw "firefox-module: set home.homeDirectory before importing this module");
+        homeCfg.homeDirectory
+          or (throw "firefox-module: set home.homeDirectory before importing this module");
 
       xdgDirs = lib.attrByPath [ "xdg" "userDirs" ] { } config;
       desktopDir =
@@ -29,11 +35,9 @@ let
     {
       programs.firefox = {
         enable = true;
-        policies =
-          policiesConfig.policies
-          // {
-            ExtensionSettings = extensionsConfig.extensionSettings;
-          };
+        policies = policiesConfig.policies // {
+          ExtensionSettings = extensionsConfig.extensionSettings;
+        };
 
         profiles.${username} = {
           id = 0;

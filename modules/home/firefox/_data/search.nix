@@ -1,8 +1,8 @@
 {
   pkgs,
-  lib,
   ...
-}: {
+}:
+{
   searchConfig = {
     force = true;
     default = "google";
@@ -26,7 +26,7 @@
           }
         ];
         icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = ["@np"];
+        definedAliases = [ "@np" ];
       };
 
       nixos-options = {
@@ -46,7 +46,7 @@
           }
         ];
         icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = ["@no"];
+        definedAliases = [ "@no" ];
       };
 
       nixos-wiki = {
@@ -62,7 +62,7 @@
           }
         ];
         icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = ["@nw"];
+        definedAliases = [ "@nw" ];
       };
 
       nixpkgs-issues = {
@@ -78,7 +78,7 @@
           }
         ];
         icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = ["@ni"];
+        definedAliases = [ "@ni" ];
       };
 
       home-manager-options = {
@@ -94,7 +94,7 @@
           }
         ];
         icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = ["@hm"];
+        definedAliases = [ "@hm" ];
       };
 
       # Development searches
@@ -115,7 +115,7 @@
           }
         ];
         icon = "https://github.com/favicon.ico";
-        definedAliases = ["@gh"];
+        definedAliases = [ "@gh" ];
       };
 
       stackoverflow = {
@@ -131,7 +131,7 @@
           }
         ];
         icon = "https://stackoverflow.com/favicon.ico";
-        definedAliases = ["@so"];
+        definedAliases = [ "@so" ];
       };
 
       mdn = {
@@ -147,7 +147,7 @@
           }
         ];
         icon = "https://developer.mozilla.org/favicon-48x48.png";
-        definedAliases = ["@mdn"];
+        definedAliases = [ "@mdn" ];
       };
 
       # General searches
@@ -164,7 +164,7 @@
           }
         ];
         icon = "https://www.youtube.com/favicon.ico";
-        definedAliases = ["@yt"];
+        definedAliases = [ "@yt" ];
       };
 
       wikipedia = {
@@ -180,7 +180,7 @@
           }
         ];
         icon = "https://en.wikipedia.org/favicon.ico";
-        definedAliases = ["@w"];
+        definedAliases = [ "@w" ];
       };
     };
   };
