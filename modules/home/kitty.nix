@@ -24,12 +24,6 @@ let
           term = "xterm-256color";
           shell = "fish";
 
-          # Fonts
-          font_family = fontName;
-          bold_font = "auto";
-          italic_font = "auto";
-          font_size = builtins.toString fontSize;
-
           # Appearance
           background_opacity = "1.0";
           window_padding_width = "25 20";

@@ -34,16 +34,6 @@ let
       };
 
       programs.fish.enable = lib.mkDefault true;
-      programs.zoxide = {
-        enable = true;
-        enableBashIntegration = lib.mkDefault true;
-        enableFishIntegration = lib.mkDefault true;
-        options = [
-          "--cmd"
-          "cd"
-        ];
-      };
-
       programs.bash.enable = lib.mkForce false;
     };
 in

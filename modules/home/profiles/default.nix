@@ -27,6 +27,7 @@ let
     "fzf"
     "zoxide"
     "opencode"
+    "codex"
   ];
 
   selectAspects = names: map requireAspect names;

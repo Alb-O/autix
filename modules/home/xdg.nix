@@ -3,43 +3,44 @@ let
   hmModule =
     { config, pkgs, ... }:
     let
+      cfgHome = config.xdg.configHome;
+      inherit (config.xdg) stateHome;
+      inherit (config.xdg) dataHome;
+      inherit (config.xdg) cacheHome;
+
       mkVars = prefix: mapping: lib.mapAttrs (_: value: "${prefix}/${value}") mapping;
 
       sessionVars =
-        mkVars "$XDG_STATE_HOME" {
+        mkVars stateHome {
           HISTFILE = "bash/history";
           PYTHON_HISTORY = "python/python_history";
         }
-        // mkVars "$XDG_DATA_HOME" {
+        // mkVars dataHome {
           CARGO_HOME = "cargo";
           DOTNET_CLI_HOME = "dotnet";
           NB_DIR = "nb";
-          CODEX_HOME = "codex";
           GOPATH = "go";
           UNISON = "unison";
           PYTHONUSERBASE = "python";
         }
-        // mkVars "$XDG_CACHE_HOME" {
+        // mkVars cacheHome {
           CUDA_CACHE_PATH = "nv";
           XCOMPOSECACHE = "X11/xcompose";
           NPM_CONFIG_CACHE = "npm";
           PYTHONPYCACHEPREFIX = "python";
         }
-        // mkVars "$XDG_CONFIG_HOME" {
+        // mkVars cfgHome {
           GTK2_RC_FILES = "gtk-2.0/gtkrc";
           NPM_CONFIG_INIT_MODULE = "npm/config/npm-init.js";
           NBRC_PATH = "nbrc";
           PYTHONSTARTUP = "python/pythonrc.py";
           XCOMPOSEFILE = "X11/xcompose";
-        }
-        // {
-          NPM_CONFIG_TMP = "$XDG_RUNTIME_DIR/npm";
         };
 
       yaziWrapper = pkgs.writeShellScript "xdg-yazi-wrapper" ''
-            set -eu
+        set -eu
 
-            multiple="$1"
+        multiple="$1"
         directory="$2"
         save="$3"
         path="$4"
@@ -62,51 +63,50 @@ let
           rm "$out"".1"
         fi
       '';
-
-      cfgHome = config.xdg.configHome;
-      inherit (config.xdg) stateHome;
-      inherit (config.xdg) dataHome;
-      inherit (config.xdg) cacheHome;
     in
     {
-      home.packages = lib.mkAfter [
-        pkgs.kitty
-        pkgs.xdg-desktop-portal-termfilechooser
-      ];
-
       nix = {
         enable = true;
         settings.use-xdg-base-directories = true;
         package = lib.mkDefault pkgs.nix;
       };
 
-      home.sessionVariables = lib.mkMerge [ sessionVars ];
+      home = {
+        packages = lib.mkAfter [
+          pkgs.kitty
+          pkgs.xdg-desktop-portal-termfilechooser
+        ];
 
-      home.file = {
-        "${cfgHome}/xdg-desktop-portal-termfilechooser/config".text = ''
-          [filechooser]
-          cmd=$XDG_CONFIG_HOME/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
-          default_dir=$HOME
-          env=TERMCMD=kitty --title 'XDG File Picker'
-          open_mode=suggested
-          save_mode=suggested
-        '';
+        preferXdgDirectories = true;
 
-        "${cfgHome}/xdg-desktop-portal/portals.conf".text = ''
-          [preferred]
-          org.freedesktop.impl.portal.FileChooser=termfilechooser
-        '';
+        sessionVariables = lib.mkMerge [ sessionVars ];
 
-        "${cfgHome}/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh" = {
-          source = yaziWrapper;
-          executable = true;
+        file = {
+          "${cfgHome}/xdg-desktop-portal-termfilechooser/config".text = ''
+            [filechooser]
+            cmd=$XDG_CONFIG_HOME/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
+            default_dir=$HOME
+            env=TERMCMD=kitty --title 'XDG File Picker'
+            open_mode=suggested
+            save_mode=suggested
+          '';
+
+          "${cfgHome}/xdg-desktop-portal/portals.conf".text = ''
+            [preferred]
+            org.freedesktop.impl.portal.FileChooser=termfilechooser
+          '';
+
+          "${cfgHome}/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh" = {
+            source = yaziWrapper;
+            executable = true;
+          };
+
+          "${cfgHome}/npm/config/.keep".text = "";
+          "${stateHome}/python/.keep".text = "";
+          "${dataHome}/python/.keep".text = "";
+          "${cacheHome}/python/.keep".text = "";
+          "${stateHome}/bash/.keep".text = "";
         };
-
-        "${cfgHome}/npm/config/.keep".text = "";
-        "${stateHome}/python/.keep".text = "";
-        "${dataHome}/python/.keep".text = "";
-        "${cacheHome}/python/.keep".text = "";
-        "${stateHome}/bash/.keep".text = "";
       };
 
       xdg = {
