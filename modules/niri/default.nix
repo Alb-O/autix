@@ -31,6 +31,11 @@ let
         package = niriPackage;
       };
 
+      # Fallback terminal emulator
+      programs.foot = {
+        enable = true;
+      };
+
       systemd.user.services."niri-flake-polkit".enable = lib.mkForce false;
     };
 in

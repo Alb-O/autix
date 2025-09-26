@@ -118,7 +118,8 @@ binds {
     Mod+Period { expel-window-from-column; }
     Mod+Q { close-window; }
     Mod+R { switch-preset-column-width; }
-    Mod+Return { spawn "xdg-terminal"; }
+    Mod+Return { spawn "kitty"; }
+    Mod+T { spawn "foot"; }
     Mod+Right { focus-column-right; }
     Mod+Shift+C { spawn "sh" "-c" "hyprpicker | wl-copy -n"; }
     Mod+Shift+Ctrl+Down { move-column-to-monitor-down; }

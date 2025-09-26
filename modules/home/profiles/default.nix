@@ -29,6 +29,7 @@ let
     "opencode"
     "codex"
     "mpv"
+    "yazi"
   ];
 
   selectAspects = names: map requireAspect names;

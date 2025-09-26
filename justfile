@@ -16,7 +16,6 @@ default:
 
 # Rebuilds and switches NixOS system for specified host
 system-rebuild host="desktop":
-    echo "Rebuilding system for host: {{host}}"; \
     sudo -E nixos-rebuild switch --flake path:.#{{host}}
 
 # Tests NixOS system build for specified host

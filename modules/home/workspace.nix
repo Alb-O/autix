@@ -23,8 +23,8 @@ let
           HOSTNAME = lib.mkDefault config.autix.home.profile.name;
         })
         (lib.mkIf isGraphical {
-          TERMINAL = lib.mkDefault "wezterm";
-          TERM = lib.mkDefault "wezterm";
+          TERMINAL = lib.mkDefault "kitty";
+          TERM_PROGRAM = lib.mkDefault "kitty";
         })
       ];
 
