@@ -1,0 +1,21 @@
+{ lib, ... }:
+let
+  hmModule =
+    { pkgs, ... }:
+    let
+      opencodeConf = import ./_config { inherit lib pkgs; };
+    in
+    {
+      programs.opencode = {
+        enable = true;
+        inherit (opencodeConf) settings;
+      };
+      home.packages = lib.mkAfter opencodeConf.packages;
+    };
+in
+{
+  config = {
+    flake.modules.homeManager.opencode = hmModule;
+    autix.home.modules.opencode = hmModule;
+  };
+}
