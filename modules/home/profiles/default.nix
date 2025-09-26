@@ -28,6 +28,7 @@ let
     "zoxide"
     "opencode"
     "codex"
+    "mpv"
   ];
 
   selectAspects = names: map requireAspect names;
