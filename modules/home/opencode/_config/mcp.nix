@@ -8,6 +8,9 @@
         enabled = true;
       };
     };
+    tools = {
+      "Mcp-Nixos*" = false;
+    };
   };
   packages = with pkgs; [
     mcp-nixos

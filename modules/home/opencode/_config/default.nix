@@ -4,6 +4,7 @@ let
     ./lsp.nix
     ./formatter.nix
     ./mcp.nix
+    ./agent.nix
   ];
   load =
     path:
