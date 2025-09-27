@@ -22,6 +22,7 @@ let
     "essential-pkgs"
     "networking"
     "ssh"
+    "git"
     "workspace"
     "xdg"
     "fzf"
