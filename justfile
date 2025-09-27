@@ -61,7 +61,11 @@ home-switch target=home_default:
         | jq -r '.[]' | sed 's/^/  /' >&2; \
       exit 1; \
     fi; \
-    nix run github:nix-community/home-manager/master -- switch --flake "path:.#${TARGET}" --impure
+    if command -v home-manager >/dev/null 2>&1; then \
+      home-manager switch --flake "path:.#${TARGET}" --impure; \
+    else \
+      nix run .#home-manager -- switch --flake "path:.#${TARGET}" --impure; \
+    fi
 
 # Builds Home Manager configuration for specified target
 home-build target=home_default:
@@ -73,7 +77,11 @@ home-build target=home_default:
         | jq -r '.[]' | sed 's/^/  /' >&2; \
       exit 1; \
     fi; \
-    nix run github:nix-community/home-manager/master -- build --flake "path:.#${TARGET}" --impure
+    if command -v home-manager >/dev/null 2>&1; then \
+      home-manager build --flake "path:.#${TARGET}" --impure; \
+    else \
+      nix run .#home-manager -- build --flake "path:.#${TARGET}" --impure; \
+    fi
 
 # Switches to WSL-specific Home Manager configuration
 home-switch-wsl:

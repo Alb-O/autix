@@ -1,6 +1,10 @@
-_: {
+{ inputs, ... }:
+{
   perSystem =
     { pkgs, ... }:
+    let
+      homeManagerPkg = inputs.home-manager.packages.${pkgs.system}.home-manager;
+    in
     {
       devShells.default = pkgs.mkShell {
         name = "autix-devshell";
@@ -42,6 +46,8 @@ _: {
           echo "Use 'nix fmt' for integrated linting"
           echo "Or 'nix run .#lint-check' to check without changes"
         '';
+
+        home-manager = homeManagerPkg;
       };
     };
 }

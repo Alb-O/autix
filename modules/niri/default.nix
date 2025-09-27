@@ -7,14 +7,26 @@ let
     let
       isGraphical = config.autix.home.profile.graphical or false;
       niriPackage = inputs.niri-flake.packages.${pkgs.system}.niri-stable;
+      portalNeedsGnome =
+        !niriPackage.cargoBuildNoDefaultFeatures
+        || builtins.elem "xdp-gnome-screencast" niriPackage.cargoBuildFeatures;
     in
     {
-      imports = [ inputs.niri-flake.homeModules.niri ];
       config = lib.mkIf isGraphical {
-        programs.niri = {
+        home.packages = lib.mkAfter [ niriPackage ];
+
+        xdg.configFile."niri/config.kdl" = {
           enable = true;
-          package = niriPackage;
-          config = niriConfig;
+          source = pkgs.writeText "niri-config.kdl" niriConfig;
+        };
+
+        services.gnome-keyring.enable = true;
+
+        xdg.portal = {
+          enable = true;
+          extraPortals =
+            if portalNeedsGnome then [ pkgs.xdg-desktop-portal-gnome ] else [ ];
+          configPackages = [ niriPackage ];
         };
       };
     };
