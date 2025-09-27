@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, stdenvNoCC
-, buildGoModule
-, bun
-, fetchFromGitHub
-, makeBinaryWrapper
-, writableTmpDirAsHomeHook
-, models-dev
-, python3
-,
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  buildGoModule,
+  bun,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  writableTmpDirAsHomeHook,
+  models-dev,
+  python3,
 }:
 let
   version = "0.11.2";
@@ -20,7 +20,8 @@ let
       "aarch64-linux" = "bun-linux-arm64";
       "x86_64-darwin" = "bun-darwin-x64";
       "aarch64-darwin" = "bun-darwin-arm64";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 
   src = fetchFromGitHub {
     owner = "sst";
@@ -80,7 +81,7 @@ let
     outputHashMode = "recursive";
   };
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (_finalAttrs: {
   pname = "opencode";
   inherit version src;
 

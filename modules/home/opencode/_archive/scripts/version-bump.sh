@@ -8,7 +8,7 @@ if git -C "$here" rev-parse --show-toplevel >/dev/null 2>&1; then
   root_dir=$(git -C "$here" rev-parse --show-toplevel)
 else
   root_dir="$here"
-  while [[ "$root_dir" != "/" && ! -f "$root_dir/flake.nix" ]]; do
+  while [[ $root_dir != "/" && ! -f "$root_dir/flake.nix" ]]; do
     root_dir=$(dirname "$root_dir")
   done
 fi
@@ -19,14 +19,14 @@ models_dev_file="$root_dir/nix/packages/cli/opencode/models-dev/default.nix"
 
 version="${1:-latest}"
 
-if [[ "$version" == "latest" ]]; then
+if [[ $version == "latest" ]]; then
   if ! command -v jq >/dev/null 2>&1; then
     echo "jq is required to detect the latest version. Install jq or pass an explicit version." >&2
     exit 1
   fi
   echo "Fetching latest opencode release tag…" >&2
   tag=$(curl -fsSL https://api.github.com/repos/sst/opencode/releases/latest | jq -r .tag_name)
-  if [[ -z "$tag" || "$tag" == "null" ]]; then
+  if [[ -z $tag || $tag == "null" ]]; then
     echo "Failed to get latest tag from GitHub." >&2
     exit 1
   fi
@@ -77,7 +77,7 @@ while ((tries < max_tries)); do
   # Extract the hash from the error message
   got=$(echo "$out" | sed -n "s/.*got: *\(sha256-[A-Za-z0-9\/+]*=\).*/\1/p" | head -n1)
 
-  if [[ -n "$got" ]]; then
+  if [[ -n $got ]]; then
     # Determine which hash to update based on the derivation name in the error message
     # Look for the specific derivation mentioned in the "hash mismatch" error line
     if echo "$out" | grep "hash mismatch.*opencode-node_modules-" >/dev/null; then

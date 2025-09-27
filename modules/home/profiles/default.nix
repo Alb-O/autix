@@ -31,6 +31,8 @@ let
     "mpv"
     "yazi"
     "lazygit"
+    "nh"
+    "zk"
   ];
 
   selectAspects = names: map requireAspect names;

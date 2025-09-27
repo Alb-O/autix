@@ -12,6 +12,7 @@
           deadnix.enable = true;
           statix.enable = true;
           stylua.enable = true;
+          shfmt.enable = true;
         };
         settings.global.excludes = [
           "flake.lock"

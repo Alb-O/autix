@@ -1,10 +1,11 @@
-{ callPackage
-, models-dev
-, inputs
-, lib
-, system
-, ...
-}@pkgs:
+{
+  callPackage,
+  models-dev,
+  inputs,
+  lib,
+  system,
+  ...
+}:
 let
   # Get the full nixpkgs with all functions
   fullPkgs = inputs.nixpkgs.legacyPackages.${system};
