@@ -1,13 +1,21 @@
-_:
+{ lib, ... }:
 let
-  hmModule = _: {
-    programs.codex = {
-      enable = true;
-      settings = {
-        approval_policy = "never";
+  hmModule =
+    { pkgs, ... }:
+    {
+      programs.codex = {
+        enable = true;
+        settings = {
+          approval_policy = "never";
+        };
       };
+      home.packages = lib.mkAfter (
+        with pkgs;
+        [
+          python314 # codex likes to use python for bulky tasks
+        ]
+      );
     };
-  };
 
   autix = {
     home.modules.codex = hmModule;
