@@ -27,10 +27,15 @@ let
         ]
       );
     };
+
+  autix = {
+    home.modules.kakoune = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.kakoune = hmModule;
-    autix.home.modules.kakoune = hmModule;
-  };
+  inherit autix flake;
 }

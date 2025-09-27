@@ -3,6 +3,7 @@ let
   userName = "albert";
   name = "Albert O'Shea";
   email = "albertoshea2@gmail.com";
+
   hmModule =
     { lib, ... }:
     {
@@ -11,14 +12,19 @@ let
       home.stateVersion = lib.mkDefault "24.05";
 
       programs.git = {
-        userName = lib.mkDefault "${name}";
-        userEmail = lib.mkDefault "${email}";
+        userName = lib.mkDefault name;
+        userEmail = lib.mkDefault email;
       };
     };
-in
-{
-  config = {
-    flake.nixosModules.${userName} = {
+
+  autix = {
+    home.modules.${userName} = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+
+    nixosModules.${userName} = {
       users.users.${userName} = {
         isNormalUser = true;
         extraGroups = [
@@ -27,12 +33,12 @@ in
           "audio"
           "video"
         ];
-        description = "${name}";
+        description = name;
         initialPassword = "changeme";
       };
     };
-
-    flake.modules.homeManager.${userName} = hmModule;
-    autix.home.modules.${userName} = hmModule;
   };
+in
+{
+  inherit autix flake;
 }

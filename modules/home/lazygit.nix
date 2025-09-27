@@ -116,11 +116,16 @@ let
         };
       };
     };
+    };
+
+  autix = {
+    home.modules.lazygit = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
   };
 in
 {
-  config = {
-    flake.modules.homeManager.lazygit = hmModule;
-    autix.home.modules.lazygit = hmModule;
-  };
+  inherit autix flake;
 }

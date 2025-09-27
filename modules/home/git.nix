@@ -60,10 +60,15 @@ let
         };
       };
     };
+
+  autix = {
+    home.modules.git = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.git = hmModule;
-    autix.home.modules.git = hmModule;
-  };
+  inherit autix flake;
 }

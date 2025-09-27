@@ -2,27 +2,16 @@ _:
 let
   essentialPackages =
     pkgs: with pkgs; [
-      # Text editors
       vim
       nano
-
-      # Git
       git
-
-      # Network tools
       curl
       wget
-
-      # Development tools
       just
       jq
       mprocs
-
-      # The 'just accidently booted into niri with no config' start pack
       firefox
       alacritty
-
-      # xdg-terminal
       (pkgs.writeShellApplication {
         name = "xdg-terminal";
         text = ''
@@ -43,8 +32,6 @@ let
           exit 1
         '';
       })
-
-      # wget wrapper with HSTS file location changed
       (pkgs.writeShellApplication {
         name = "wget";
         text = ''
@@ -59,27 +46,37 @@ let
     {
       home.packages = lib.mkDefault (essentialPackages pkgs);
     };
-in
-{
-  config = {
-    flake.nixosModules."essential-pkgs" =
+
+  autix = {
+    home.modules."essential-pkgs" = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+
+    nixosModules."essential-pkgs" =
       { pkgs, ... }:
       {
         environment.systemPackages = essentialPackages pkgs;
       };
+  };
 
-    flake.modules.homeManager."essential-pkgs" = hmModule;
-    autix.home.modules."essential-pkgs" = hmModule;
-    _module.args.autixPackages = {
+  moduleArgs = {
+    autixPackages = {
       essential = essentialPackages;
     };
-    perSystem =
-      { pkgs, ... }:
-      {
-        packages.essential-pkgs-bundle = pkgs.symlinkJoin {
-          name = "essential-pkgs";
-          paths = essentialPackages pkgs;
-        };
-      };
   };
+
+  perSystem =
+    { pkgs, ... }:
+    {
+      packages.essential-pkgs-bundle = pkgs.symlinkJoin {
+        name = "essential-pkgs";
+        paths = essentialPackages pkgs;
+      };
+    };
+in
+{
+  inherit autix flake perSystem;
+  _module.args = moduleArgs;
 }

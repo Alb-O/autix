@@ -12,10 +12,15 @@ let
       };
       home.packages = lib.mkAfter opencodeConf.packages;
     };
+
+  autix = {
+    home.modules.opencode = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.opencode = hmModule;
-    autix.home.modules.opencode = hmModule;
-  };
+  inherit autix flake;
 }

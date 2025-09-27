@@ -14,10 +14,15 @@ let
         open = "wslview";
       };
     };
+
+  autix = {
+    home.modules.wsl = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.wsl = hmModule;
-    autix.home.modules.wsl = hmModule;
-  };
+  inherit autix flake;
 }

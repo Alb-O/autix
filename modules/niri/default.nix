@@ -43,25 +43,29 @@ let
         package = niriPackage;
       };
 
-      # Fallback terminal emulator
-      programs.foot = {
-        enable = true;
-      };
-
+      programs.foot.enable = true;
       systemd.user.services."niri-flake-polkit".enable = lib.mkForce false;
     };
-in
-{
+
+  autix = {
+    home.modules.niri = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+    overlays.niri = inputs.niri-flake.overlays.niri;
+    nixosModules.niri = nixosModule;
+    modules.nixos.niri = nixosModule;
+    homeModules.niri = hmModule;
+  };
+
   flake-file = {
     inputs = {
       niri-flake.url = "github:sodiboo/niri-flake";
       niri-flake.inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  flake.overlays.niri = inputs.niri-flake.overlays.niri;
-  flake.nixosModules.niri = nixosModule;
-  flake.modules.nixos.niri = nixosModule;
-  flake.homeModules.niri = hmModule;
-  flake.modules.homeManager.niri = hmModule;
-  autix.home.modules.niri = hmModule;
+in
+{
+  inherit autix flake flake-file;
 }

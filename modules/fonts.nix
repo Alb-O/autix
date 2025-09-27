@@ -118,10 +118,15 @@ let
         };
       };
     };
-in
-{
-  config = {
-    flake.nixosModules.fonts =
+
+  autix = {
+    home.modules.fonts = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+
+    nixosModules.fonts =
       { pkgs, config, ... }:
       let
         cfg = config.autix.fonts;
@@ -142,8 +147,8 @@ in
           };
         };
       };
-
-    flake.modules.homeManager.fonts = hmModule;
-    autix.home.modules.fonts = hmModule;
   };
+in
+{
+  inherit autix flake;
 }

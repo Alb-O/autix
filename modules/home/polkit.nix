@@ -22,10 +22,15 @@ let
         };
       };
     };
+
+  autix = {
+    home.modules.polkit = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.polkit = hmModule;
-    autix.home.modules.polkit = hmModule;
-  };
+  inherit autix flake;
 }

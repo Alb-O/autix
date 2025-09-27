@@ -37,10 +37,15 @@ let
         executable = false;
       };
     };
+
+  autix = {
+    home.modules.fzf = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.fzf = hmModule;
-    autix.home.modules.fzf = hmModule;
-  };
+  inherit autix flake;
 }

@@ -27,10 +27,15 @@ let
         };
       };
     };
+
+  autix = {
+    home.modules.notifications = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.notifications = hmModule;
-    autix.home.modules.notifications = hmModule;
-  };
+  inherit autix flake;
 }

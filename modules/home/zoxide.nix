@@ -9,10 +9,15 @@ let
       ];
     };
   };
+
+  autix = {
+    home.modules.zoxide = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.zoxide = hmModule;
-    autix.home.modules.zoxide = hmModule;
-  };
+  inherit autix flake;
 }

@@ -1,4 +1,4 @@
-_:
+{ lib, ... }:
 let
   hmModule =
     { lib, ... }:
@@ -18,10 +18,15 @@ let
         };
       };
     };
-in
-{
-  config = {
-    flake.nixosModules.ssh = {
+
+  autix = {
+    home.modules.ssh = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+
+    nixosModules.ssh = {
       services.openssh = {
         enable = true;
         settings = {
@@ -30,8 +35,8 @@ in
         };
       };
     };
-
-    flake.modules.homeManager.ssh = hmModule;
-    autix.home.modules.ssh = hmModule;
   };
+in
+{
+  inherit autix flake;
 }

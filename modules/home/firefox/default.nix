@@ -64,10 +64,15 @@ let
         DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
       };
     };
+
+  autix = {
+    home.modules.firefox = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.firefox = hmModule;
-    autix.home.modules.firefox = hmModule;
-  };
+  inherit autix flake;
 }

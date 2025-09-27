@@ -42,11 +42,16 @@ let
         };
       };
     };
+    };
+
+  autix = {
+    home.modules.mpv = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
   };
 in
 {
-  config = {
-    flake.modules.homeManager.mpv = hmModule;
-    autix.home.modules.mpv = hmModule;
-  };
+  inherit autix flake;
 }

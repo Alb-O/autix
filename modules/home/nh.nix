@@ -261,10 +261,15 @@ let
     {
       home.packages = lib.mkAfter [ nh ];
     };
+
+  autix = {
+    home.modules.nh = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.nh = hmModule;
-    autix.home.modules.nh = hmModule;
-  };
+  inherit autix flake;
 }

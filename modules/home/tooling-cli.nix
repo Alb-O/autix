@@ -22,10 +22,15 @@ let
         ]
       );
     };
+
+  autix = {
+    home.modules."tooling-cli" = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager."tooling-cli" = hmModule;
-    autix.home.modules."tooling-cli" = hmModule;
-  };
+  inherit autix flake;
 }

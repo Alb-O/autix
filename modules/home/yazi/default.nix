@@ -17,10 +17,15 @@ let
           ;
       };
     };
+
+  autix = {
+    home.modules.yazi = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.yazi = hmModule;
-    autix.home.modules.yazi = hmModule;
-  };
+  inherit autix flake;
 }

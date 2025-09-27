@@ -8,10 +8,15 @@ let
       };
     };
   };
+
+  autix = {
+    home.modules.codex = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.codex = hmModule;
-    autix.home.modules.codex = hmModule;
-  };
+  inherit autix flake;
 }

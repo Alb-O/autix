@@ -48,10 +48,15 @@ let
     };
     xdg.configFile."zk/templates/default.md".source = ./templates/default.md;
   };
+
+  autix = {
+    home.modules.zk = hmModule;
+  };
+
+  flake = {
+    modules.homeManager = autix.home.modules;
+  };
 in
 {
-  config = {
-    flake.modules.homeManager.zk = hmModule;
-    autix.home.modules.zk = hmModule;
-  };
+  inherit autix flake;
 }
