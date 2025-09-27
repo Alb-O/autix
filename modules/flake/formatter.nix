@@ -21,6 +21,8 @@
           "**/.gitignore"
           "*.example"
           "*.kdl"
+          "*.kak"
+          "**/kakrc"
           "justfile"
         ];
       };

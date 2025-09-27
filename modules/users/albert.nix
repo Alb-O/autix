@@ -1,10 +1,8 @@
 _:
 let
-  _p = builtins.pathExists ./_personal.nix;
-  personal = if _p then import ./_personal.nix else { };
-  userName = personal.user.username or "albert";
-  name = personal.user.name or "Joe Mama";
-  email = personal.user.email or "albert@example.com";
+  userName = "albert";
+  name = "Albert O'Shea";
+  email = "albertoshea2@gmail.com";
   hmModule =
     { lib, pkgs, ... }:
     {
@@ -82,8 +80,7 @@ in
           "video"
         ];
         description = "${name}";
-        hashedPassword = personal.user.hashedPassword or null;
-        initialPassword = personal.user.initialPassword or "changeme";
+        initialPassword = "changeme";
       };
     };
 

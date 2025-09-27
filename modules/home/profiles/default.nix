@@ -33,6 +33,7 @@ let
     "lazygit"
     "nh"
     "zk"
+    "kakoune"
   ];
 
   selectAspects = names: map requireAspect names;

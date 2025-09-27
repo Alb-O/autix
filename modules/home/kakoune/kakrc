@@ -1,0 +1,251 @@
+################################################################################
+# Base options & UI
+################################################################################
+# Matching symbols highlight
+add-highlighter -override global/ show-matching
+
+# Tabs / indentation defaults
+set-option global tabstop 2
+set-option global indentwidth 2
+
+# Insert tab behaves like spaces
+map global insert <tab> '<a-;><gt>'
+map global insert <s-tab> '<a-;><lt>'
+hook -group edit-whitespace global InsertChar \t %{ try %{ execute-keys -draft h %opt{indentwidth}@ } }
+
+# Remove trailing whitespace on save
+hook -group trim-whitespace global BufWritePre .* %{ try %{ execute-keys -draft \%s\h+$<ret>d } }
+
+# Line numbers (named highlighter)
+hook -group number-lines global WinCreate .* %{ add-highlighter -override window/number-lines number-lines -hlcursor }
+
+# Use ripgrep for grep
+set-option global grepcmd 'rg --column'
+
+# Friendlier quit alias
+alias global qa kill
+
+# Disable clippy
+set-option global ui_options terminal_assistant=none
+
+################################################################################
+# Plugin autoload helpers
+################################################################################
+evaluate-commands %sh{
+  autoload_directory() {
+    # Find .kak files up to depth 3, deterministic order (dependencies first)
+    find -L "$1" -maxdepth 3 -type f -name '*\.kak' -print \
+      | LC_ALL=C sort \
+      | while IFS= read -r f; do
+          printf 'try %%{ source "%s" } catch %%{ echo -debug Autoload: could not load "%s" }\n' "$f" "$f"
+        done
+  }
+
+  autoload_directory ${kak_config}/filetypes/
+  autoload_directory ${kak_config}/plugins/
+}
+
+################################################################################
+# Language features startup: kak-lsp first, then tree-sitter
+################################################################################
+# kak-lsp before filetype hooks run
+eval %sh{ kak-lsp --kakoune -s $kak_session }
+
+# Autostart LSP per window when filetype is set
+hook -group lsp-autostart global WinSetOption filetype=.* %{ lsp-enable-window }
+
+# tree-sitter
+eval %sh{ kak-tree-sitter -dks --init $kak_session }
+
+################################################################################
+# Theme
+################################################################################
+colorscheme gruvdark
+
+################################################################################
+# kak-lsp config and language-specific hooks
+################################################################################
+set-option global lsp_insert_spaces true
+
+# Inline diagnostics
+lsp-inlay-diagnostics-enable global
+
+# TypeScript / JavaScript + Tailwind
+hook -group lsp-ts-tailwind global BufSetOption filetype=(?:javascript|typescript|jsx|tsx) %{
+  set-option buffer lsp_servers %{
+    [typescript-language-server]
+    root_globs = ["package.json", "tsconfig.json", "jsconfig.json", ".git", ".hg"]
+    args = ["--stdio"]
+    [tailwindcss-language-server]
+    root_globs = ["tailwind.*", "tailwind.config.*", "tailwind.config.ts", "tailwind.config.js"]
+    args = ["--stdio"]
+  }
+}
+
+# JSON
+hook -group json-filetype global BufCreate .*[.](json|jsonc) %{ set-option buffer filetype json }
+
+hook -group lsp-filetype-json global BufSetOption filetype=json %{
+  set-option buffer lsp_servers %{
+    [[vscode-json-language-server.settings._.json.schemas]]
+    fileMatch = ["/opencode.json","/opencode.jsonc"]
+    url = "https://opencode.ai/config.json"
+  }
+}
+
+################################################################################
+# Keymap
+################################################################################
+# Extend lines up/down
+map -docstring 'extend lines downwards' global normal X %{<a-:>F<ret>x}
+map -docstring 'extend lines upwards'   global normal <a-X> %{<a-:><a-;><a-H>Kx}
+
+# Vertical selection helpers
+map -docstring 'select pattern down'        global user v     :vertical-selection-down<ret>
+map -docstring 'select pattern up'          global user <a-v> :vertical-selection-up<ret>
+map -docstring 'select both directions'     global user V     :vertical-selection-up-and-down<ret>
+
+# REPL / reload
+map -docstring 'send selection to repl window' global user s <esc>:send-text<ret>
+map -docstring 'load your kakrc'               global user R <esc>:source<space>~/.config/kak/kakrc<ret>
+
+# Clipboard (Wayland)
+define-command copy-to-clipboard -docstring 'copy selection to wayland clipboard' %{
+  execute-keys '<a-|>wl-copy -n<ret>'
+  echo -markup '{Information}copied selection to clipboard'
+}
+map -docstring 'copy to clipboard' global user y ': copy-to-clipboard<ret>'
+map -docstring 'paste (after) from clipboard'  global user p '<a-!>wl-paste -n<ret>'
+map -docstring 'paste (before) from clipboard' global user P '!wl-paste -n<ret>'
+map -docstring 'replace from clipboard'        global user r '|wl-paste -n<ret>'
+
+# Toggle line numbers
+define-command toggle-line-numbers -docstring 'toggle line numbers' %{
+  try %{
+    remove-highlighter window/number-lines
+    echo -markup '{Information}line numbers off'
+  } catch %{
+    add-highlighter window/number-lines number-lines
+    echo -markup '{Information}line numbers on'
+  }
+}
+map -docstring 'toggle line numbers' global user l ': toggle-line-numbers<ret>'
+
+# Window / view management
+map global normal <c-w> V
+map -docstring 'open new window'                          global view n <esc>:new<ret>
+map -docstring 'open new window in vertical split'        global view v "<esc>:kitty-split-vertical kak -c %val{session}<ret>"
+map -docstring 'open new window in horizontal split'      global view s "<esc>:kitty-split-horizontal kak -c %val{session}<ret>"
+map -docstring 'close current window'                     global view c <esc>:quit<ret>
+
+# Quick goto
+map -docstring 'select buffer' global goto B '<esc>: connect terminal kcr-fzf-buffers<ret>'
+map -docstring 'select file'   global goto f '<esc>: connect terminal kcr-fzf-files<ret>'
+
+# Toggle case on ~
+map global normal ~ <a-`>
+
+# Object selection for XML tags
+map -docstring 'xml tag objet' global object t %{c<lt>([\w.]+)\b[^>]*?(?<lt>!/)> , <lt>/([\w.]+)\b[^>]*?(?<lt>!/)> <ret>}
+
+# LSP menu + shell
+map -docstring 'LSP menu' global normal <c-l> ': enter-user-mode lsp<ret>'
+map global normal <c-t> '<esc>: connect terminal elvish<ret>'
+
+################################################################################
+# Crosshairs (line highlight)
+################################################################################
+try %{
+  set-option global highlight_current_line true
+  set-option global highlight_current_column false
+  crosshairs-change-hooks
+  crosshairs-update
+}
+
+################################################################################
+# Helper commands
+################################################################################
+# Simple IDE layout helper
+define-command ide %{
+  nop %sh{ layout_manager IDE }
+
+  rename-client main
+  set-option global jumpclient main
+
+  new rename-client tools
+  set-option global toolsclient tools
+
+  new rename-client docs
+  set-option global docsclient docs
+}
+
+################################################################################
+# Filetype-specific defaults & formatters
+################################################################################
+# C/C++ — placeholder for clang integration (disabled)
+# hook global WinSetOption filetype=(c|cpp) %{
+#   # hook window BufWritePre .* lsp-formatting-sync
+# }
+
+# Python
+hook -group ft-python global WinSetOption filetype=python %{
+  set-option buffer tabstop 4
+  set-option buffer indentwidth 4
+  set-option buffer lsp_insert_spaces false
+  set-option buffer lsp_tab_size 4
+  hook -group fmt-python window BufWritePre .* lsp-formatting-sync
+}
+
+# Lua: treat .luau as lua
+hook -group ft-luau global BufCreate '.*[.](luau)' %{ set-option buffer filetype lua }
+
+# JSON pretty format
+hook -group fmt-json global BufSetOption filetype=json %{
+  set-option buffer formatcmd "jq --indent %opt{tabstop} ."
+}
+
+# XML tidy
+hook -group fmt-xml global BufSetOption filetype=xml %{
+  set-option buffer formatcmd "tidy -q -xml --indent yes --indent-spaces %opt{tabstop}"
+}
+
+# General pre-save formatter (uses buffer.formatcmd if set)
+hook -group fmt-on-save global BufWritePre .* %{ try %{ format } }
+
+# Nix
+hook -group fmt-nix global BufSetOption filetype=nix %{ set-option buffer formatcmd 'nixfmt' }
+
+# Go (prefer gofumpt)
+hook -group fmt-go global BufSetOption filetype=go %{ set-option buffer formatcmd 'gofumpt' }
+
+# Shell
+hook -group fmt-sh global BufSetOption filetype=sh %{ set-option buffer formatcmd 'shfmt -i 2 -ci -bn' }
+
+# Lua
+hook -group fmt-lua global BufSetOption filetype=lua %{ set-option buffer formatcmd 'stylua - --search-parent-directories' }
+
+# JS/TS/JSX/TSX/Markdown via Prettier
+hook -group fmt-prettier global BufSetOption filetype=(javascript|typescript|jsx|tsx|markdown) %{
+  set-option buffer formatcmd 'prettier --stdin-filepath %val{buffile}'
+}
+
+# Rust — semantic tokens + format on save
+hook -group ft-rust global WinSetOption filetype=rust %{
+  set-option buffer lsp_auto_highlight_references true
+
+  hook -group fmt-rust window BufWritePre .* lsp-formatting-sync
+
+  hook -group semantic-tokens window BufReload .* lsp-semantic-tokens
+  hook -group semantic-tokens window NormalIdle .* lsp-semantic-tokens
+  hook -group semantic-tokens window InsertIdle .* lsp-semantic-tokens
+
+  hook -once -always window WinSetOption filetype=.* %{ remove-hooks window semantic-tokens }
+}
+
+# Asciidoc / Markdown — prose lint + soft wrap
+hook -group prose global WinSetOption filetype=(asciidoc|markdown) %{
+  set-option window lintcmd 'proselint'
+  add-highlighter -override global/markdown-wrap wrap -word
+  hook -once -always window WinSetOption filetype=.* %{ remove-highlighter global/markdown-wrap }
+}
+
