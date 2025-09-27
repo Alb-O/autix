@@ -30,6 +30,7 @@ let
     "codex"
     "mpv"
     "yazi"
+    "lazygit"
   ];
 
   selectAspects = names: map requireAspect names;
