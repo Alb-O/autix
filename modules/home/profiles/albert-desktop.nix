@@ -14,6 +14,8 @@ _: {
       "notifications"
       "polkit"
       "sillytavern"
+      "blender"
+      "hydrus"
     ];
   };
 }
