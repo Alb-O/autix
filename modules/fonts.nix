@@ -48,6 +48,7 @@ let
         inter
         crimson-pro
         fira-sans
+        roboto
       ];
 
       defaults = {

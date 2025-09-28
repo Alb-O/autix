@@ -109,6 +109,7 @@ let
           shell-init
           essential-pkgs
           display-manager
+          wayland
           ssh
           keyring
           fonts

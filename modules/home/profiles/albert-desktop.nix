@@ -5,6 +5,7 @@ _: {
     system = "x86_64-linux";
     modules = [
       "niri"
+      "wayland"
       "firefox"
       "tooling-cli"
       "tooling-dev"

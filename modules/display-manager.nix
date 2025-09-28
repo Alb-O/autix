@@ -31,8 +31,5 @@ _: {
       programs.dconf.enable = true;
       services.udev.packages = [ pkgs.gnome-settings-daemon ];
 
-      environment.sessionVariables = {
-        NIXOS_OZONE_WL = "1";
-      };
     };
 }
