@@ -116,7 +116,7 @@ let
         };
       };
     };
-    };
+  };
 
   autix = {
     home.modules.lazygit = hmModule;

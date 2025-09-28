@@ -8,11 +8,10 @@ let
       ...
     }:
     let
-      homeCfg = config.home;
       username =
-        homeCfg.username or (throw "firefox-module: set home.username before importing this module");
+        config.home.username or (throw "firefox-module: set home.username before importing this module");
       homeDir =
-        homeCfg.homeDirectory
+        config.home.homeDirectory
           or (throw "firefox-module: set home.homeDirectory before importing this module");
 
       xdgDirs = lib.attrByPath [ "xdg" "userDirs" ] { } config;
@@ -29,7 +28,7 @@ let
 
       policiesConfig = import ./_config/policies.nix { };
       extensionsConfig = import ./_config/extensions.nix { };
-      profileConfig = import ./_config/profile.nix { inherit lib downloadDir; };
+      prefsConfig = import ./_config/prefs.nix { inherit lib downloadDir; };
       searchConfig = import ./_config/search.nix { inherit lib pkgs; };
     in
     {
@@ -43,7 +42,15 @@ let
           id = 0;
           isDefault = true;
           path = username;
-          settings = profileConfig.profileSettings;
+          settings = prefsConfig.profileSettings;
+          search = searchConfig.searchConfig;
+        };
+
+        profiles.work = {
+          id = 1;
+          isDefault = false;
+          path = "work";
+          settings = prefsConfig.profileSettings;
           search = searchConfig.searchConfig;
         };
       };

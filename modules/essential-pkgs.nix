@@ -6,39 +6,11 @@ let
       nano
       git
       curl
-      wget
       just
       jq
-      mprocs
+      fastfetch
       firefox
       alacritty
-      (pkgs.writeShellApplication {
-        name = "xdg-terminal";
-        text = ''
-          set -euo pipefail
-
-          term="''${TERMINAL:-}"
-          if [[ -n "$term" ]]; then
-            exec "$term" "$@"
-          fi
-
-          for cmd in kitty wezterm alacritty foot gnome-terminal konsole xterm; do
-            if command -v "$cmd" >/dev/null 2>&1; then
-              exec "$cmd" "$@"
-            fi
-          done
-
-          echo "xdg-terminal: no terminal emulator found (set $TERMINAL)" >&2
-          exit 1
-        '';
-      })
-      (pkgs.writeShellApplication {
-        name = "wget";
-        text = ''
-          data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
-          exec -a "$0" "${pkgs.wget}/bin/wget" --hsts-file="$data_home/wget-hsts" "$@"
-        '';
-      })
     ];
 
   hmModule =

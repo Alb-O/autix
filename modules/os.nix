@@ -1,4 +1,9 @@
-{ inputs, lib, config, ... }:
+{
+  inputs,
+  lib,
+  config,
+  ...
+}:
 let
   inherit (inputs.nixpkgs.lib) nixosSystem;
 
@@ -37,8 +42,7 @@ let
   selectAspects = names: map requireAspect names;
 
   commonModules =
-    (lib.optional (optionsModule != null) optionsModule)
-    ++ selectAspects commonAspectNames;
+    (lib.optional (optionsModule != null) optionsModule) ++ selectAspects commonAspectNames;
 
   modulesForProfile =
     profileName: profile:
@@ -52,7 +56,9 @@ let
         };
       };
     in
-    commonModules ++ aspectModules ++ [
+    commonModules
+    ++ aspectModules
+    ++ [
       userModule
       profileSettings
     ];
@@ -96,7 +102,10 @@ let
   desktopLinux =
     { system, name }:
     let
-      hmModules = homeManagerModulesFor { inherit system; host = name; };
+      hmModules = homeManagerModulesFor {
+        inherit system;
+        host = name;
+      };
     in
     nixosSystem {
       inherit system;
@@ -131,7 +140,10 @@ let
   wslLinux =
     { system, name }:
     let
-      hmModules = homeManagerModulesFor { inherit system; host = name; };
+      hmModules = homeManagerModulesFor {
+        inherit system;
+        host = name;
+      };
     in
     nixosSystem {
       inherit system;
@@ -160,7 +172,13 @@ let
 in
 {
   flake.nixosConfigurations = {
-    desktop = desktopLinux { system = "x86_64-linux"; name = "desktop"; };
-    wsl = wslLinux { system = "x86_64-linux"; name = "wsl"; };
+    desktop = desktopLinux {
+      system = "x86_64-linux";
+      name = "desktop";
+    };
+    wsl = wslLinux {
+      system = "x86_64-linux";
+      name = "wsl";
+    };
   };
 }

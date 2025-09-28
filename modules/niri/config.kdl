@@ -1,3 +1,6 @@
+animations {
+    off
+}
 input {
     keyboard {
         repeat-delay 200
@@ -9,7 +12,7 @@ input {
         tap
         natural-scroll
     }
-    focus-follows-mouse max-scroll-amount="50%"
+    focus-follows-mouse max-scroll-amount="20%"
     workspace-auto-back-and-forth
 }
 output "LG Electronics LG ULTRAGEAR 103NTNH5S287" {
@@ -24,7 +27,7 @@ output "PNP(BNQ) ZOWIE XL LCD 95L03173SL0" {
 }
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 prefer-no-csd
-overview { backdrop-color "#1A1B26"; }
+overview { backdrop-color "#000000"; }
 layout {
     gaps 16
     struts {
@@ -34,9 +37,9 @@ layout {
         bottom 0
     }
     focus-ring {
-        width 2
+        width 4
         active-color "#ffffff"
-        inactive-color "#888888"
+        active-gradient from="#80c8ff" to="#bbddff" angle=45
     }
     border { off; }
     default-column-width { proportion 0.500000; }
@@ -46,7 +49,14 @@ layout {
         proportion 0.666670
     }
     center-focused-column "never"
+    tab-indicator {
+      	width 11
+      	position "top"
+      	corner-radius 11
+    }
+    background-color "#000000"
 }
+
 cursor {
     xcursor-theme "default"
     xcursor-size 24
@@ -170,6 +180,10 @@ binds {
 }
 spawn-at-startup "waybar"
 spawn-at-startup "setup-background-terminals"
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
 window-rule {
     match app-id="kitty" title="XDG File Picker"
     default-column-width { proportion 0.650000; }

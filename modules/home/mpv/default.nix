@@ -42,7 +42,7 @@ let
         };
       };
     };
-    };
+  };
 
   autix = {
     home.modules.mpv = hmModule;

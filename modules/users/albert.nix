@@ -25,6 +25,7 @@ let
     modules.homeManager = autix.home.modules;
 
     nixosModules.${userName} = {
+      time.timeZone = "Australia/Hobart";
       users.users.${userName} = {
         isNormalUser = true;
         extraGroups = [

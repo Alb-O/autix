@@ -24,8 +24,7 @@ let
 
         xdg.portal = {
           enable = true;
-          extraPortals =
-            if portalNeedsGnome then [ pkgs.xdg-desktop-portal-gnome ] else [ ];
+          extraPortals = if portalNeedsGnome then [ pkgs.xdg-desktop-portal-gnome ] else [ ];
           configPackages = [ niriPackage ];
         };
       };

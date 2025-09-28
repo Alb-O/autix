@@ -11,25 +11,44 @@ let
       fontStyle = terminalFont.family.style;
     in
     lib.mkIf isGraphical {
+      xdg.configFile."kitty/tab_bar.py" = {
+        source = ./tab_bar.py;
+      };
       programs.kitty = {
         enable = true;
 
         extraConfig = ''
           font_family family='${fontName}' style='${fontStyle}'
-          font_size=${toString fontSize}'';
+          font_size ${toString fontSize}'';
 
         settings = {
-          # Terminal behavior
           shell_integration = "enabled";
           term = "xterm-256color";
           shell = "fish";
+          strip_trailing_spaces = "smart";
+          focus_follows_mouse = "yes";
+          enable_audio_bell = "no";
 
           # Appearance
           background_opacity = "1.0";
-          window_padding_width = "25 20";
+          window_padding_width = "0 20 20";
           cursor_shape = "beam";
           cursor_blink_interval = "0.25";
           hide_window_decorations = "yes";
+          active_border_color = "#80c8ff";
+
+          ## Tab bar
+          tab_bar_min_tabs = "1";
+          tab_bar_edge = "top";
+          tab_bar_margin_height = "5.0 5.0";
+          tab_bar_style = "custom";
+          tab_powerline_style = "round";
+          active_tab_foreground = "#000000";
+          inactive_tab_foreground = "#1E1E1E";
+          active_tab_background = "#BBDDFF";
+          inactive_tab_background = "#579DD4";
+          tab_bar_margin_color = "#1E1E1E";
+          tab_title_template = "{index}: {title}";
 
           # Gruvdark color scheme
           foreground = "#E6E3DE";
@@ -57,16 +76,6 @@ let
           color13 = "#B794F0";
           color14 = "#2FCAB9";
           color15 = "#E6E3DE";
-
-          # Window layout
-          remember_window_size = "no";
-          initial_window_width = "640";
-          initial_window_height = "400";
-
-          # Performance
-          repaint_delay = "10";
-          input_delay = "3";
-          sync_to_monitor = "yes";
         };
       };
     };

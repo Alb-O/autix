@@ -13,6 +13,7 @@
           statix.enable = true;
           stylua.enable = true;
           shfmt.enable = true;
+          black.enable = true;
         };
         settings.global.excludes = [
           "flake.lock"
@@ -24,6 +25,7 @@
           "*.kak"
           "**/kakrc"
           "justfile"
+          "**/.keep"
         ];
       };
     };

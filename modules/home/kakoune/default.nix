@@ -17,6 +17,10 @@ let
           source = ./colors;
           recursive = true;
         };
+        "kak/filetypes" = {
+          source = ./filetypes;
+          recursive = true;
+        };
       };
       home.packages = lib.mkAfter (
         with pkgs;

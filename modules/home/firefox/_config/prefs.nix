@@ -126,7 +126,7 @@
     "mousewheel.default.delta_multiplier_y" = 300; # 250-400;
     "general.autoScroll" = true; # Middle-click scrolling
 
-    # Enable userChrome.css for custom styling (disabled)
-    #"toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+    "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+    "svg.context-properties.content.enabled" = true;
   };
 }

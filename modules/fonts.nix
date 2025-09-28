@@ -11,9 +11,9 @@ let
           package = pkgs.jetbrains-mono;
           style = "ExtraLight";
           sizes = {
-            small = 11;
-            normal = 13;
-            large = 15;
+            small = 14;
+            normal = 16;
+            large = 18;
           };
         };
 
@@ -22,9 +22,9 @@ let
           package = pkgs.fira-sans;
           style = "Regular";
           sizes = {
-            small = 11;
-            normal = 12;
-            large = 14;
+            small = 14;
+            normal = 16;
+            large = 18;
           };
         };
 
@@ -33,9 +33,9 @@ let
           package = pkgs.crimson-pro;
           style = "Regular";
           sizes = {
-            small = 12;
-            normal = 13;
-            large = 15;
+            small = 14;
+            normal = 16;
+            large = 18;
           };
         };
       };

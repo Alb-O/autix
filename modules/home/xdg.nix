@@ -4,8 +4,8 @@ let
     { config, pkgs, ... }:
     let
       cfgHome = config.xdg.configHome;
-      inherit (config.xdg) stateHome;
       inherit (config.xdg) dataHome;
+      inherit (config.xdg) stateHome;
       inherit (config.xdg) cacheHome;
 
       mkVars = prefix: mapping: lib.mapAttrs (_: value: "${prefix}/${value}") mapping;
@@ -72,10 +72,20 @@ let
       };
 
       home = {
-        packages = lib.mkAfter [
-          pkgs.kitty
-          pkgs.xdg-desktop-portal-termfilechooser
-        ];
+        packages = lib.mkAfter (
+          with pkgs;
+          [
+            kitty
+            xdg-desktop-portal-termfilechooser
+            # Thin wget wrapper that puts its litter file into .local/share
+            (writeShellApplication {
+              name = "wget";
+              text = ''
+                exec -a "$0" "${wget}/bin/wget" --hsts-file="${dataHome}/wget-hsts" "$@"
+              '';
+            })
+          ]
+        );
 
         preferXdgDirectories = true;
 

@@ -29,6 +29,7 @@ let
     "zoxide"
     "opencode"
     "codex"
+    "gemini"
     "mpv"
     "yazi"
     "lazygit"

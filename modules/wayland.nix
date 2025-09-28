@@ -1,4 +1,4 @@
-{ lib, ... }:
+_:
 let
   envDefaults = {
     QT_QPA_PLATFORM = "wayland;xcb";
