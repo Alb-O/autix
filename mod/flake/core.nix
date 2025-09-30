@@ -47,5 +47,11 @@
       nixos-wsl.url = "github:nix-community/NixOS-WSL";
       nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     };
+    outputs = lib.mkForce ''
+      inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; }
+        (inputs.import-tree [
+          ./mod
+        ])
+    '';
   };
 }
