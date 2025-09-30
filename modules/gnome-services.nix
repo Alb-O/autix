@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.keyring =
+  flake.nixosModules.gnome-services =
     { pkgs, ... }:
     {
       services.gnome.gnome-keyring.enable = true;
@@ -10,5 +10,7 @@ _: {
         gnome-keyring
         libsecret # For secret storage API
       ];
+      programs.dconf.enable = true;
+      services.udev.packages = [ pkgs.gnome-settings-daemon ];
     };
 }

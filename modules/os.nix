@@ -117,10 +117,11 @@ let
           nix-settings
           shell-init
           essential-pkgs
-          display-manager
+          dm
+          tty
           wayland
           ssh
-          keyring
+          gnome-services
           fonts
           keyboard
           albert

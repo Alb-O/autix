@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.display-manager =
+  flake.nixosModules.tty =
     { config, pkgs, ... }:
     let
       fontBundle = config.autix.fonts;
@@ -7,16 +7,6 @@ _: {
       monoFamily = displayFont.family;
     in
     {
-      services.displayManager = {
-        enable = true;
-        ly = {
-          enable = true;
-          settings = {
-            animation = "matrix";
-          };
-        };
-      };
-
       services.kmscon = {
         enable = true;
         fonts = [
@@ -27,9 +17,5 @@ _: {
         ];
         extraConfig = "font-size=${toString displayFont.size}";
       };
-
-      programs.dconf.enable = true;
-      services.udev.packages = [ pkgs.gnome-settings-daemon ];
-
     };
 }
