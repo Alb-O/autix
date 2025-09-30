@@ -1,6 +1,86 @@
-{ lib, ... }:
+{ inputs, lib, config, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib)
+    attrByPath
+    hasAttr
+    mkAfter
+    mkOption
+    types;
+
+  hmAspects = attrByPath [ "autix" "home" "modules" ] { } config;
+
+  requireAspect = name:
+    attrByPath [ name ] (throw "Home-manager aspect '${name}' is not defined") hmAspects;
+
+  selectAspects = names: map requireAspect names;
+
+  optionsModule = attrByPath [ "flake" "modules" "homeManager" "profileOptions" ] null config;
+
+  baseModuleNames =
+    attrByPath [ "autix" "home" "profile" "baseModules" ]
+      config.autix.home.profileDefaults.baseModules
+      config;
+
+  baseModules =
+    (lib.optional (optionsModule != null) optionsModule)
+    ++ selectAspects baseModuleNames;
+
+  profileModules = profileName: profile:
+    let
+      aspectModules = selectAspects profile.modules;
+      userModule = requireAspect profile.user;
+      profileSettings = _: {
+        autix.home.profile = {
+          name = profileName;
+          inherit (profile) graphical system;
+        };
+      };
+    in
+    baseModules
+    ++ aspectModules
+    ++ [
+      userModule
+      profileSettings
+    ];
+
+  homeManagerModulesForProfile =
+    { profileName ? null, system }:
+    if profileName == null then
+      [ ]
+    else
+      let
+        profileDefs = attrByPath [ "autix" "home" "profile" "profiles" ] { } config;
+      in if !(hasAttr profileName profileDefs) then
+        throw "Home profile '${profileName}' is not defined"
+      else
+        let
+          profile = profileDefs.${profileName};
+          userName = profile.user;
+          hmModules = profileModules profileName profile;
+        in
+        [
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.${userName}.imports = hmModules;
+            };
+            environment.systemPackages = mkAfter [
+              inputs.home-manager.packages.${system}.home-manager
+            ];
+          }
+        ];
+
+  mkHomeConfiguration =
+    profileName: profile:
+    let
+      pkgs = inputs.nixpkgs.legacyPackages.${profile.system};
+    in
+    inputs.home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      modules = profileModules profileName profile;
+    };
 
   profileType = types.submodule (
     { name, ... }:
@@ -51,6 +131,12 @@ let
       description = "System identifier for this profile's package set.";
     };
 
+    baseModules = mkOption {
+      type = types.listOf types.str;
+      default = config.autix.home.profileDefaults.baseModules;
+      description = "Home-manager aspects included for every profile.";
+    };
+
     profiles = mkOption {
       type = types.attrsOf profileType;
       default = { };
@@ -69,7 +155,7 @@ let
     config.autix.home.modules.profileOptions = _: { };
   };
 in
-{
+{ 
   options.autix.home = {
     profile = profileOptionSet;
     modules = mkOption {
@@ -79,5 +165,22 @@ in
     };
   };
 
+  options.autix.home.profileSupport = mkOption {
+    type = types.raw;
+    default = { };
+    description = "Helper functions for assembling home profile modules across configuration classes.";
+  };
+
   config.flake.modules.homeManager.profileOptions = _: profileOptionsModule;
+
+  config.autix.home.profileSupport = {
+    inherit
+      baseModuleNames
+      baseModules
+      requireAspect
+      selectAspects
+      profileModules
+      homeManagerModulesForProfile
+      mkHomeConfiguration;
+  };
 }
