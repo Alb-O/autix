@@ -17,3 +17,5 @@
 - New files must be added to git before Nix can see them in flake evaluations. Use `git mv` if renaming/moving files.
 
 - Import paths in dendritic modules are relative to the file location, not the flake root.
+
+- Agents in a virtual/isolated environment image without the Nix package manager should find the latest Nix installer script in the scripts/ directory. If you're an agent needing access to Nix in order to test, run this script.
