@@ -5,14 +5,11 @@ let
       BROWSER = lib.mkDefault "firefox";
     };
   };
-
-  autix = {
-    home.modules.networking = hmModule;
-  };
+in
+{
+  autix.home.modules.networking = hmModule;
 
   flake = {
-    modules.homeManager = autix.home.modules;
-
     nixosModules.networking = {
       networking = {
         networkmanager.enable = lib.mkDefault true;
@@ -20,7 +17,4 @@ let
       };
     };
   };
-in
-{
-  inherit autix flake;
 }

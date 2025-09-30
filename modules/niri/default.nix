@@ -46,18 +46,6 @@ let
       systemd.user.services."niri-flake-polkit".enable = lib.mkForce false;
     };
 
-  autix = {
-    home.modules.niri = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-    overlays.niri = inputs.niri-flake.overlays.niri;
-    nixosModules.niri = nixosModule;
-    modules.nixos.niri = nixosModule;
-    homeModules.niri = hmModule;
-  };
-
   flake-file = {
     inputs = {
       niri-flake.url = "github:sodiboo/niri-flake";
@@ -66,5 +54,14 @@ let
   };
 in
 {
-  inherit autix flake flake-file;
+  autix.home.modules.niri = hmModule;
+
+  flake = {
+    overlays.niri = inputs.niri-flake.overlays.niri;
+    nixosModules.niri = nixosModule;
+    modules.nixos.niri = nixosModule;
+    homeModules.niri = hmModule;
+  };
+
+  inherit flake-file;
 }

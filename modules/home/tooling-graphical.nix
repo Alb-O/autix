@@ -21,15 +21,7 @@ let
         ]
       );
     };
-
-  autix = {
-    home.modules."tooling-graphical" = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules."tooling-graphical" = hmModule;
 }

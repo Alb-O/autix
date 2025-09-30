@@ -41,15 +41,7 @@ let
         };
       }
     );
-
-  autix = {
-    home.modules.sillytavern = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.sillytavern = hmModule;
 }

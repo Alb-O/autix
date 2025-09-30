@@ -14,15 +14,7 @@ let
         open = "wslview";
       };
     };
-
-  autix = {
-    home.modules.wsl = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.wsl = hmModule;
 }

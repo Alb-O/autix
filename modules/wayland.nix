@@ -34,17 +34,12 @@ let
       home.sessionVariables = mkDefaultEnv lib;
       systemd.user.sessionVariables = mkDefaultEnv lib;
     };
-
-  autix = {
-    home.modules.wayland = hmModule;
-  };
+in
+{
+  autix.home.modules.wayland = hmModule;
 
   flake = {
-    modules.homeManager = autix.home.modules;
     homeModules.wayland = hmModule;
     nixosModules.wayland = nixosModule;
   };
-in
-{
-  inherit autix flake;
 }

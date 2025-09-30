@@ -119,37 +119,29 @@ let
         };
       };
     };
-
-  autix = {
-    home.modules.fonts = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-
-    nixosModules.fonts =
-      { pkgs, config, ... }:
-      let
-        cfg = config.autix.fonts;
-      in
-      {
-        options.autix.fonts = mkOption {
-          type = types.attrs;
-          default = mkFontBundle pkgs;
-          description = "autix font bundle available to NixOS aspects.";
-        };
-
-        config = {
-          fonts.packages = cfg.packages;
-
-          fonts.fontconfig = {
-            enable = true;
-            defaultFonts = cfg.defaults;
-          };
-        };
-      };
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.fonts = hmModule;
+
+  flake.nixosModules.fonts =
+    { pkgs, config, ... }:
+    let
+      cfg = config.autix.fonts;
+    in
+    {
+      options.autix.fonts = mkOption {
+        type = types.attrs;
+        default = mkFontBundle pkgs;
+        description = "autix font bundle available to NixOS aspects.";
+      };
+
+      config = {
+        fonts.packages = cfg.packages;
+
+        fonts.fontconfig = {
+          enable = true;
+          defaultFonts = cfg.defaults;
+        };
+      };
+    };
 }

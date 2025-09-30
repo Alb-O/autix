@@ -16,14 +16,11 @@ let
         userEmail = lib.mkDefault email;
       };
     };
-
-  autix = {
-    home.modules.${userName} = hmModule;
-  };
+in
+{
+  autix.home.modules.${userName} = hmModule;
 
   flake = {
-    modules.homeManager = autix.home.modules;
-
     nixosModules.${userName} = {
       time.timeZone = "Australia/Hobart";
       users.users.${userName} = {
@@ -39,7 +36,4 @@ let
       };
     };
   };
-in
-{
-  inherit autix flake;
 }

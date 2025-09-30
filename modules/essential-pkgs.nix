@@ -19,20 +19,6 @@ let
       home.packages = lib.mkDefault (essentialPackages pkgs);
     };
 
-  autix = {
-    home.modules."essential-pkgs" = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-
-    nixosModules."essential-pkgs" =
-      { pkgs, ... }:
-      {
-        environment.systemPackages = essentialPackages pkgs;
-      };
-  };
-
   moduleArgs = {
     autixPackages = {
       essential = essentialPackages;
@@ -49,6 +35,14 @@ let
     };
 in
 {
-  inherit autix flake perSystem;
+  autix.home.modules."essential-pkgs" = hmModule;
+
+  flake.nixosModules."essential-pkgs" =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = essentialPackages pkgs;
+    };
+
+  inherit perSystem;
   _module.args = moduleArgs;
 }

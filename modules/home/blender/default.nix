@@ -145,15 +145,7 @@ let
     {
       home.packages = lib.mkAfter [ blenderDaily ];
     };
-
-  autix = {
-    home.modules.blender = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.blender = hmModule;
 }

@@ -143,15 +143,7 @@ let
       targets.genericLinux.enable = lib.mkForce false;
       programs.man.enable = false;
     };
-
-  autix = {
-    home.modules.xdg = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.xdg = hmModule;
 }

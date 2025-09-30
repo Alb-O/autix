@@ -18,25 +18,17 @@ let
         };
       };
     };
+in
+{
+  autix.home.modules.ssh = hmModule;
 
-  autix = {
-    home.modules.ssh = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-
-    nixosModules.ssh = {
-      services.openssh = {
-        enable = true;
-        settings = {
-          PermitRootLogin = "no";
-          PasswordAuthentication = false;
-        };
+  flake.nixosModules.ssh = {
+    services.openssh = {
+      enable = true;
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
       };
     };
   };
-in
-{
-  inherit autix flake;
 }

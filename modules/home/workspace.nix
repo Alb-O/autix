@@ -36,15 +36,7 @@ let
       programs.fish.enable = lib.mkDefault true;
       programs.bash.enable = lib.mkForce false;
     };
-
-  autix = {
-    home.modules.workspace = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.workspace = hmModule;
 }

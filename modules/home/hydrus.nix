@@ -16,15 +16,7 @@ let
     {
       home.packages = lib.mkAfter [ hydrusClient ];
     };
-
-  autix = {
-    home.modules.hydrus = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.hydrus = hmModule;
 }

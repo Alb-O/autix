@@ -79,15 +79,7 @@ let
         };
       };
     };
-
-  autix = {
-    home.modules.kitty = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.kitty = hmModule;
 }

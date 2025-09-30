@@ -16,15 +16,7 @@ let
         ]
       );
     };
-
-  autix = {
-    home.modules.codex = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.codex = hmModule;
 }

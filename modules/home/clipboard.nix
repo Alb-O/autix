@@ -38,15 +38,7 @@ let
         CLIPHIST_DB_PATH = lib.mkDefault "$HOME/.local/share/cliphist/db";
       };
     };
-
-  autix = {
-    home.modules.clipboard = hmModule;
-  };
-
-  flake = {
-    modules.homeManager = autix.home.modules;
-  };
 in
 {
-  inherit autix flake;
+  autix.home.modules.clipboard = hmModule;
 }
