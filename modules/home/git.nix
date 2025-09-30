@@ -23,12 +23,10 @@ let
           "*~"
           "*.swp"
           "*.tmp"
+          "*.log"
           "node_modules/"
           "dist/"
-          "build/"
           "target/"
-          "result"
-          "result-*"
         ];
         extraConfig = {
           init.defaultBranch = "main";
