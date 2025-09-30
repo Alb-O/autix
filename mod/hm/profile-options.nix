@@ -51,10 +51,23 @@ let
       description = "System identifier for this profile's package set.";
     };
 
+    baseModules = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Home-manager aspects included for every profile.";
+    };
+
     profiles = mkOption {
       type = types.attrsOf profileType;
       default = { };
       description = "Declarative set of home profiles available in this flake.";
+    };
+
+    lib = mkOption {
+      type = types.attrs;
+      default = { };
+      description = "Helper functions derived from the configured home profiles.";
+      readOnly = true;
     };
   };
 
