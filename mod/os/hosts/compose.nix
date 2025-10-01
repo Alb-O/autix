@@ -2,6 +2,7 @@
 let
   inherit (lib)
     attrByPath
+    all
     concatStringsSep
     foldl'
     mapAttrs;
@@ -11,6 +12,30 @@ let
   layerTree = config.autix.os.layerTree;
   hostDefinitions = config.autix.os.hosts;
   helpers = config.autix.home.profileSupport;
+
+  providedLayerPaths = config.autix.os.layerPaths;
+
+  buildLayerRefs = path: node:
+    let
+      childrenAttr = attrByPath [ "children" ] { } node;
+      modulesAttr = attrByPath [ "modules" ] [ ] node;
+      descriptionAttr = attrByPath [ "description" ] "" node;
+      children = mapAttrs (name: child: buildLayerRefs (path ++ [ name ]) child) childrenAttr;
+    in
+    children
+    // {
+      path = path;
+      modules = modulesAttr;
+      description = descriptionAttr;
+    };
+
+  derivedLayerPaths = mapAttrs (name: node: buildLayerRefs [ name ] node) layerTree;
+
+  layerPaths =
+    let
+      hasProvided = builtins.length (builtins.attrNames providedLayerPaths) > 0;
+    in
+    if hasProvided then providedLayerPaths else derivedLayerPaths;
 
   pathKey = path: concatStringsSep "/" path;
 
@@ -55,11 +80,28 @@ let
         modules = result.modules;
       };
 
-  modulesForPaths = paths:
+  ensureLayerRef = thunk:
+    let
+      ref = thunk layerPaths;
+      isValid =
+        builtins.isAttrs ref
+        && ref ? path
+        && lib.isList ref.path
+        && all builtins.isString ref.path;
+    in
+    if isValid then
+      ref
+    else
+      throw "Host path thunk must return a layer reference from autix.os.layerPaths";
+
+  modulesForPaths = pathThunks:
+    let
+      refs = builtins.map ensureLayerRef pathThunks;
+    in
     (foldl'
-      (state: path: collectPath path state)
+      (state: ref: collectPath ref.path state)
       { visited = [ ]; modules = [ ]; }
-      paths
+      refs
     ).modules;
 
   mkHost = name: host:

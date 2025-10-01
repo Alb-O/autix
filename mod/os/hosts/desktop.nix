@@ -7,8 +7,8 @@ in
     system = "x86_64-linux";
     profile = "albert-desktop";
     paths = [
-      [ "base" "locale" "graphical" ]
-      [ "base" "user" ]
+      (layerPaths: layerPaths.base.locale.graphical)
+      (layerPaths: layerPaths.base.user)
     ];
     extraModules = [ modules.desktop ];
   };

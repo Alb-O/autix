@@ -7,8 +7,8 @@ in
     system = "x86_64-linux";
     profile = "albert-wsl";
     paths = [
-      [ "base" "locale" "wsl" ]
-      [ "base" "user" ]
+      (layerPaths: layerPaths.base.locale.wsl)
+      (layerPaths: layerPaths.base.user)
     ];
     extraModules = [ modules.wsl ];
   };
