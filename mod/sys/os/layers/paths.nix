@@ -2,9 +2,10 @@
 let
   inherit (lib) attrByPath mapAttrs;
 
-  layerTree = config.autix.os.layerTree;
+  inherit (config.autix.os) layerTree;
 
-  buildLayerRefs = path: node:
+  buildLayerRefs =
+    path: node:
     let
       childrenAttr = attrByPath [ "children" ] { } node;
       modulesAttr = attrByPath [ "modules" ] [ ] node;
@@ -13,7 +14,7 @@ let
     in
     children
     // {
-      path = path;
+      inherit path;
       modules = modulesAttr;
       description = descriptionAttr;
     };

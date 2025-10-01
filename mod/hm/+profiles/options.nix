@@ -1,16 +1,23 @@
-{ inputs, lib, config, autixUnfree, ... }:
+{
+  inputs,
+  lib,
+  config,
+  autixUnfree,
+  ...
+}:
 let
   inherit (lib)
     attrByPath
     hasAttr
     mkAfter
     mkOption
-    types;
+    types
+    ;
 
   hmAspects = attrByPath [ "autix" "home" "modules" ] { } config;
 
-  requireAspect = name:
-    attrByPath [ name ] (throw "Home-manager aspect '${name}' is not defined") hmAspects;
+  requireAspect =
+    name: attrByPath [ name ] (throw "Home-manager aspect '${name}' is not defined") hmAspects;
 
   selectAspects = names: map requireAspect names;
 
@@ -20,16 +27,17 @@ let
 
   optionsModule = attrByPath [ "flake" "modules" "homeManager" "profileOptions" ] null config;
 
-  baseModuleNames =
-    attrByPath [ "autix" "home" "profile" "baseModules" ]
-      config.autix.home.profileDefaults.baseModules
-      config;
+  baseModuleNames = attrByPath [
+    "autix"
+    "home"
+    "profile"
+    "baseModules"
+  ] config.autix.home.profileDefaults.baseModules config;
 
-  baseModules =
-    (lib.optional (optionsModule != null) optionsModule)
-    ++ selectAspects baseModuleNames;
+  baseModules = (lib.optional (optionsModule != null) optionsModule) ++ selectAspects baseModuleNames;
 
-  profileModules = profileName: profile:
+  profileModules =
+    profileName: profile:
     let
       aspectModules = selectAspects profile.modules;
       userModule = requireAspect profile.user;
@@ -48,13 +56,17 @@ let
     ];
 
   homeManagerModulesForProfile =
-    { profileName ? null, system }:
+    {
+      profileName ? null,
+      system,
+    }:
     if profileName == null then
       [ ]
     else
       let
         profileDefs = attrByPath [ "autix" "home" "profile" "profiles" ] { } config;
-      in if !(hasAttr profileName profileDefs) then
+      in
+      if !(hasAttr profileName profileDefs) then
         throw "Home profile '${profileName}' is not defined"
       else
         let
@@ -79,10 +91,9 @@ let
   mkHomeConfiguration =
     profileName: profile:
     let
-      moduleNames =
-        unfree.moduleNamesFor profile {
-          inherit baseModuleNames;
-        };
+      moduleNames = unfree.moduleNamesFor profile {
+        inherit baseModuleNames;
+      };
       permittedUnfreePackages = unfree.permittedFor moduleNames;
       pkgs = unfree.pkgsFor {
         inherit permittedUnfreePackages;
@@ -194,6 +205,7 @@ in
       selectAspects
       profileModules
       homeManagerModulesForProfile
-      mkHomeConfiguration;
+      mkHomeConfiguration
+      ;
   };
 }

@@ -1,21 +1,28 @@
-{ inputs, lib, config, ... }:
+{
+  inputs,
+  lib,
+  config,
+  ...
+}:
 let
   inherit (lib)
     attrByPath
     all
     concatStringsSep
     foldl'
-    mapAttrs;
+    mapAttrs
+    ;
 
-  nixosSystem = inputs.nixpkgs.lib.nixosSystem;
+  inherit (inputs.nixpkgs.lib) nixosSystem;
 
-  layerTree = config.autix.os.layerTree;
+  inherit (config.autix.os) layerTree;
   hostDefinitions = config.autix.os.hosts;
   helpers = config.autix.home.profileSupport;
 
   providedLayerPaths = config.autix.os.layerPaths;
 
-  buildLayerRefs = path: node:
+  buildLayerRefs =
+    path: node:
     let
       childrenAttr = attrByPath [ "children" ] { } node;
       modulesAttr = attrByPath [ "modules" ] [ ] node;
@@ -24,7 +31,7 @@ let
     in
     children
     // {
-      path = path;
+      inherit path;
       modules = modulesAttr;
       description = descriptionAttr;
     };
@@ -39,7 +46,8 @@ let
 
   pathKey = path: concatStringsSep "/" path;
 
-  collectFromNode = pathSoFar: node: remaining: visited: modules:
+  collectFromNode =
+    pathSoFar: node: remaining: visited: modules:
     let
       key = pathKey pathSoFar;
       alreadyVisited = lib.elem key visited;
@@ -56,61 +64,60 @@ let
       let
         childName = builtins.head remaining;
         children = attrByPath [ "children" ] { } node;
-        childNode =
-          attrByPath [ childName ]
-            (throw "Layer '${childName}' is not defined under path '${pathKey pathSoFar}'")
-            children;
+        childNode = attrByPath [
+          childName
+        ] (throw "Layer '${childName}' is not defined under path '${pathKey pathSoFar}'") children;
       in
       collectFromNode (pathSoFar ++ [ childName ]) childNode (builtins.tail remaining) visited' modules';
 
-  collectPath = path: state:
-    if path == [ ] then state
+  collectPath =
+    path: state:
+    if path == [ ] then
+      state
     else
       let
         rootName = builtins.head path;
-        rootNode =
-          attrByPath [ rootName ]
-            (throw "Layer '${rootName}' is not defined in the OS layer tree")
-            layerTree;
+        rootNode = attrByPath [
+          rootName
+        ] (throw "Layer '${rootName}' is not defined in the OS layer tree") layerTree;
         remainder = builtins.tail path;
         result = collectFromNode [ rootName ] rootNode remainder state.visited state.modules;
       in
       {
-        visited = result.visited;
-        modules = result.modules;
+        inherit (result) visited;
+        inherit (result) modules;
       };
 
-  ensureLayerRef = thunk:
+  ensureLayerRef =
+    thunk:
     let
       ref = thunk layerPaths;
       isValid =
-        builtins.isAttrs ref
-        && ref ? path
-        && lib.isList ref.path
-        && all builtins.isString ref.path;
+        builtins.isAttrs ref && ref ? path && lib.isList ref.path && all builtins.isString ref.path;
     in
     if isValid then
       ref
     else
       throw "Host path thunk must return a layer reference from autix.os.layerPaths";
 
-  modulesForPaths = pathThunks:
+  modulesForPaths =
+    pathThunks:
     let
       refs = builtins.map ensureLayerRef pathThunks;
     in
-    (foldl'
-      (state: ref: collectPath ref.path state)
-      { visited = [ ]; modules = [ ]; }
-      refs
-    ).modules;
+    (foldl' (state: ref: collectPath ref.path state) {
+      visited = [ ];
+      modules = [ ];
+    } refs).modules;
 
-  mkHost = name: host:
+  mkHost =
+    name: host:
     let
       layerModules = modulesForPaths host.paths;
       modules = layerModules ++ host.extraModules;
       hmModules = helpers.homeManagerModulesForProfile {
         profileName = host.profile;
-        system = host.system;
+        inherit (host) system;
       };
       defaultsModule = {
         networking.hostName = name;
@@ -121,7 +128,7 @@ let
       };
     in
     nixosSystem {
-      system = host.system;
+      inherit (host) system;
       modules = modules ++ hmModules ++ [ defaultsModule ];
     };
 

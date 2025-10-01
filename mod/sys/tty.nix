@@ -1,6 +1,6 @@
 _: {
   flake.nixosModules.tty =
-    { config, pkgs, ... }:
+    { config, ... }:
     let
       fontBundle = config.autix.fonts;
       displayFont = fontBundle.roles.displayManager;

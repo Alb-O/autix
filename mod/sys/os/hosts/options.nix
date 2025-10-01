@@ -2,13 +2,12 @@
 let
   inherit (lib) mkOption types;
 
-  layerPathThunkType =
-    types.mkOptionType {
-      name = "layerPathThunk";
-      description = "Function accepting 'config.autix.os.layerPaths' and returning a layer reference.";
-      check = builtins.isFunction;
-      merge = lib.mergeOneOption;
-    };
+  layerPathThunkType = types.mkOptionType {
+    name = "layerPathThunk";
+    description = "Function accepting 'config.autix.os.layerPaths' and returning a layer reference.";
+    check = builtins.isFunction;
+    merge = lib.mergeOneOption;
+  };
 
   hostType = types.submodule (
     { name, ... }:
