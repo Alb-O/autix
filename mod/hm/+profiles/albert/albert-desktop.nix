@@ -16,6 +16,7 @@ _: {
       "sillytavern"
       "blender"
       "hydrus"
+      "vscode"
     ];
   };
 }

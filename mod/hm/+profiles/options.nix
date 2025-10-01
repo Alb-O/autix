@@ -1,4 +1,4 @@
-{ inputs, lib, config, ... }:
+{ inputs, lib, config, autixUnfree, ... }:
 let
   inherit (lib)
     attrByPath
@@ -13,6 +13,10 @@ let
     attrByPath [ name ] (throw "Home-manager aspect '${name}' is not defined") hmAspects;
 
   selectAspects = names: map requireAspect names;
+
+  unfree = autixUnfree {
+    inherit inputs lib config;
+  };
 
   optionsModule = attrByPath [ "flake" "modules" "homeManager" "profileOptions" ] null config;
 
@@ -75,11 +79,20 @@ let
   mkHomeConfiguration =
     profileName: profile:
     let
-      pkgs = inputs.nixpkgs.legacyPackages.${profile.system};
+      moduleNames =
+        unfree.moduleNamesFor profile {
+          inherit baseModuleNames;
+        };
+      permittedUnfreePackages = unfree.permittedFor moduleNames;
+      pkgs = unfree.pkgsFor {
+        inherit permittedUnfreePackages;
+        inherit (profile) system;
+      };
+      hmModules = profileModules profileName profile;
+      modules = hmModules;
     in
     inputs.home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      modules = profileModules profileName profile;
+      inherit pkgs modules;
     };
 
   profileType = types.submodule (
