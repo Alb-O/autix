@@ -11,6 +11,7 @@ in
       tty
       wayland
       gnome-services
+      keyboard
     ];
   };
 }

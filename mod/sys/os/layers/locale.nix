@@ -4,10 +4,9 @@ let
 in
 {
   config.autix.os.layerTree.base.children.locale = {
-    description = "Locale, keyboard and language preferences.";
+    description = "Locale, time and language preferences.";
     modules = with modules; [
       i18n
-      keyboard
     ];
   };
 }
