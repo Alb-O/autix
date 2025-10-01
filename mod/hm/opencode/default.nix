@@ -1,16 +1,19 @@
 { lib, ... }:
 let
   hmModule =
-    { pkgs, ... }:
-    let
-      opencodeConf = import ./_config { inherit lib pkgs; };
-    in
+    { pkgs, config, ... }:
     {
-      programs.opencode = {
-        enable = true;
-        inherit (opencodeConf) settings;
-      };
-      home.packages = lib.mkAfter opencodeConf.packages;
+      config =
+        let
+          opencodeConf = import ./_config { inherit lib pkgs config; };
+        in
+        {
+          programs.opencode = {
+            enable = true;
+            inherit (opencodeConf) settings;
+          };
+          home.packages = lib.mkAfter opencodeConf.packages;
+        };
     };
 in
 {

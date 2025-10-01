@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   confFiles = [
     ./lsp.nix
@@ -11,7 +16,7 @@ let
     let
       v = import path;
     in
-    if builtins.isFunction v then v { inherit lib pkgs; } else v;
+    if builtins.isFunction v then v { inherit lib pkgs config; } else v;
   confAttrsets = map load confFiles;
   mergedSettings = lib.foldl' lib.recursiveUpdate { } (map (c: c.settings or { }) confAttrsets);
   mergedPackages = lib.unique (lib.concatMap (c: c.packages or [ ]) confAttrsets);

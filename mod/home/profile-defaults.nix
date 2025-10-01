@@ -13,6 +13,8 @@ let
     "xdg"
     "fzf"
     "zoxide"
+    "lsp"
+    "formatter"
     "opencode"
     "codex"
     "gemini"
