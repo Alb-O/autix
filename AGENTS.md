@@ -10,7 +10,7 @@
 
 - Files with `_` anywhere in their path are ignored by `import-tree`. Use this for hardware configs or files that should not be auto-imported.
 
-- All files in `modules/` must be valid flake-parts modules. Regular NixOS modules should be placed in `_` prefixed directories (or outside of `modules/`) and imported manually.
+- All files in `mod/` must be valid flake-parts modules. Regular NixOS modules should be placed in `_` prefixed directories (or outside of `mod/`) and imported manually.
 
 - Arguments like `pkgs` must be declared at the module function level, not at the flake-parts module level. Use `{ ... }: { flake.modules.nixos.aspect = { pkgs, ... }: { ... }; }` not `{ pkgs, ... }: { flake.modules.nixos.aspect = { ... }; }`.
 
@@ -18,4 +18,4 @@
 
 - Import paths in dendritic modules are relative to the file location, not the flake root.
 
-- Agents in a virtual/isolated environment image without the Nix package manager should find the latest Nix installer script in the scripts/ directory. If you're an agent needing access to Nix in order to test, run this script.
+- Agents in a virtual/isolated environment image (namely Codex) without the Nix package manager should find the latest Nix installer script in the scripts/ directory. If you're an agent needing access to Nix in order to test, run this script.
