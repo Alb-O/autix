@@ -18,5 +18,7 @@
     services.openssh.enable = lib.mkForce false;
     services.xserver.enable = lib.mkForce false;
     services.displayManager.enable = lib.mkForce false;
+
+    programs.nix-ld.enable = true;
   };
 }

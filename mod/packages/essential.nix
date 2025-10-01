@@ -11,6 +11,7 @@ let
       just
       nano
       vim
+      nmap
     ];
 
   hmModule =
