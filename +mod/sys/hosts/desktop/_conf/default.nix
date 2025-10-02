@@ -2,11 +2,11 @@
   imports = [
     ./boot
     ./cpu
-    ./filesystem
+    ./fs
     ./gpu
     ./kernel
-    ./networking
-    ./system
-    ./thermal
+    ./net
+    ./env
+    ./fans
   ];
 }
