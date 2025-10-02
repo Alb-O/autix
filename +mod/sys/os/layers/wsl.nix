@@ -7,6 +7,7 @@ in
     description = "Windows Subsystem for Linux specific adjustments.";
     modules = with modules; [
       wsl
+      netshare
     ];
   };
 }
