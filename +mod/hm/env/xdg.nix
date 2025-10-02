@@ -114,10 +114,13 @@ let
           "${cfgHome}/npm/config/.keep".text = "";
           "${stateHome}/python/.keep".text = "";
           "${dataHome}/python/.keep".text = "";
+          "${dataHome}/pki/nssdb/keep".text = "";
           "${cacheHome}/python/.keep".text = "";
           "${stateHome}/bash/.keep".text = "";
         };
       };
+
+      systemd.user.sessionVariables = lib.mkMerge [ sessionVars ];
 
       xdg = {
         enable = true;
