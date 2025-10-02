@@ -24,6 +24,7 @@ let
           "*.swp"
           "*.tmp"
           "*.log"
+          "*.blend1"
           "node_modules/"
           "dist/"
           "target/"

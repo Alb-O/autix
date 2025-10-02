@@ -11,7 +11,7 @@ _: {
       "tooling-dev"
       "tooling-graphical"
       "clipboard"
-      "notifications"
+      "mako"
       "polkit"
       "sillytavern"
       "blender"

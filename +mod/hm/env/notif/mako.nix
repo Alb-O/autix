@@ -29,5 +29,5 @@ let
     };
 in
 {
-  autix.home.modules.notifications = hmModule;
+  autix.home.modules.mako = hmModule;
 }
