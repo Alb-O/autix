@@ -26,10 +26,10 @@ let
         in
         lib.replaceStrings [ "$HOME" "$XDG_DESKTOP_DIR" ] [ homeDir desktopDir ] rawDownload;
 
-      policiesConfig = import ./_config/policies.nix { };
-      extensionsConfig = import ./_config/extensions.nix { };
-      prefsConfig = import ./_config/prefs.nix { inherit lib downloadDir; };
-      searchConfig = import ./_config/search.nix { inherit lib pkgs; };
+      policiesConfig = import ./_conf/policies.nix { };
+      extensionsConfig = import ./_conf/extensions.nix { };
+      prefsConfig = import ./_conf/prefs.nix { inherit lib downloadDir; };
+      searchConfig = import ./_conf/search.nix { inherit lib pkgs; };
     in
     {
       programs.firefox = {

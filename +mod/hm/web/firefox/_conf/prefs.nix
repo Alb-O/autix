@@ -68,6 +68,7 @@
 
     "identity.fxaccounts.enabled" = false; # Disable fx accounts
     "signon.rememberSignons" = false; # Disable "save password" prompt
+    "browser.preferences.experimental.hidden" = false; # Show experimental settings
 
     # Harden
     "privacy.trackingprotection.enabled" = true;
@@ -102,14 +103,6 @@
     "general.config.filename" = "nixos-firefox.cfg";
     "general.config.obscure_value" = 0;
     "general.config.sandbox_enabled" = false;
-
-    # Prevent Firefox from overriding NixOS-managed settings
-    "browser.preferences.instantApply" = false;
-    "browser.preferences.animateFadeIn" = true;
-
-    # Force profile consistency
-    "browser.profiles.updateCheckIntervalMS" = 0;
-    "browser.migration.version" = 999;
 
     # Enable smooth scrolling
     "apz.overscroll.enabled" = true; # DEFAULT NON-LINUX
