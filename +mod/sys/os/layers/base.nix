@@ -8,7 +8,7 @@ in
     modules = with modules; [
       nix-settings
       shell-init
-      essential-pkgs
+      essential
       ssh
       fonts
     ];

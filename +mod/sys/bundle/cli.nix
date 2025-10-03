@@ -34,14 +34,14 @@ let
   perSystem =
     { pkgs, ... }:
     {
-      packages.tooling-cli-bundle = pkgs.symlinkJoin {
-        name = "autix-tooling-cli";
+      packages.cli-bundle = pkgs.symlinkJoin {
+        name = "autix-bundle-cli";
         paths = packages pkgs;
       };
     };
 in
 {
-  autix.home.modules."tooling-cli" = hmModule;
+  autix.home.modules.cli = hmModule;
 
   inherit perSystem;
 

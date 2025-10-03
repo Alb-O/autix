@@ -4,8 +4,8 @@ _: {
     graphical = false;
     system = "x86_64-linux";
     modules = [
-      "tooling-cli"
-      "tooling-dev"
+      "cli"
+      "dev"
       "wsl"
     ];
   };

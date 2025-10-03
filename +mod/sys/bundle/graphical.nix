@@ -32,14 +32,14 @@ let
   perSystem =
     { pkgs, ... }:
     {
-      packages.tooling-graphical-bundle = pkgs.symlinkJoin {
-        name = "autix-tooling-graphical";
+      packages.graphical-bundle = pkgs.symlinkJoin {
+        name = "autix-bundle-graphical";
         paths = packages pkgs;
       };
     };
 in
 {
-  autix.home.modules."tooling-graphical" = hmModule;
+  autix.home.modules.graphical = hmModule;
 
   inherit perSystem;
 

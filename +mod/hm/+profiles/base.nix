@@ -5,7 +5,7 @@ let
   baseModules = [
     "fonts"
     "kitty"
-    "essential-pkgs"
+    "essential"
     "networking"
     "ssh"
     "git"

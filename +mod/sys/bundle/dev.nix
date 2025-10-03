@@ -38,13 +38,13 @@ let
     { pkgs, ... }:
     {
       packages.tooling-dev-bundle = pkgs.symlinkJoin {
-        name = "autix-tooling-dev";
+        name = "autix-bundle-dev";
         paths = packages pkgs;
       };
     };
 in
 {
-  autix.home.modules."tooling-dev" = hmModule;
+  autix.home.modules.dev = hmModule;
 
   inherit perSystem;
 

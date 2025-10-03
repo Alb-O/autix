@@ -38,15 +38,15 @@ let
     { pkgs, ... }:
     {
       packages.essential-bundle = pkgs.symlinkJoin {
-        name = "autix-essential";
+        name = "autix-bundle-essential";
         paths = packages pkgs;
       };
     };
 in
 {
-  autix.home.modules."essential-pkgs" = hmModule;
+  autix.home.modules.essential = hmModule;
 
-  flake.nixosModules."essential-pkgs" = nixosModule;
+  flake.nixosModules.essential = nixosModule;
 
   inherit perSystem;
 
