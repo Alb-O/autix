@@ -3,38 +3,7 @@ let
   hmModule =
     { pkgs, config, ... }:
     {
-      options.autix.lsp = {
-        servers = lib.mkOption {
-          type = lib.types.attrsOf (
-            lib.types.submodule {
-              options = {
-                command = lib.mkOption {
-                  type = lib.types.listOf lib.types.str;
-                  description = "Command to start the LSP server";
-                };
-                extensions = lib.mkOption {
-                  type = lib.types.listOf lib.types.str;
-                  description = "File extensions this LSP handles";
-                };
-                package = lib.mkOption {
-                  type = lib.types.nullOr lib.types.package;
-                  default = null;
-                  description = "Package providing this LSP server";
-                };
-              };
-            }
-          );
-          default = { };
-          description = "LSP server definitions";
-        };
-
-        packages = lib.mkOption {
-          type = lib.types.listOf lib.types.package;
-          default = [ ];
-          description = "Additional LSP-related packages";
-        };
-      };
-
+      # defaults will be provided by the options module when available
       config = {
         autix.lsp.servers = {
           typescript = {
@@ -162,13 +131,49 @@ let
         );
       };
     };
+  optionsModule = {
+    options.autix.lsp = {
+      servers = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              command = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                description = "Command to start the LSP server";
+              };
+              extensions = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                description = "File extensions this LSP handles";
+              };
+              package = lib.mkOption {
+                type = lib.types.nullOr lib.types.package;
+                default = null;
+                description = "Package providing this LSP server";
+              };
+            };
+          }
+        );
+        default = { };
+        description = "LSP server definitions";
+      };
+
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        description = "Additional LSP-related packages";
+      };
+    };
+  };
 in
 {
   autix.aspects.lsp = {
     description = "Shared Language Server Protocol tooling.";
     home = {
       targets = [ "*" ];
-      modules = [ hmModule ];
+      modules = [
+        optionsModule
+        hmModule
+      ];
     };
   };
 }

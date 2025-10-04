@@ -5,6 +5,15 @@ let
       BROWSER = lib.mkDefault "firefox";
     };
   };
+
+  nixosModule =
+    { ... }:
+    {
+      networking = {
+        networkmanager.enable = lib.mkDefault true;
+        firewall.enable = lib.mkDefault true;
+      };
+    };
 in
 {
   autix.aspects.networking = {
@@ -15,23 +24,11 @@ in
     };
     nixos = {
       targets = [ "*" ];
-      modules = [
-        {
-          networking = {
-            networkmanager.enable = lib.mkDefault true;
-            firewall.enable = lib.mkDefault true;
-          };
-        }
-      ];
+      modules = [ nixosModule ];
     };
   };
 
   flake = {
-    nixosModules.networking = {
-      networking = {
-        networkmanager.enable = lib.mkDefault true;
-        firewall.enable = lib.mkDefault true;
-      };
-    };
+    nixosModules.networking = nixosModule;
   };
 }

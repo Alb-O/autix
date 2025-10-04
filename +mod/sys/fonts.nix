@@ -102,20 +102,19 @@ let
     }:
     let
       cfg = config.autix.fonts;
+      inherit (lib) mkDefault;
     in
     {
-      options.autix.fonts = mkOption {
-        type = types.attrs;
-        default = mkFontBundle pkgs;
-        description = "autix font bundle available to home aspects.";
-      };
-
       config = {
         home.packages = lib.mkAfter cfg.packages;
 
         fonts.fontconfig = {
           enable = true;
           defaultFonts = cfg.defaults;
+        };
+        # Ensure sensible per-module default using pkgs
+        autix = {
+          fonts = mkDefault (mkFontBundle pkgs);
         };
       };
     };
@@ -124,14 +123,9 @@ let
     { pkgs, config, ... }:
     let
       cfg = config.autix.fonts;
+      inherit (lib) mkDefault;
     in
     {
-      options.autix.fonts = mkOption {
-        type = types.attrs;
-        default = mkFontBundle pkgs;
-        description = "autix font bundle available to NixOS aspects.";
-      };
-
       config = {
         fonts.packages = cfg.packages;
 
@@ -139,19 +133,36 @@ let
           enable = true;
           defaultFonts = cfg.defaults;
         };
+        autix = {
+          fonts = mkDefault (mkFontBundle pkgs);
+        };
       };
     };
+  # Top-level options module exported so option normalization happens
+  optionsModule = {
+    options.autix.fonts = mkOption {
+      type = types.attrs;
+      default = { };
+      description = "autix font bundle available to aspects.";
+    };
+  };
 in
 {
   autix.aspects.fonts = {
     description = "Shared font bundle and defaults.";
     home = {
       targets = [ "*" ];
-      modules = [ hmModule ];
+      modules = [
+        optionsModule
+        hmModule
+      ];
     };
     nixos = {
       targets = [ "*" ];
-      modules = [ nixosModule ];
+      modules = [
+        optionsModule
+        nixosModule
+      ];
     };
   };
 

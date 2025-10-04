@@ -3,38 +3,7 @@ let
   hmModule =
     { pkgs, config, ... }:
     {
-      options.autix.formatter = {
-        formatters = lib.mkOption {
-          type = lib.types.attrsOf (
-            lib.types.submodule {
-              options = {
-                command = lib.mkOption {
-                  type = lib.types.listOf lib.types.str;
-                  description = "Command to run the formatter (use $FILE placeholder)";
-                };
-                extensions = lib.mkOption {
-                  type = lib.types.listOf lib.types.str;
-                  description = "File extensions this formatter handles";
-                };
-                package = lib.mkOption {
-                  type = lib.types.nullOr lib.types.package;
-                  default = null;
-                  description = "Package providing this formatter";
-                };
-              };
-            }
-          );
-          default = { };
-          description = "Formatter definitions";
-        };
-
-        packages = lib.mkOption {
-          type = lib.types.listOf lib.types.package;
-          default = [ ];
-          description = "Additional formatter-related packages";
-        };
-      };
-
+      # Defaults provided by options module
       config = {
         autix.formatter.formatters = {
           prettier = {
@@ -138,13 +107,49 @@ let
         );
       };
     };
+  optionsModule = {
+    options.autix.formatter = {
+      formatters = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              command = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                description = "Command to run the formatter (use $FILE placeholder)";
+              };
+              extensions = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                description = "File extensions this formatter handles";
+              };
+              package = lib.mkOption {
+                type = lib.types.nullOr lib.types.package;
+                default = null;
+                description = "Package providing this formatter";
+              };
+            };
+          }
+        );
+        default = { };
+        description = "Formatter definitions";
+      };
+
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        description = "Additional formatter-related packages";
+      };
+    };
+  };
 in
 {
   autix.aspects.formatter = {
     description = "Formatter definitions and helper packages.";
     home = {
       targets = [ "*" ];
-      modules = [ hmModule ];
+      modules = [
+        optionsModule
+        hmModule
+      ];
     };
   };
 }
