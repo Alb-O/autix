@@ -66,11 +66,5 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake = {
-    nixosModules.niri = nixosModule;
-    homeModules.niri = hmModule;
-  };
-
   inherit flake-file;
 }

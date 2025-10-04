@@ -17,6 +17,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.netshare = nixosModule;
 }

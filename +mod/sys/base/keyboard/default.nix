@@ -25,6 +25,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.keyboard = nixosModule;
 }

@@ -39,6 +39,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.nix-settings = nixosModule;
 }

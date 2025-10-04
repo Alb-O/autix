@@ -18,6 +18,15 @@ let
         };
       };
     };
+  nixosModule = _: {
+    services.openssh = {
+      enable = true;
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
+      };
+    };
+  };
 in
 {
   autix.aspects.ssh = {
@@ -28,27 +37,7 @@ in
     };
     nixos = {
       targets = [ "*" ];
-      modules = [
-        {
-          services.openssh = {
-            enable = true;
-            settings = {
-              PermitRootLogin = "no";
-              PasswordAuthentication = false;
-            };
-          };
-        }
-      ];
-    };
-  };
-
-  flake.nixosModules.ssh = {
-    services.openssh = {
-      enable = true;
-      settings = {
-        PermitRootLogin = "no";
-        PasswordAuthentication = false;
-      };
+      modules = [ nixosModule ];
     };
   };
 }

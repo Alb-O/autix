@@ -28,6 +28,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.tty = nixosModule;
 }

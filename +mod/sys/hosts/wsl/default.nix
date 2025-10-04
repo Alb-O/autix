@@ -23,8 +23,6 @@ let
   };
 in
 {
-  flake.nixosModules.wsl = wslModule;
-
   autix.os.hosts.wsl = {
     system = "x86_64-linux";
     profile = "albert-wsl";

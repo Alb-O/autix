@@ -56,8 +56,6 @@ in
     };
   };
 
-  flake.nixosModules.essential = nixosModule;
-
   inherit perSystem;
 
   _module.args = moduleArgs;

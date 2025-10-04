@@ -1,15 +1,13 @@
 _:
 let
-  nixosModule =
-    _:
-    {
-      services.displayManager = {
+  nixosModule = _: {
+    services.displayManager = {
+      enable = true;
+      gdm = {
         enable = true;
-        gdm = {
-          enable = true;
-        };
       };
     };
+  };
 in
 {
   autix.aspects.dm = {
@@ -19,6 +17,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.dm = nixosModule;
 }

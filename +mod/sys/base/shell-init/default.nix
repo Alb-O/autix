@@ -25,6 +25,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.shell-init = nixosModule;
 }

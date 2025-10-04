@@ -12,6 +12,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.i18n = nixosModule;
 }

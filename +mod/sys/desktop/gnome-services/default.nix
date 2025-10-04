@@ -23,6 +23,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.gnome-services = nixosModule;
 }

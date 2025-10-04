@@ -50,6 +50,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  flake.nixosModules.${userName} = nixosModule;
 }

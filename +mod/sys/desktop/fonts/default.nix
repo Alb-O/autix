@@ -165,6 +165,4 @@ in
       ];
     };
   };
-
-  flake.nixosModules.fonts = nixosModule;
 }
