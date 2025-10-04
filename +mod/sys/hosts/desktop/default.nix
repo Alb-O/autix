@@ -2,7 +2,7 @@ _:
 let
   desktopModule = {
     imports = [
-      ./_conf
+      ./_config
     ];
   };
 in

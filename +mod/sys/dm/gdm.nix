@@ -10,8 +10,8 @@ let
   };
 in
 {
-  autix.aspects.dm = {
-    description = "GDM display manager.";
+  autix.aspects.gdm = {
+    description = "GNOME Display Manager.";
     nixos = {
       targets = [ "desktop" ];
       modules = [ nixosModule ];
