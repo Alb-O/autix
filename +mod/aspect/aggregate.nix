@@ -70,6 +70,5 @@ let
 in
 {
   _module.args.autixAspectHelpers = aspectHelpers;
-
   flake.overlays = overlays;
 }

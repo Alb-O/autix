@@ -88,7 +88,6 @@ let
 in
 {
   flake.homeConfigurations = mapAttrs buildProfile profiles;
-
   _module.args.autixHomeProfileComputed = {
     inherit modulesForProfile unfreeForProfile;
   };

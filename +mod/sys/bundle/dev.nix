@@ -25,23 +25,6 @@ let
     {
       home.packages = lib.mkAfter (packages pkgs);
     };
-
-  moduleArgs = {
-    autixPackages = {
-      tooling = {
-        dev = packages;
-      };
-    };
-  };
-
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.tooling-dev-bundle = pkgs.symlinkJoin {
-        name = "autix-bundle-dev";
-        paths = packages pkgs;
-      };
-    };
 in
 {
   autix.aspects.dev = {
@@ -51,8 +34,4 @@ in
       modules = [ hmModule ];
     };
   };
-
-  inherit perSystem;
-
-  _module.args = moduleArgs;
 }

@@ -20,23 +20,6 @@ let
     lib.mkIf isGraphical {
       home.packages = lib.mkAfter (packages pkgs);
     };
-
-  moduleArgs = {
-    autixPackages = {
-      tooling = {
-        graphical = packages;
-      };
-    };
-  };
-
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.graphical-bundle = pkgs.symlinkJoin {
-        name = "autix-bundle-graphical";
-        paths = packages pkgs;
-      };
-    };
 in
 {
   autix.aspects.graphical = {
@@ -46,8 +29,4 @@ in
       modules = [ hmModule ];
     };
   };
-
-  inherit perSystem;
-
-  _module.args = moduleArgs;
 }

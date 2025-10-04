@@ -25,23 +25,6 @@ let
     {
       environment.systemPackages = packages pkgs;
     };
-
-  moduleArgs = {
-    autixPackages = {
-      core = {
-        essential = packages;
-      };
-    };
-  };
-
-  perSystem =
-    { pkgs, ... }:
-    {
-      packages.essential-bundle = pkgs.symlinkJoin {
-        name = "autix-bundle-essential";
-        paths = packages pkgs;
-      };
-    };
 in
 {
   autix.aspects.essential = {
@@ -55,8 +38,4 @@ in
       modules = [ nixosModule ];
     };
   };
-
-  inherit perSystem;
-
-  _module.args = moduleArgs;
 }

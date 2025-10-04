@@ -53,7 +53,6 @@ let
     nixpkgs.hostPlatform = host.system;
     system.stateVersion = host.stateVersion;
     security.sudo.wheelNeedsPassword = false;
-    _module.args.modulesPath = inputs.nixpkgs.outPath + "/nixos/modules";
   };
 
   modulesForHost =
