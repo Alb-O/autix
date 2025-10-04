@@ -1,5 +1,6 @@
-_: {
-  flake.nixosModules.dm = {
+_:
+let
+  nixosModule = {
     services.displayManager = {
       enable = true;
       ly = {
@@ -8,6 +9,15 @@ _: {
           animation = "matrix";
         };
       };
+    };
+  };
+in
+{
+  autix.aspects.ly = {
+    description = "Ly TTY display manager.";
+    nixos = {
+      targets = [ "desktop" ];
+      modules = [ nixosModule ];
     };
   };
 }
