@@ -31,7 +31,14 @@ let
   };
 in
 {
-  autix.home.modules.emacs = hmModule;
-  flake.overlays.emacs = inputs.emacs-overlay.overlays.emacs;
+  autix.aspects.emacs = {
+    description = "Emacs editor configured with the emacs-overlay.";
+    overlays.emacs = inputs.emacs-overlay.overlays.emacs;
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
+
   inherit flake-file;
 }

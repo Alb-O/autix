@@ -263,5 +263,11 @@ let
     };
 in
 {
-  autix.home.modules.nh = hmModule;
+  autix.aspects.nh = {
+    description = "Utility script collection for nohup helper (nh).";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

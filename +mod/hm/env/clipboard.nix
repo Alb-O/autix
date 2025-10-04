@@ -40,5 +40,11 @@ let
     };
 in
 {
-  autix.home.modules.clipboard = hmModule;
+  autix.aspects.clipboard = {
+    description = "Wayland clipboard manager service.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 }

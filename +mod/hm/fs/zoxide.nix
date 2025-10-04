@@ -11,5 +11,11 @@ let
   };
 in
 {
-  autix.home.modules.zoxide = hmModule;
+  autix.aspects.zoxide = {
+    description = "Enable zoxide jump navigation.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

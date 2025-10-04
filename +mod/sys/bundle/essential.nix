@@ -44,7 +44,17 @@ let
     };
 in
 {
-  autix.home.modules.essential = hmModule;
+  autix.aspects.essential = {
+    description = "Baseline essential packages for all profiles and hosts.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+    nixos = {
+      targets = [ "*" ];
+      modules = [ nixosModule ];
+    };
+  };
 
   flake.nixosModules.essential = nixosModule;
 

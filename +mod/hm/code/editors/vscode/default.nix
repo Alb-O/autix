@@ -5,8 +5,12 @@ let
   };
 in
 {
-  autix.home.modules.vscode = hmModule;
-  autix.home.modules.unfreePackages.vscode = [
-    "code"
-  ];
+  autix.aspects.vscode = {
+    description = "Visual Studio Code (unfree) enablement.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+      unfreePackages = [ "code" ];
+    };
+  };
 }

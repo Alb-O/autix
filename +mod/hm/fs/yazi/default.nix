@@ -19,5 +19,11 @@ let
     };
 in
 {
-  autix.home.modules.yazi = hmModule;
+  autix.aspects.yazi = {
+    description = "Setup Yazi terminal file manager.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

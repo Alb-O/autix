@@ -1,4 +1,4 @@
-_:
+{ autixAspectHelpers, ... }:
 let
   helper =
     {
@@ -10,35 +10,19 @@ let
       inherit (lib)
         attrByPath
         attrValues
-        concatMap
         optionalAttrs
-        unique
         ;
 
-      moduleUnfreePackages = attrByPath [ "autix" "home" "modules" "unfreePackages" ] { } config;
-
-      moduleNamesFor =
-        profile:
-        {
-          baseModuleNames,
-        }:
-        unique (baseModuleNames ++ profile.modules ++ [ profile.user ]);
-
-      permittedFor = names: unique (concatMap (name: attrByPath [ name ] [ ] moduleUnfreePackages) names);
+      overlays = attrValues (attrByPath [ "flake" "overlays" ] { } config);
 
       pkgsFor =
         {
           system,
           permittedUnfreePackages ? [ ],
         }:
-        let
-          overlays = attrByPath [ "flake" "overlays" ] { } config;
-          overlayList = attrValues overlays;
-        in
         import inputs.nixpkgs (
           {
-            inherit system;
-            overlays = overlayList;
+            inherit system overlays;
           }
           // optionalAttrs (permittedUnfreePackages != [ ]) {
             config = {
@@ -48,9 +32,11 @@ let
             };
           }
         );
+
+      permittedForProfile = profileName: autixAspectHelpers.unfreeForScope "home" profileName;
     in
     {
-      inherit moduleNamesFor permittedFor pkgsFor;
+      inherit pkgsFor permittedForProfile;
     };
 in
 {

@@ -16,24 +16,40 @@ let
         userEmail = lib.mkDefault email;
       };
     };
-in
-{
-  autix.home.modules.${userName} = hmModule;
 
-  flake = {
-    nixosModules.${userName} = {
-      time.timeZone = "Australia/Hobart";
-      users.users.${userName} = {
-        isNormalUser = true;
-        extraGroups = [
-          "wheel"
-          "networkmanager"
-          "audio"
-          "video"
-        ];
-        description = name;
-        initialPassword = "changeme";
-      };
+  nixosModule = {
+    time.timeZone = "Australia/Hobart";
+    users.users.${userName} = {
+      isNormalUser = true;
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+        "audio"
+        "video"
+      ];
+      description = name;
+      initialPassword = "changeme";
     };
   };
+in
+{
+  autix.aspects.${userName} = {
+    description = "Base user configuration for ${name}.";
+    home = {
+      targets = [
+        "albert-desktop"
+        "albert-wsl"
+      ];
+      modules = [ hmModule ];
+    };
+    nixos = {
+      targets = [
+        "desktop"
+        "wsl"
+      ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.${userName} = nixosModule;
 }

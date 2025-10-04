@@ -20,7 +20,27 @@ let
     };
 in
 {
-  autix.home.modules.ssh = hmModule;
+  autix.aspects.ssh = {
+    description = "SSH client defaults and server hardening.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+    nixos = {
+      targets = [ "*" ];
+      modules = [
+        {
+          services.openssh = {
+            enable = true;
+            settings = {
+              PermitRootLogin = "no";
+              PasswordAuthentication = false;
+            };
+          };
+        }
+      ];
+    };
+  };
 
   flake.nixosModules.ssh = {
     services.openssh = {

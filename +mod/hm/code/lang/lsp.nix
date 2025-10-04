@@ -164,5 +164,11 @@ let
     };
 in
 {
-  autix.home.modules.lsp = hmModule;
+  autix.aspects.lsp = {
+    description = "Shared Language Server Protocol tooling.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

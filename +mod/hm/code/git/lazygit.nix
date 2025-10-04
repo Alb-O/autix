@@ -119,5 +119,11 @@ let
   };
 in
 {
-  autix.home.modules.lazygit = hmModule;
+  autix.aspects.lazygit = {
+    description = "Lazygit configuration.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

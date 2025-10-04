@@ -17,5 +17,11 @@ let
     };
 in
 {
-  autix.home.modules.opencode = hmModule;
+  autix.aspects.opencode = {
+    description = "OpenCode configuration.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

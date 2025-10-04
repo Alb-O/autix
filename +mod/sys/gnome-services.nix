@@ -1,5 +1,6 @@
-_: {
-  flake.nixosModules.gnome-services =
+_:
+let
+  nixosModule =
     { pkgs, ... }:
     {
       services.gnome.gnome-keyring.enable = true;
@@ -8,9 +9,20 @@ _: {
       };
       environment.systemPackages = with pkgs; [
         gnome-keyring
-        libsecret # For secret storage API
+        libsecret
       ];
       programs.dconf.enable = true;
       services.udev.packages = [ pkgs.gnome-settings-daemon ];
     };
+in
+{
+  autix.aspects."gnome-services" = {
+    description = "GNOME keyring and supporting services.";
+    nixos = {
+      targets = [ "desktop" ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.gnome-services = nixosModule;
 }

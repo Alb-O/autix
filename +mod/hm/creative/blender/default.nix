@@ -147,5 +147,11 @@ let
     };
 in
 {
-  autix.home.modules.blender = hmModule;
+  autix.aspects.blender = {
+    description = "Helper script for Blender daily builds.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 }

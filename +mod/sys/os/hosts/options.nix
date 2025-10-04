@@ -2,13 +2,6 @@
 let
   inherit (lib) mkOption types;
 
-  layerPathThunkType = types.mkOptionType {
-    name = "layerPathThunk";
-    description = "Function accepting 'config.autix.os.layerPaths' and returning a layer reference.";
-    check = builtins.isFunction;
-    merge = lib.mergeOneOption;
-  };
-
   hostType = types.submodule (
     { name, ... }:
     {
@@ -21,25 +14,19 @@ let
         profile = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = "Optional home profile name linked to host '${name}'.";
-        };
-
-        paths = mkOption {
-          type = types.listOf layerPathThunkType;
-          default = [ ];
-          description = "List of lambdas returning layer references composed for host '${name}'.";
-        };
-
-        extraModules = mkOption {
-          type = types.listOf types.raw;
-          default = [ ];
-          description = "Additional ad-hoc modules appended after resolving the layer paths.";
+          description = "Optional home profile associated with host '${name}'.";
         };
 
         stateVersion = mkOption {
           type = types.str;
           default = "24.11";
           description = "System stateVersion applied to host '${name}'.";
+        };
+
+        extraModules = mkOption {
+          type = types.listOf types.raw;
+          default = [ ];
+          description = "Additional ad-hoc modules appended after aspect modules for host '${name}'.";
         };
       };
     }
@@ -49,6 +36,6 @@ in
   options.autix.os.hosts = mkOption {
     type = types.attrsOf hostType;
     default = { };
-    description = "Declarative host definitions built from the OS layer tree.";
+    description = "Declarative host definitions built from aspect targets.";
   };
 }

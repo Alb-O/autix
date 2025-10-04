@@ -29,5 +29,11 @@ let
     };
 in
 {
-  autix.home.modules.mako = hmModule;
+  autix.aspects.mako = {
+    description = "Mako notification daemon for graphical profiles.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 }

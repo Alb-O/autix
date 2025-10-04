@@ -1,6 +1,6 @@
 { self, lib, ... }:
-{
-  flake.nixosModules.nix-settings =
+let
+  nixosModule =
     {
       pkgs,
       config,
@@ -30,4 +30,15 @@
         overlays = lib.attrValues self.overlays;
       };
     };
+in
+{
+  autix.aspects.nix-settings = {
+    description = "Shared Nix daemon and nixpkgs defaults.";
+    nixos = {
+      targets = [ "*" ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.nix-settings = nixosModule;
 }

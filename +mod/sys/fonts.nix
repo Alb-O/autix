@@ -119,11 +119,8 @@ let
         };
       };
     };
-in
-{
-  autix.home.modules.fonts = hmModule;
 
-  flake.nixosModules.fonts =
+  nixosModule =
     { pkgs, config, ... }:
     let
       cfg = config.autix.fonts;
@@ -144,4 +141,19 @@ in
         };
       };
     };
+in
+{
+  autix.aspects.fonts = {
+    description = "Shared font bundle and defaults.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+    nixos = {
+      targets = [ "*" ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.fonts = nixosModule;
 }

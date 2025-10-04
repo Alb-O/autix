@@ -1,6 +1,6 @@
 _:
-{
-  flake.nixosModules.netshare =
+let
+  nixosModule =
     { pkgs, ... }:
     {
       environment.systemPackages = with pkgs; [
@@ -8,4 +8,15 @@ _:
         cifs-utils
       ];
     };
+in
+{
+  autix.aspects.netshare = {
+    description = "NFS/CIFS client tooling.";
+    nixos = {
+      targets = [ "*" ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.netshare = nixosModule;
 }

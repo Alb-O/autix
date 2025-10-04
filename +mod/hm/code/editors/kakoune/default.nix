@@ -33,5 +33,11 @@ let
     };
 in
 {
-  autix.home.modules.kakoune = hmModule;
+  autix.aspects.kakoune = {
+    description = "Kakoune editor configuration and plugins.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

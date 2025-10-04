@@ -39,5 +39,11 @@ let
     };
 in
 {
-  autix.home.modules.fzf = hmModule;
+  autix.aspects.fzf = {
+    description = "Configure fzf with custom defaults.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

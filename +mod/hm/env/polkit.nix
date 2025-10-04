@@ -24,5 +24,11 @@ let
     };
 in
 {
-  autix.home.modules.polkit = hmModule;
+  autix.aspects.polkit = {
+    description = "Polkit agent for graphical sessions.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 }

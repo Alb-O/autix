@@ -73,5 +73,11 @@ let
     };
 in
 {
-  autix.home.modules.firefox = hmModule;
+  autix.aspects.firefox = {
+    description = "Firefox configuration with policies and profiles.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 }

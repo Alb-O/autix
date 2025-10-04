@@ -18,5 +18,11 @@ let
     };
 in
 {
-  autix.home.modules.codex = hmModule;
+  autix.aspects.codex = {
+    description = "Codex CLI tooling.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

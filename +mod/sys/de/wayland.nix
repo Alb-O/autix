@@ -36,7 +36,17 @@ let
     };
 in
 {
-  autix.home.modules.wayland = hmModule;
+  autix.aspects.wayland = {
+    description = "Wayland-first session defaults.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+    nixos = {
+      targets = [ "desktop" ];
+      modules = [ nixosModule ];
+    };
+  };
 
   flake = {
     homeModules.wayland = hmModule;

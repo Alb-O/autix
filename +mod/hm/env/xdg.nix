@@ -148,5 +148,11 @@ let
     };
 in
 {
-  autix.home.modules.xdg = hmModule;
+  autix.aspects.xdg = {
+    description = "XDG base directory layout and session tweaks.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

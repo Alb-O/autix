@@ -140,5 +140,11 @@ let
     };
 in
 {
-  autix.home.modules.formatter = hmModule;
+  autix.aspects.formatter = {
+    description = "Formatter definitions and helper packages.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

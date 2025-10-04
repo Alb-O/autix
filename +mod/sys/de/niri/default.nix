@@ -54,12 +54,21 @@ let
   };
 in
 {
-  autix.home.modules.niri = hmModule;
+  autix.aspects.niri = {
+    description = "Niri Wayland compositor and related tooling.";
+    overlays.niri = inputs.niri-flake.overlays.niri;
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+    nixos = {
+      targets = [ "desktop" ];
+      modules = [ nixosModule ];
+    };
+  };
 
   flake = {
-    overlays.niri = inputs.niri-flake.overlays.niri;
     nixosModules.niri = nixosModule;
-    modules.nixos.niri = nixosModule;
     homeModules.niri = hmModule;
   };
 

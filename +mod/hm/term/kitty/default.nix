@@ -81,5 +81,11 @@ let
     };
 in
 {
-  autix.home.modules.kitty = hmModule;
+  autix.aspects.kitty = {
+    description = "Kitty terminal with themed configuration.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

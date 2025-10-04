@@ -38,5 +38,11 @@ let
     };
 in
 {
-  autix.home.modules.workspace = hmModule;
+  autix.aspects.workspace = {
+    description = "Session environment defaults for shells and direnv.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

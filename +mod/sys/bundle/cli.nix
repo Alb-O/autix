@@ -41,7 +41,13 @@ let
     };
 in
 {
-  autix.home.modules.cli = hmModule;
+  autix.aspects.cli = {
+    description = "Common CLI tooling bundle.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 
   inherit perSystem;
 

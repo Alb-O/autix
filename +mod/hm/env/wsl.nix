@@ -16,5 +16,11 @@ let
     };
 in
 {
-  autix.home.modules.wsl = hmModule;
+  autix.aspects.wsl = {
+    description = "WSL integration helpers.";
+    home = {
+      targets = [ "albert-wsl" ];
+      modules = [ hmModule ];
+    };
+  };
 }

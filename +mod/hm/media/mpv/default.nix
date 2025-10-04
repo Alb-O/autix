@@ -45,5 +45,11 @@ let
   };
 in
 {
-  autix.home.modules.mpv = hmModule;
+  autix.aspects.mpv = {
+    description = "MPV media player defaults.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

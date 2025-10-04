@@ -39,7 +39,13 @@ let
     };
 in
 {
-  autix.home.modules.graphical = hmModule;
+  autix.aspects.graphical = {
+    description = "Graphical desktop utilities bundle.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 
   inherit perSystem;
 

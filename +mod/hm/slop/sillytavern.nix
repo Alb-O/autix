@@ -43,5 +43,11 @@ let
     );
 in
 {
-  autix.home.modules.sillytavern = hmModule;
+  autix.aspects.sillytavern = {
+    description = "SillyTavern launcher and desktop entry.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 }

@@ -50,5 +50,11 @@ let
   };
 in
 {
-  autix.home.modules.zk = hmModule;
+  autix.aspects.zk = {
+    description = "Zettelkasten CLI (zk) configuration.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

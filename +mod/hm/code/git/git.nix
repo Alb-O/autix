@@ -61,5 +61,11 @@ let
     };
 in
 {
-  autix.home.modules.git = hmModule;
+  autix.aspects.git = {
+    description = "Git configuration with helpful defaults.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

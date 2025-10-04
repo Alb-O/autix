@@ -7,7 +7,24 @@ let
   };
 in
 {
-  autix.home.modules.networking = hmModule;
+  autix.aspects.networking = {
+    description = "Networking defaults for NetworkManager.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+    nixos = {
+      targets = [ "*" ];
+      modules = [
+        {
+          networking = {
+            networkmanager.enable = lib.mkDefault true;
+            firewall.enable = lib.mkDefault true;
+          };
+        }
+      ];
+    };
+  };
 
   flake = {
     nixosModules.networking = {

@@ -1,5 +1,6 @@
-_: {
-  flake.nixosModules.keyboard = {
+_:
+let
+  nixosModule = {
     services.keyd = {
       enable = true;
       keyboards = {
@@ -15,4 +16,15 @@ _: {
       };
     };
   };
+in
+{
+  autix.aspects.keyboard = {
+    description = "Swap Caps Lock and Escape via keyd.";
+    nixos = {
+      targets = [ "*" ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.keyboard = nixosModule;
 }

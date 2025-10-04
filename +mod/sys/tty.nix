@@ -1,5 +1,6 @@
-_: {
-  flake.nixosModules.tty =
+_:
+let
+  nixosModule =
     { config, ... }:
     let
       fontBundle = config.autix.fonts;
@@ -18,4 +19,15 @@ _: {
         extraConfig = "font-size=${toString displayFont.size}";
       };
     };
+in
+{
+  autix.aspects.tty = {
+    description = "kmscon font defaults for virtual consoles.";
+    nixos = {
+      targets = [ "*" ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.tty = nixosModule;
 }

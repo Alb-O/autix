@@ -1,5 +1,6 @@
-_: {
-  flake.nixosModules.shell-init =
+_:
+let
+  nixosModule =
     { pkgs, ... }:
     {
       environment.interactiveShellInit = ''
@@ -15,4 +16,15 @@ _: {
         fi
       '';
     };
+in
+{
+  autix.aspects.shell-init = {
+    description = "Ensure login shells hand over to fish with XDG-aware history.";
+    nixos = {
+      targets = [ "*" ];
+      modules = [ nixosModule ];
+    };
+  };
+
+  flake.nixosModules.shell-init = nixosModule;
 }

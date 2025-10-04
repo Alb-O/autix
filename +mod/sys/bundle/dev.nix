@@ -44,7 +44,13 @@ let
     };
 in
 {
-  autix.home.modules.dev = hmModule;
+  autix.aspects.dev = {
+    description = "Development language servers and toolchain bundle.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 
   inherit perSystem;
 

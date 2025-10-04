@@ -7,5 +7,11 @@ let
     };
 in
 {
-  autix.home.modules.gemini = hmModule;
+  autix.aspects.gemini = {
+    description = "Gemini CLI tooling.";
+    home = {
+      targets = [ "*" ];
+      modules = [ hmModule ];
+    };
+  };
 }

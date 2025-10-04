@@ -18,5 +18,11 @@ let
     };
 in
 {
-  autix.home.modules.hydrus = hmModule;
+  autix.aspects.hydrus = {
+    description = "Hydrus client launcher with Wayland-friendly defaults.";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
+    };
+  };
 }
