@@ -1,6 +1,6 @@
 { lib, inputs, ... }:
-{
-  flake.nixosModules.wsl = {
+let
+  wslModule = {
     imports = [ inputs.nixos-wsl.nixosModules.default ];
 
     wsl = {
@@ -20,5 +20,14 @@
     services.displayManager.enable = lib.mkForce false;
 
     programs.nix-ld.enable = true;
+  };
+in
+{
+  flake.nixosModules.wsl = wslModule;
+
+  autix.os.hosts.wsl = {
+    system = "x86_64-linux";
+    profile = "albert-wsl";
+    extraModules = [ wslModule ];
   };
 }

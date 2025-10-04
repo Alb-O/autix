@@ -7,7 +7,7 @@ let
   };
 
   nixosModule =
-    { ... }:
+    _:
     {
       networking = {
         networkmanager.enable = lib.mkDefault true;
