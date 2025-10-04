@@ -31,6 +31,14 @@
     allfollow = {
       url = "github:spikespaz/allfollow";
     };
+    emacs-overlay = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
+    };
     flake-file = {
       url = "github:vic/flake-file";
     };

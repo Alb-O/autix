@@ -27,7 +27,10 @@
       };
       nixpkgs = {
         config.allowUnfree = true;
-        overlays = [ self.overlays.niri ];
+        overlays = [
+          self.overlays.niri
+          self.overlays.emacs
+        ];
       };
     };
 }

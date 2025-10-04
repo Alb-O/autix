@@ -1,10 +1,8 @@
 _:
 let
-  hmModule =
-    { lib, pkgs, ... }:
-    {
-      home.packages = lib.mkAfter (with pkgs; [ vscode-fhs ]);
-    };
+  hmModule = {
+    programs.vscode.enable = true;
+  };
 in
 {
   autix.home.modules.vscode = hmModule;

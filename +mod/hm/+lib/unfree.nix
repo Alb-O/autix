@@ -9,6 +9,7 @@ let
     let
       inherit (lib)
         attrByPath
+        attrValues
         concatMap
         optionalAttrs
         unique
@@ -30,9 +31,14 @@ let
           system,
           permittedUnfreePackages ? [ ],
         }:
+        let
+          overlays = attrByPath [ "flake" "overlays" ] { } config;
+          overlayList = attrValues overlays;
+        in
         import inputs.nixpkgs (
           {
             inherit system;
+            overlays = overlayList;
           }
           // optionalAttrs (permittedUnfreePackages != [ ]) {
             config = {

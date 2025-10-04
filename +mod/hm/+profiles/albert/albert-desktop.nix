@@ -17,6 +17,7 @@ _: {
       "blender"
       "hydrus"
       "vscode"
+      "emacs"
     ];
   };
 }
