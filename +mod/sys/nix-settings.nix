@@ -1,4 +1,4 @@
-{ self, ... }:
+{ self, lib, ... }:
 {
   flake.nixosModules.nix-settings =
     {
@@ -27,10 +27,7 @@
       };
       nixpkgs = {
         config.allowUnfree = true;
-        overlays = [
-          self.overlays.niri
-          self.overlays.emacs
-        ];
+        overlays = lib.attrValues self.overlays;
       };
     };
 }
