@@ -1,0 +1,17 @@
+* Interface
+#+BEGIN_SRC emacs-lisp :tangle yes
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+#+END_SRC
+
+* Package Setup
+#+BEGIN_SRC emacs-lisp :tangle yes
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+#+END_SRC
+
+* Keybindings
+#+BEGIN_SRC emacs-lisp :tangle yes
+(global-set-key (kbd "C-c f") 'find-file)
+#+END_SRC

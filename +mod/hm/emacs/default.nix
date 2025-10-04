@@ -7,7 +7,11 @@ let
         with pkgs;
         (emacsWithPackagesFromUsePackage {
           package = emacs-unstable-pgtk;
-          config = "";
+          config = ./emacs.org;
+          defaultInitFile = true;
+          extraEmacsPackages = epkgs: [
+            epkgs.use-package
+          ];
         });
     in
     {

@@ -10,8 +10,8 @@ let
       jq
       just
       nano
-      vim
       nmap
+      lsof
     ];
 
   hmModule =

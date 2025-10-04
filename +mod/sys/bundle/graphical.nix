@@ -5,7 +5,6 @@ let
       hyprpicker
       libinput
       solaar
-      vesktop
     ];
 
   hmModule =
