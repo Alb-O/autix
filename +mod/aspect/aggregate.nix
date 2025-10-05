@@ -63,9 +63,8 @@ let
       unfreeForScope
       substitutorsForScope
       trustedKeysForScope
+      overlays
       ;
-    inherit overlays;
-    inherit aspectNames;
   };
 in
 {
