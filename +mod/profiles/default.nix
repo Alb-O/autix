@@ -20,7 +20,7 @@ let
   # Single module that declares AND sets profile metadata
   profileMetaModule =
     profileName: profile:
-    { ... }:
+    _:
     {
       options.autix.home.profile = {
         name = mkOption {
@@ -61,24 +61,23 @@ let
     let
       overlays = attrValues autixAspectHelpers.overlays;
       permittedUnfreePackages = autixAspectHelpers.unfreeForScope "home" profileName;
-      
+
       pkgs = import inputs.nixpkgs (
         {
-          system = profile.system;
+          inherit (profile) system;
           inherit overlays;
         }
         // optionalAttrs (permittedUnfreePackages != [ ]) {
           config = {
             allowUnfree = true;
             inherit permittedUnfreePackages;
-            allowUnfreePredicate = pkg: 
-              builtins.elem (inputs.nixpkgs.lib.getName pkg) permittedUnfreePackages;
+            allowUnfreePredicate = pkg: builtins.elem (inputs.nixpkgs.lib.getName pkg) permittedUnfreePackages;
           };
         }
       );
     in
     inputs.home-manager.lib.homeManagerConfiguration {
-      pkgs = pkgs;
+      inherit pkgs;
       modules = modulesForProfile profileName profile;
     };
 in

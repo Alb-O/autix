@@ -3,7 +3,7 @@ let
   kittyWrapped = import ../kitty pkgs;
 in
 pkgs.writeShellApplication {
-  name = "setup-background-terminals";
+  name = "background-terminals";
   runtimeInputs = [
     pkgs.coreutils
     pkgs.gnugrep
@@ -20,7 +20,7 @@ pkgs.writeShellApplication {
       | sort -u)
 
     if [ ''${#monitors[@]} -eq 0 ]; then
-      echo "setup-background-terminals: no monitors reported by niri; skipping" >&2
+      echo "background-terminals: no monitors reported by niri; skipping" >&2
       exit 0
     fi
 

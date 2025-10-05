@@ -1,6 +1,11 @@
 { lib, config, ... }:
 let
-  inherit (lib) mkOption types concatStringsSep mapAttrsToList;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    mapAttrsToList
+    ;
   inherit (config.autix) aspects;
 
   # Generate a list of all aspect names
@@ -9,20 +14,23 @@ let
   # Generate a detailed aspect table
   aspectsTable =
     let
-      rows = mapAttrsToList
-        (name: aspect:
-          let
-            hasNixos = (aspect.nixos.modules or [ ]) != [ ] || (aspect.nixos.targets or [ ]) != [ ];
-            hasHome = (aspect.home.modules or [ ]) != [ ] || (aspect.home.targets or [ ]) != [ ];
-            scopes =
-              if hasNixos && hasHome then "NixOS, Home"
-              else if hasNixos then "NixOS"
-              else if hasHome then "Home"
-              else "None";
-          in
-          "| `${name}` | ${aspect.description or "—"} | ${scopes} |"
-        )
-        aspects;
+      rows = mapAttrsToList (
+        name: aspect:
+        let
+          hasNixos = (aspect.nixos.modules or [ ]) != [ ] || (aspect.nixos.targets or [ ]) != [ ];
+          hasHome = (aspect.home.modules or [ ]) != [ ] || (aspect.home.targets or [ ]) != [ ];
+          scopes =
+            if hasNixos && hasHome then
+              "NixOS, Home"
+            else if hasNixos then
+              "NixOS"
+            else if hasHome then
+              "Home"
+            else
+              "None";
+        in
+        "| `${name}` | ${aspect.description or "—"} | ${scopes} |"
+      ) aspects;
     in
     concatStringsSep "\n" rows;
 in
@@ -68,9 +76,11 @@ in
       - Additional custom modules
 
       Available profiles:
-      ${concatStringsSep "\n" (mapAttrsToList
-        (name: profile: "- **${name}**: User `${profile.user}`, ${if profile.graphical then "graphical" else "headless"}")
-        config.autix.home.profiles
+      ${concatStringsSep "\n" (
+        mapAttrsToList (
+          name: profile:
+          "- **${name}**: User `${profile.user}`, ${if profile.graphical then "graphical" else "headless"}"
+        ) config.autix.home.profiles
       )}
 
       Build a profile:
@@ -85,9 +95,13 @@ in
       ## NixOS Hosts
 
       Host configurations for NixOS systems:
-      ${concatStringsSep "\n" (mapAttrsToList
-        (name: host: "- **${name}**: ${host.system}${if host.profile != null then ", profile: `${host.profile}`" else ""}")
-        config.autix.os.hosts
+      ${concatStringsSep "\n" (
+        mapAttrsToList (
+          name: host:
+          "- **${name}**: ${host.system}${
+            if host.profile != null then ", profile: `${host.profile}`" else ""
+          }"
+        ) config.autix.os.hosts
       )}
 
       Build a host configuration:

@@ -6,14 +6,12 @@ let
     };
   };
 
-  nixosModule =
-    _:
-    {
-      networking = {
-        networkmanager.enable = lib.mkDefault true;
-        firewall.enable = lib.mkDefault true;
-      };
+  nixosModule = _: {
+    networking = {
+      networkmanager.enable = lib.mkDefault true;
+      firewall.enable = lib.mkDefault true;
     };
+  };
 in
 {
   autix.aspects.networking = {

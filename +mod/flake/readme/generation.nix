@@ -58,15 +58,17 @@ let
   '';
 in
 {
-  perSystem = psArgs@{ pkgs, ... }: {
-    files.files = [
-      {
-        path_ = "README.md";
-        drv = pkgs.writeText "README.md" readmeContent;
-      }
-    ];
+  perSystem =
+    psArgs@{ pkgs, ... }:
+    {
+      files.files = [
+        {
+          path_ = "README.md";
+          drv = pkgs.writeText "README.md" readmeContent;
+        }
+      ];
 
-    # Expose the write-files script as a package
-    packages.write-files = psArgs.config.files.writer.drv;
-  };
+      # Expose the write-files script as a package
+      packages.write-files = psArgs.config.files.writer.drv;
+    };
 }

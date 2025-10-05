@@ -20,6 +20,8 @@
           ".envrc"
           ".leaderrc"
           "**/.gitignore"
+          "**/.gitattributes"
+          "**/.gitmodules"
           "*.example"
           "*.kdl"
           "*.kak"
