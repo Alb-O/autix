@@ -26,6 +26,7 @@
           "**/kakrc"
           "justfile"
           "**/.keep"
+          "*.org"
         ];
       };
     };

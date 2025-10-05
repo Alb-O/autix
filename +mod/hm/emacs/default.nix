@@ -27,14 +27,14 @@ let
         package = emacsPackage;
       };
     };
+in
+{
   flake-file = {
     inputs = {
       emacs-overlay.url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
       emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-in
-{
   autix.aspects.emacs = {
     description = "Emacs editor configured with the emacs-overlay.";
     overlays.emacs = inputs.emacs-overlay.overlays.emacs;
@@ -43,6 +43,4 @@ in
       modules = [ hmModule ];
     };
   };
-
-  inherit flake-file;
 }

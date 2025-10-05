@@ -23,6 +23,18 @@ let
           default = [ ];
           description = "Unfree packages permitted when targeting '${name}'.";
         };
+
+        substituters = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "Binary cache substituters when targeting '${name}'.";
+        };
+
+        trustedPublicKeys = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "Trusted public keys for substituters when targeting '${name}'.";
+        };
       };
     }
   );
@@ -57,6 +69,18 @@ let
         type = types.listOf types.str;
         default = [ ];
         description = "Unfree package names permitted when this scope is active.";
+      };
+
+      substituters = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "Binary cache substituters for this scope.";
+      };
+
+      trustedPublicKeys = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "Trusted public keys for substituters in this scope.";
       };
     };
   });

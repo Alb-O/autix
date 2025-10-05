@@ -3,7 +3,6 @@ let
   nixosModule =
     { pkgs, ... }:
     {
-      services.gnome.gnome-keyring.enable = true;
       security.pam.services = {
         login.enableGnomeKeyring = true;
       };
@@ -12,7 +11,11 @@ let
         libsecret
       ];
       programs.dconf.enable = true;
-      services.udev.packages = [ pkgs.gnome-settings-daemon ];
+      services = {
+        gnome-keyring.enable = true;
+        gnome.gnome-keyring.enable = true;
+        udev.packages = [ pkgs.gnome-settings-daemon ];
+      };
     };
 in
 {

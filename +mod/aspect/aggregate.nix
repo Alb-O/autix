@@ -18,52 +18,52 @@ let
   emptyPerTarget = {
     modules = [ ];
     unfreePackages = [ ];
+    substituters = [ ];
+    trustedPublicKeys = [ ];
+  };
+
+  # Default empty scope with all possible fields
+  emptyScope = {
+    modules = [ ];
+    targets = [ ];
+    perTarget = { };
+    unfreePackages = [ ];
+    substituters = [ ];
+    trustedPublicKeys = [ ];
   };
 
   matchesTarget = scope: target: (elem "*" scope.targets) || (elem target scope.targets);
 
   perTargetEntry = scope: target: attrByPath [ target ] emptyPerTarget scope.perTarget;
 
-  modulesForScope =
-    scopeName: target:
+  # Generic function to collect a specific attribute from aspects
+  collectFromScope =
+    attrName: scopeName: target:
     concatLists (
       mapAttrsToList (
         _: aspect:
         let
-          scope = attrByPath [ scopeName ] {
-            modules = [ ];
-            targets = [ ];
-            perTarget = { };
-            unfreePackages = [ ];
-          } aspect;
-          baseModules = optionals (matchesTarget scope target) scope.modules;
+          scope = attrByPath [ scopeName ] emptyScope aspect;
+          baseValues = optionals (matchesTarget scope target) (scope.${attrName} or [ ]);
           targetEntry = perTargetEntry scope target;
         in
-        baseModules ++ targetEntry.modules
+        baseValues ++ (targetEntry.${attrName} or [ ])
       ) aspects
     );
 
-  unfreeForScope =
-    scopeName: target:
-    concatLists (
-      mapAttrsToList (
-        _: aspect:
-        let
-          scope = attrByPath [ scopeName ] {
-            modules = [ ];
-            targets = [ ];
-            perTarget = { };
-            unfreePackages = [ ];
-          } aspect;
-          basePkgs = optionals (matchesTarget scope target) scope.unfreePackages;
-          targetEntry = perTargetEntry scope target;
-        in
-        basePkgs ++ targetEntry.unfreePackages
-      ) aspects
-    );
+  # Specialized collection functions using the generic collector
+  modulesForScope = collectFromScope "modules";
+  unfreeForScope = collectFromScope "unfreePackages";
+  substitutorsForScope = collectFromScope "substituters";
+  trustedKeysForScope = collectFromScope "trustedPublicKeys";
 
   aspectHelpers = {
-    inherit modulesForScope unfreeForScope;
+    inherit
+      modulesForScope
+      unfreeForScope
+      substitutorsForScope
+      trustedKeysForScope
+      ;
     inherit overlays;
     inherit aspectNames;
   };

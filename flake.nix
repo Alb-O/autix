@@ -27,6 +27,17 @@
       ]
     );
 
+  nixConfig = {
+    extra-substituters = [
+      "https://zed.cachix.org"
+      "https://cache.garnix.io"
+    ];
+    extra-trusted-public-keys = [
+      "zed.cachix.org-1:/pHQ6dpMsAZk2DiP4WCL0p9YDNKWj2Q5FL20bNmw1cU="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+    ];
+  };
+
   inputs = {
     allfollow = {
       url = "github:spikespaz/allfollow";
@@ -86,6 +97,14 @@
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
+    };
+    zed-flake = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:zed-industries/zed";
     };
   };
 
