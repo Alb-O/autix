@@ -2,7 +2,6 @@
 let
   inherit (config.text.readme) parts;
 
-  # Combine all README parts into a single document
   readmeContent = ''
     # Autix
 
@@ -67,8 +66,6 @@ in
           drv = pkgs.writeText "README.md" readmeContent;
         }
       ];
-
-      # Expose the write-files script as a package
       packages.write-files = psArgs.config.files.writer.drv;
     };
 }

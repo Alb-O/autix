@@ -25,58 +25,30 @@ let
 
   modPath = self + "/modules";
 
-  # Read comment from .gitattributes file if it exists
-  # Format: # description: Your comment here
-  readGitAttributesComment =
-    path:
-    let
-      attrFile = path + "/.gitattributes";
-      fileExists = builtins.pathExists attrFile;
-    in
-    if !fileExists then
-      ""
-    else
-      let
-        content = builtins.readFile attrFile;
-        lines = lib.splitString "\n" content;
-        # Find line starting with "# description: "
-        commentLines = builtins.filter (line: lib.hasPrefix "# description: " line) lines;
-      in
-      if commentLines == [ ] then
-        ""
-      else
-        let
-          line = builtins.head commentLines;
-          # Extract text after "# description: "
-          afterPrefix = lib.removePrefix "# description: " line;
-        in
-        lib.trim afterPrefix;
-
-  # Read directory and filter out hidden/ignored items
+  # Filter out hidden/ignored items
   readDirFiltered =
     path:
     let
       entries = builtins.readDir path;
-      # Filter out files/dirs starting with _ or .
       visible = filterAttrs (name: _: !(hasPrefix "_" name) && !(hasPrefix "." name)) entries;
     in
     visible;
 
-  # Get immediate subdirectories of modules/
+  # Immediate subdirs of modules/
   topLevelDirs = readDirFiltered modPath;
   topLevelNames = builtins.attrNames topLevelDirs;
   topLevelCount = builtins.length topLevelNames;
 
-  # Calculate maximum name length for top-level dirs (with slash)
+  # Calculate max name length for top-level dirs
   maxTopLevelLen = foldl' (
     max: name:
     let
-      len = builtins.stringLength name + 1; # +1 for trailing slash
+      len = builtins.stringLength name + 1;
     in
     if len > max then len else max
   ) 0 topLevelNames;
 
-  # Calculate maximum name length for subdirectories in each top-level dir
+  # Calculate max name length for subdirs in each top-level dir
   maxSubLengthPerDir = mapAttrs (
     name: type:
     let
@@ -95,10 +67,9 @@ let
     ) 0 subNames
   ) topLevelDirs;
 
-  # Find the global maximum for all subdirectories
   maxSubLen = foldl' (max: len: if len > max then len else max) 0 (attrValues maxSubLengthPerDir);
 
-  # Generate tree lines for each top-level directory
+  # Tree lines for each top-level directory
   generateSubTree =
     idx: name:
     let
@@ -111,32 +82,19 @@ let
       subDirs = if type == "directory" then readDirFiltered fullPath else { };
       subNames = builtins.attrNames subDirs;
       subCount = builtins.length subNames;
+      
+      # Top-level aspect description
+      aspectDesc = aspectDescriptions.${name} or "";
 
-      # Main directory comment - try .gitattributes first, then hardcoded
-      gitAttrComment = readGitAttributesComment fullPath;
-      commentText =
-        if gitAttrComment != "" then
-          gitAttrComment
-        else if name == "aspect" then
-          "Aspect system core (aggregation, options)"
-        else if name == "flake" then
-          "Flake-level configuration (formatter, nix config, file generation)"
-        else if name == "hm" then
-          "Home Manager aspects and profiles"
-        else if name == "sys" then
-          "System-level configuration"
-        else
-          "";
-
-      # Calculate padding for alignment
+      # Alignment padding for top-level
       nameWithSlash = "${name}/";
       nameLen = builtins.stringLength nameWithSlash;
       padding = concatStrings (replicate (maxTopLevelLen - nameLen + 1) " ");
-      comment = if commentText != "" then "${padding}# ${commentText}" else "";
+      comment = if aspectDesc != "" then "${padding}# ${aspectDesc}" else "";
 
       mainLine = "${prefix} ${nameWithSlash}${comment}";
 
-      # Generate lines for subdirectories
+      # Generate lines for subdirs
       subLines = imap0 (
         subIdx: subName:
         let
@@ -145,27 +103,14 @@ let
           subType = subDirs.${subName};
           suffix = if subType == "directory" then "/" else "";
 
-          # Try to find description: .gitattributes > aspect description > hardcoded
           subFullPath = fullPath + "/${subName}";
-          gitAttrComment = if subType == "directory" then readGitAttributesComment subFullPath else "";
 
-          aspectDesc = aspectDescriptions.${subName} or "";
-
-          commentText =
-            if gitAttrComment != "" then
-              gitAttrComment
-            else if subName == "+profiles" then
-              "Profile definitions and options"
-            else if aspectDesc != "" then
-              aspectDesc
-            else
-              "";
-
-          # Calculate padding for alignment
+          # Alignment padding for subdir
           nameWithSuffix = "${subName}${suffix}";
           nameLen = builtins.stringLength nameWithSuffix;
           padding = concatStrings (replicate (maxSubLen - nameLen) " ");
-          subComment = if commentText != "" then "${padding}  # ${commentText}" else "";
+          subAspectDesc = aspectDescriptions.${subName} or "";
+          subComment = if subAspectDesc != "" then "${padding}  # ${subAspectDesc}" else "";
         in
         "${continueBar}${subPrefix} ${nameWithSuffix}${subComment}"
       ) subNames;

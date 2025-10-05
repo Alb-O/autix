@@ -8,10 +8,6 @@ let
     ;
   inherit (config.autix) aspects;
 
-  # Generate a list of all aspect names
-  aspectsList = concatStringsSep ", " (lib.attrNames aspects);
-
-  # Generate a detailed aspect table
   aspectsTable =
     let
       rows = mapAttrsToList (
@@ -47,8 +43,6 @@ in
 
       Autix uses a modular **aspect system** for configuration. Each aspect represents a logical
       unit of functionality that can target specific hosts or profiles.
-
-      Currently enabled aspects: ${aspectsList}
 
       ### Aspect Details
 
