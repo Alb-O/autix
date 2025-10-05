@@ -9,9 +9,12 @@ let
           package = emacs-unstable-pgtk;
           config = ./emacs.org;
           defaultInitFile = true;
-          extraEmacsPackages = epkgs: [
-            epkgs.use-package
-          ];
+          extraEmacsPackages =
+            epkgs:
+            (with epkgs; [
+              use-package
+              which-key
+            ]);
         });
     in
     {

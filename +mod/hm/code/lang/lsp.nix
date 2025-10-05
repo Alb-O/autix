@@ -5,7 +5,7 @@ let
     {
       # defaults will be provided by the options module when available
       config = {
-        autix.lsp.servers = {
+        autix.lsp.servers = with pkgs; {
           typescript = {
             command = [
               "typescript-language-server"
@@ -21,7 +21,7 @@ let
               ".mts"
               ".cts"
             ];
-            package = pkgs.nodePackages.typescript-language-server;
+            package = nodePackages.typescript-language-server;
           };
 
           eslint = {
@@ -40,7 +40,7 @@ let
               ".cts"
               ".vue"
             ];
-            package = pkgs.vscode-langservers-extracted;
+            package = vscode-langservers-extracted;
           };
 
           html = {
@@ -52,7 +52,7 @@ let
               ".html"
               ".htm"
             ];
-            package = pkgs.vscode-langservers-extracted;
+            package = vscode-langservers-extracted;
           };
 
           css = {
@@ -64,7 +64,7 @@ let
               ".css"
               ".scss"
             ];
-            package = pkgs.vscode-langservers-extracted;
+            package = vscode-langservers-extracted;
           };
 
           json = {
@@ -76,7 +76,7 @@ let
               ".json"
               ".jsonc"
             ];
-            package = pkgs.vscode-langservers-extracted;
+            package = vscode-langservers-extracted;
           };
 
           markdown = {
@@ -88,7 +88,7 @@ let
               ".md"
               ".mdx"
             ];
-            package = pkgs.marksman;
+            package = marksman;
           };
 
           tailwindcss = {
@@ -106,19 +106,28 @@ let
               ".jsx"
               ".svelte"
             ];
-            package = pkgs.tailwindcss-language-server;
+            package = tailwindcss-language-server;
           };
 
           rust = {
             command = [ "rust-analyzer" ];
             extensions = [ ".rs" ];
-            package = pkgs.rust-analyzer;
+            package = rust-analyzer;
           };
 
           nix = {
             command = [ "nixd" ];
             extensions = [ ".nix" ];
-            package = pkgs.nixd;
+            package = nixd;
+          };
+
+          package-version-server = {
+            command = [ "package-version-server" ];
+            extensions = [
+              ".json"
+              ".lock"
+            ];
+            package = package-version-server;
           };
         };
 
