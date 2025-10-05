@@ -3,6 +3,7 @@
   imports = [
     inputs.flake-file.flakeModules.dendritic
     inputs.flake-file.flakeModules.nix-auto-follow
+    inputs.files.flakeModules.default
   ];
 
   flake-file = {
@@ -46,6 +47,7 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs";
       nixos-wsl.url = "github:nix-community/NixOS-WSL";
       nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+      files.url = "github:mightyiam/files";
     };
     outputs = lib.mkForce ''
       inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; }

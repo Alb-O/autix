@@ -44,6 +44,9 @@
       };
       url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
     };
+    files = {
+      url = "github:mightyiam/files";
+    };
     flake-file = {
       url = "github:vic/flake-file";
     };
