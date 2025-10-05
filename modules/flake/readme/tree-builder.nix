@@ -23,7 +23,7 @@ let
   # Create mapping from directory names to aspect descriptions
   aspectDescriptions = mapAttrs (_: aspect: aspect.description or "") aspects;
 
-  modPath = self + "/+mod";
+  modPath = self + "/modules";
 
   # Read comment from .gitattributes file if it exists
   # Format: # description: Your comment here
@@ -62,7 +62,7 @@ let
     in
     visible;
 
-  # Get immediate subdirectories of +mod/
+  # Get immediate subdirectories of modules/
   topLevelDirs = readDirFiltered modPath;
   topLevelNames = builtins.attrNames topLevelDirs;
   topLevelCount = builtins.length topLevelNames;
@@ -181,6 +181,6 @@ in
     type = lib.types.str;
     default = tree;
     readOnly = true;
-    description = "Generated directory tree for +mod/ structure";
+    description = "Generated directory tree for modules/ structure";
   };
 }

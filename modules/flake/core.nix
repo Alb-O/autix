@@ -49,11 +49,13 @@
       nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
       files.url = "github:mightyiam/files";
     };
-    outputs = lib.mkForce ''
-      inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; }
-        (inputs.import-tree [
-          ./+mod
-        ])
-    '';
+  
+    # Can change the auto-imported 'modules' directory name here:
+    # outputs = lib.mkForce ''
+    #   inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; }
+    #     (inputs.import-tree [
+    #       ./nix
+    #     ])
+    # '';
   };
 }

@@ -56,14 +56,14 @@ in
       |--------|-------------|--------|
       ${aspectsTable}
 
-      Aspects are defined in `+mod/` directories and automatically aggregated by the build system.
+      Aspects are defined in `modules/` directories and automatically aggregated by the build system.
       Each aspect can contribute:
       - Modules for NixOS or Home Manager
       - Overlays for package customization
       - Unfree package permissions
       - Binary cache substituters and keys
 
-      See [`+mod/aspect/options.nix`](+mod/aspect/options.nix) for the full aspect schema.
+      See [`modules/aspect/options.nix`](modules/aspect/options.nix) for the full aspect schema.
     '';
 
     profiles = ''
@@ -84,7 +84,7 @@ in
       $ nix build .#homeConfigurations.<profile>.activationPackage
       ```
 
-      See [`+mod/hm/+profiles/options.nix`](+mod/hm/+profiles/options.nix) for profile options.
+      See [`modules/hm/+profiles/options.nix`](modules/hm/+profiles/options.nix) for profile options.
     '';
 
     hosts = ''
@@ -105,19 +105,19 @@ in
       $ nixos-rebuild switch --flake .#<hostname>
       ```
 
-      See [`+mod/sys/hosts/options.nix`](+mod/sys/hosts/options.nix) for host options.
+      See [`modules/sys/hosts/options.nix`](modules/sys/hosts/options.nix) for host options.
     '';
 
     project-structure = ''
       ## Project Structure
 
       ```
-      +mod/
+      modules/
       ${config.text.readme.tree}
       ```
 
       Files/directories prefixed with `_` or `.` are ignored by auto-import.
-      All `.nix` files in `+mod/` are automatically imported as flake-parts modules.
+      All `.nix` files in `modules/` are automatically imported as flake-parts modules.
     '';
   };
 

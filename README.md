@@ -5,7 +5,7 @@ A modular NixOS and Home Manager configuration using the aspect system.
 ## Project Structure
 
 ```
-+mod/
+modules/
 ├── aspect/   # Aspect system core (aggregation, options)
 │   ├── aggregate.nix
 │   └── options.nix
@@ -72,7 +72,7 @@ A modular NixOS and Home Manager configuration using the aspect system.
 ```
 
 Files/directories prefixed with `_` or `.` are ignored by auto-import.
-All `.nix` files in `+mod/` are automatically imported as flake-parts modules.
+All `.nix` files in `modules/` are automatically imported as flake-parts modules.
 
 ## Aspects
 
@@ -131,7 +131,7 @@ Currently enabled aspects: albert, blender, cli, clipboard, codex, dev, emacs, e
 | `zk`             | Zettelkasten CLI (zk) configuration.                          | Home        |
 | `zoxide`         | Enable zoxide jump navigation.                                | Home        |
 
-Aspects are defined in `+mod/` directories and automatically aggregated by the build system.
+Aspects are defined in `modules/` directories and automatically aggregated by the build system.
 Each aspect can contribute:
 
 - Modules for NixOS or Home Manager
@@ -139,7 +139,7 @@ Each aspect can contribute:
 - Unfree package permissions
 - Binary cache substituters and keys
 
-See [`+mod/aspect/options.nix`](+mod/aspect/options.nix) for the full aspect schema.
+See [`modules/aspect/options.nix`](modules/aspect/options.nix) for the full aspect schema.
 
 ## Home Manager Profiles
 
@@ -160,7 +160,7 @@ Build a profile:
 $ nix build .#homeConfigurations.<profile>.activationPackage
 ```
 
-See [`+mod/hm/+profiles/options.nix`](+mod/hm/+profiles/options.nix) for profile options.
+See [`modules/hm/+profiles/options.nix`](modules/hm/+profiles/options.nix) for profile options.
 
 ## NixOS Hosts
 
@@ -175,7 +175,7 @@ Build a host configuration:
 $ nixos-rebuild switch --flake .#<hostname>
 ```
 
-See [`+mod/sys/hosts/options.nix`](+mod/sys/hosts/options.nix) for host options.
+See [`modules/sys/hosts/options.nix`](modules/sys/hosts/options.nix) for host options.
 
 ## Usage
 
