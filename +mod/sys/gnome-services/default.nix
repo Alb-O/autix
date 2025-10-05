@@ -12,7 +12,6 @@ let
       ];
       programs.dconf.enable = true;
       services = {
-        gnome-keyring.enable = true;
         gnome.gnome-keyring.enable = true;
         udev.packages = [ pkgs.gnome-settings-daemon ];
       };
