@@ -3,11 +3,16 @@
   inputs,
   config,
   autixAspectHelpers,
-  autixUnfree,
   ...
 }:
 let
-  inherit (lib) mapAttrs mkOption types;
+  inherit (lib)
+    attrValues
+    mapAttrs
+    mkOption
+    optionalAttrs
+    types
+    ;
 
   inherit (config.autix.home) profiles;
 
@@ -75,11 +80,23 @@ let
     profileName: profile:
     let
       permittedUnfreePackages = unfreeForProfile profileName profile;
-      unfreeHelper = autixUnfree { inherit inputs lib config; };
-      pkgs = unfreeHelper.pkgsFor {
-        inherit permittedUnfreePackages;
-        inherit (profile) system;
-      };
+      overlays = attrValues autixAspectHelpers.overlays;
+      
+      # Instantiate nixpkgs with unfree support if needed
+      pkgs = import inputs.nixpkgs (
+        {
+          system = profile.system;
+          inherit overlays;
+        }
+        // optionalAttrs (permittedUnfreePackages != [ ]) {
+          config = {
+            allowUnfree = true;
+            inherit permittedUnfreePackages;
+            allowUnfreePredicate = pkg: builtins.elem (inputs.nixpkgs.lib.getName pkg) permittedUnfreePackages;
+          };
+        }
+      );
+      
       modules = modulesForProfile profileName profile;
     in
     inputs.home-manager.lib.homeManagerConfiguration {
