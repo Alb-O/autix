@@ -9,14 +9,10 @@ let
 
   hmModule =
     {
-      config,
       pkgs,
       ...
     }:
-    let
-      isGraphical = config.autix.home.profile.graphical or false;
-    in
-    lib.mkIf isGraphical {
+    {
       home.packages = lib.mkAfter (packages pkgs);
     };
 in

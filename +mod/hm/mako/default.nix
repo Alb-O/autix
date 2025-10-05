@@ -1,15 +1,14 @@
-{ lib, ... }:
+_:
 let
   hmModule =
     { config, ... }:
     let
-      isGraphical = config.autix.home.profile.graphical or false;
       fontBundle = config.autix.fonts;
       notificationFont = fontBundle.roles.notifications;
       fontName = notificationFont.family.name;
       fontSize = notificationFont.size;
     in
-    lib.mkIf isGraphical {
+    {
       services.mako = {
         enable = true;
         settings = {

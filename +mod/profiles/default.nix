@@ -18,37 +18,27 @@ let
   inherit (config.autix.home) profiles;
 
   # Single module that declares AND sets profile metadata
-  profileMetaModule =
-    profileName: profile:
-    _:
-    {
-      options.autix.home.profile = {
-        name = mkOption {
-          type = types.str;
-          default = profileName;
-          readOnly = true;
-          description = "Profile name (read-only).";
-        };
-
-        graphical = mkOption {
-          type = types.bool;
-          default = profile.graphical;
-          readOnly = true;
-          description = "Whether profile targets a graphical session (read-only).";
-        };
-
-        system = mkOption {
-          type = types.str;
-          default = profile.system;
-          readOnly = true;
-          description = "Target system architecture (read-only).";
-        };
+  profileMetaModule = profileName: profile: _: {
+    options.autix.home.profile = {
+      name = mkOption {
+        type = types.str;
+        default = profileName;
+        readOnly = true;
+        description = "Profile name (read-only).";
       };
 
-      config = {
-        home.username = mkDefault profile.user;
+      system = mkOption {
+        type = types.str;
+        default = profile.system;
+        readOnly = true;
+        description = "Target system architecture (read-only).";
       };
     };
+
+    config = {
+      home.username = mkDefault profile.user;
+    };
+  };
 
   modulesForProfile =
     profileName: profile:

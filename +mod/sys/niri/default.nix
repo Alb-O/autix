@@ -3,26 +3,23 @@ let
   niriConfig = builtins.readFile ./config.kdl;
 
   hmModule =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     let
-      isGraphical = config.autix.home.profile.graphical or false;
       niriPackage = inputs.niri-flake.packages.${pkgs.system}.niri-stable;
       portalNeedsGnome =
         !niriPackage.cargoBuildNoDefaultFeatures
         || builtins.elem "xdp-gnome-screencast" niriPackage.cargoBuildFeatures;
     in
     {
-      config = lib.mkIf isGraphical {
-        home.packages = lib.mkAfter [ niriPackage ];
-        xdg.configFile."niri/config.kdl" = {
-          enable = true;
-          source = pkgs.writeText "niri-config.kdl" niriConfig;
-        };
-        xdg.portal = {
-          enable = true;
-          extraPortals = if portalNeedsGnome then [ pkgs.xdg-desktop-portal-gnome ] else [ ];
-          configPackages = [ niriPackage ];
-        };
+      home.packages = lib.mkAfter [ niriPackage ];
+      xdg.configFile."niri/config.kdl" = {
+        enable = true;
+        source = pkgs.writeText "niri-config.kdl" niriConfig;
+      };
+      xdg.portal = {
+        enable = true;
+        extraPortals = if portalNeedsGnome then [ pkgs.xdg-desktop-portal-gnome ] else [ ];
+        configPackages = [ niriPackage ];
       };
     };
 

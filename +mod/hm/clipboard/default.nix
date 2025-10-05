@@ -1,9 +1,8 @@
 { lib, ... }:
 let
   hmModule =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     let
-      isGraphical = config.autix.home.profile.graphical or false;
       clipboardService = {
         Unit = {
           Description = "Clipboard manager for Wayland";
@@ -23,7 +22,7 @@ let
         };
       };
     in
-    lib.mkIf isGraphical {
+    {
       home.packages = lib.mkAfter (
         with pkgs;
         [
@@ -33,7 +32,6 @@ let
       );
 
       systemd.user.services.cliphist = clipboardService;
-
       home.sessionVariables = {
         CLIPHIST_DB_PATH = lib.mkDefault "$HOME/.local/share/cliphist/db";
       };

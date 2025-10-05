@@ -1,16 +1,15 @@
-{ lib, ... }:
+_:
 let
   hmModule =
     { config, ... }:
     let
-      isGraphical = config.autix.home.profile.graphical or false;
       fontBundle = config.autix.fonts;
       terminalFont = fontBundle.roles.terminal;
       fontName = terminalFont.family.name;
       fontSize = terminalFont.size;
       fontStyle = terminalFont.family.style;
     in
-    lib.mkIf isGraphical {
+    {
       xdg.configFile."kitty/tab_bar.py" = {
         source = ./tab_bar.py;
       };

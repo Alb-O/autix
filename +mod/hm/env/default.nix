@@ -3,7 +3,6 @@ let
   hmModule =
     { config, ... }:
     let
-      isGraphical = config.autix.home.profile.graphical or false;
       homeDir = config.home.homeDirectory;
       localBin = "${homeDir}/.local/bin";
       cargoBin = "${homeDir}/.local/share/cargo/bin";
@@ -18,13 +17,11 @@ let
         {
           USERNAME = lib.mkDefault config.home.username;
           EDITOR = lib.mkDefault "kak";
+          TERMINAL = lib.mkDefault "kitty";
+          TERM_PROGRAM = lib.mkDefault "kitty";
         }
         (lib.mkIf (config.autix.home.profile.name != null) {
           HOSTNAME = lib.mkDefault config.autix.home.profile.name;
-        })
-        (lib.mkIf isGraphical {
-          TERMINAL = lib.mkDefault "kitty";
-          TERM_PROGRAM = lib.mkDefault "kitty";
         })
       ];
 

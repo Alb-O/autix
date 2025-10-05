@@ -1,8 +1,8 @@
-{ lib, ... }:
+_:
 let
   hmModule =
-    { config, pkgs, ... }:
-    lib.mkIf (config.autix.home.profile.graphical or false) {
+    { pkgs, ... }:
+    {
       systemd.user.services.polkit-gnome-authentication-agent-1 = {
         Unit = {
           Description = "polkit-gnome-authentication-agent-1";

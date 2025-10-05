@@ -72,15 +72,11 @@ in
       Profiles define Home Manager configurations. Each profile specifies:
       - User account
       - System architecture
-      - Whether it's a graphical session
       - Additional custom modules
 
       Available profiles:
       ${concatStringsSep "\n" (
-        mapAttrsToList (
-          name: profile:
-          "- **${name}**: User `${profile.user}`, ${if profile.graphical then "graphical" else "headless"}"
-        ) config.autix.home.profiles
+        mapAttrsToList (name: profile: "- **${name}**: User `${profile.user}`") config.autix.home.profiles
       )}
 
       Build a profile:

@@ -147,13 +147,12 @@ Profiles define Home Manager configurations. Each profile specifies:
 
 - User account
 - System architecture
-- Whether it's a graphical session
 - Additional custom modules
 
 Available profiles:
 
-- **albert-desktop**: User `albert`, graphical
-- **albert-wsl**: User `albert`, headless
+- **albert-desktop**: User `albert`
+- **albert-wsl**: User `albert`
 
 Build a profile:
 

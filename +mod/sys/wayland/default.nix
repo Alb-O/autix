@@ -26,11 +26,8 @@ let
     };
 
   hmModule =
-    { lib, config, ... }:
-    let
-      isGraphical = config.autix.home.profile.graphical or false;
-    in
-    lib.mkIf isGraphical {
+    { lib, ... }:
+    {
       home.sessionVariables = mkDefaultEnv lib;
       systemd.user.sessionVariables = mkDefaultEnv lib;
     };

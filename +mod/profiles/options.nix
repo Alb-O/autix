@@ -15,12 +15,6 @@ let
         description = "Target system architecture.";
       };
 
-      graphical = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether profile targets a graphical session.";
-      };
-
       extraModules = mkOption {
         type = types.listOf types.raw;
         default = [ ];
