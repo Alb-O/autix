@@ -21,7 +21,7 @@ in
   autix.aspects.keyboard = {
     description = "Swap Caps Lock and Escape via keyd.";
     nixos = {
-      targets = [ "*" ];
+      targets = [ "desktop" ];
       modules = [ nixosModule ];
     };
   };

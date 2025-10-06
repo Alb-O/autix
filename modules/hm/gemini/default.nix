@@ -8,7 +8,7 @@ let
 in
 {
   autix.aspects.gemini = {
-    description = "Gemini CLI tooling.";
+    description = "Google Gemini CLI.";
     home = {
       targets = [ "*" ];
       modules = [ hmModule ];

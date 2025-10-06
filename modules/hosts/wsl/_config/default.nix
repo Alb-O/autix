@@ -1,6 +1,7 @@
-{ lib, inputs, ... }:
+{ lib, ... }:
 {
-  imports = [ inputs.nixos-wsl.nixosModules.default ];
+  # The nixos-wsl module is provided through the wsl aspect
+  # No need to import it here - it's automatically included for the "wsl" target
 
   wsl = {
     enable = true;
