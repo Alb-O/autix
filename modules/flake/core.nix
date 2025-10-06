@@ -47,7 +47,7 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs";
       files.url = "github:mightyiam/files";
     };
-  
+
     # Can change the auto-imported 'modules' directory name here:
     # outputs = lib.mkForce ''
     #   inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; }

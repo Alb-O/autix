@@ -15,6 +15,7 @@
           shfmt.enable = true;
           black.enable = true;
         };
+        settings.on-unmatched = "warn";
         settings.global.excludes = [
           "flake.lock"
           ".envrc"
@@ -29,6 +30,7 @@
           "justfile"
           "**/.keep"
           "*.org"
+          "secrets/**"
         ];
       };
     };

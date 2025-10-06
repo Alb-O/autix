@@ -1,4 +1,4 @@
-{ ... }:
+_:
 let
   hmModule = {
     programs.nushell.enable = true;

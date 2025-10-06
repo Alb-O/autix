@@ -20,7 +20,7 @@ let
       sops = {
         age.keyFile = "/home/${userName}/.config/sops/age/keys.txt";
         defaultSopsFile = ../../../secrets/secrets.yaml;
-        
+
         # Example secrets - uncomment to use
         # secrets.example_api_key = { };
         # secrets.example_password = { };
@@ -45,7 +45,7 @@ let
     # sops = {
     #   defaultSopsFile = ../../../secrets/secrets.yaml;
     #   age.keyFile = "/home/${userName}/.config/sops/age/keys.txt";
-    #   
+    #
     #   # Example system secrets
     #   # secrets.example_system_secret = { };
     # };

@@ -1,10 +1,10 @@
 { inputs, ... }:
 let
-  hmModule = { ... }: {
+  hmModule = {
     imports = [ inputs.sops-nix.homeManagerModules.sops ];
   };
 
-  nixosModule = { ... }: {
+  nixosModule = {
     imports = [ inputs.sops-nix.nixosModules.sops ];
   };
 in
