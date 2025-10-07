@@ -82,7 +82,7 @@ let
       subDirs = if type == "directory" then readDirFiltered fullPath else { };
       subNames = builtins.attrNames subDirs;
       subCount = builtins.length subNames;
-      
+
       # Top-level aspect description
       aspectDesc = aspectDescriptions.${name} or "";
 
@@ -102,8 +102,6 @@ let
           subPrefix = if subIsLast then "└──" else "├──";
           subType = subDirs.${subName};
           suffix = if subType == "directory" then "/" else "";
-
-          subFullPath = fullPath + "/${subName}";
 
           # Alignment padding for subdir
           nameWithSuffix = "${subName}${suffix}";
