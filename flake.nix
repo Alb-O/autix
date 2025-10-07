@@ -83,6 +83,14 @@
     nixpkgs-lib = {
       follows = "nixpkgs";
     };
+    nur = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:nix-community/NUR";
+    };
     sops-nix = {
       inputs = {
         nixpkgs = {

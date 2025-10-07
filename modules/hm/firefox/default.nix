@@ -1,5 +1,19 @@
-_:
+{ inputs, ... }:
 let
+  firefoxExtensions = pkgs:
+    with pkgs.nur.repos.rycee.firefox-addons;
+    [
+      darkreader
+      ublock-origin
+      bitwarden
+      sponsorblock
+      web-clipper-obsidian
+      libredirect
+      violentmonkey
+      youtube-high-definition
+      youtube-nonstop
+    ];
+
   hmModule =
     {
       config,
@@ -8,11 +22,8 @@ let
       ...
     }:
     let
-      username =
-        config.home.username or (throw "firefox-module: set home.username before importing this module");
-      homeDir =
-        config.home.homeDirectory
-          or (throw "firefox-module: set home.homeDirectory before importing this module");
+      username = config.home.username;
+      homeDir = config.home.homeDirectory;
 
       xdgDirs = lib.attrByPath [ "xdg" "userDirs" ] { } config;
       desktopDir =
@@ -27,16 +38,13 @@ let
         lib.replaceStrings [ "$HOME" "$XDG_DESKTOP_DIR" ] [ homeDir desktopDir ] rawDownload;
 
       policiesConfig = import ./_config/policies.nix { };
-      extensionsConfig = import ./_config/extensions.nix { };
       prefsConfig = import ./_config/prefs.nix { inherit lib downloadDir; };
       searchConfig = import ./_config/search.nix { inherit lib pkgs; };
     in
     {
       programs.firefox = {
         enable = true;
-        policies = policiesConfig.policies // {
-          ExtensionSettings = extensionsConfig.extensionSettings;
-        };
+        inherit (policiesConfig) policies;
 
         profiles.${username} = {
           id = 0;
@@ -44,6 +52,7 @@ let
           path = username;
           settings = prefsConfig.profileSettings;
           search = searchConfig.searchConfig;
+          extensions.packages = firefoxExtensions pkgs;
         };
 
         profiles.work = {
@@ -52,6 +61,7 @@ let
           path = "work";
           settings = prefsConfig.profileSettings;
           search = searchConfig.searchConfig;
+          extensions.packages = firefoxExtensions pkgs;
         };
       };
 
@@ -68,13 +78,21 @@ let
       };
 
       home.sessionVariables = {
+        BROWSER = "${pkgs.firefox}/bin/firefox";
         DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
       };
     };
 in
 {
+  flake-file = {
+    inputs = {
+      nur.url = "github:nix-community/NUR";
+      nur.inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
   autix.aspects.firefox = {
-    description = "Firefox configuration with policies and profiles.";
+    description = "Firefox config, including policies, profiles and NUR overlay extensions.";
+    overlays.nur = inputs.nur.overlays.default;
     home = {
       targets = [ "albert-desktop" ];
       modules = [ hmModule ];

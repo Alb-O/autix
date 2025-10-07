@@ -23,16 +23,10 @@
       "downloads-button",
       "preferences-button"
     ],
-    "toolbar-menubar": [
-      "menubar-items"
-    ],
+    "toolbar-menubar": ["menubar-items"],
     "TabsToolbar": [],
-    "vertical-tabs": [
-      "tabbrowser-tabs"
-    ],
-    "PersonalToolbar": [
-      "personal-bookmarks"
-    ]
+    "vertical-tabs": ["tabbrowser-tabs"],
+    "PersonalToolbar": ["personal-bookmarks"]
   },
   "seen": [
     "save-to-pocket-button",
