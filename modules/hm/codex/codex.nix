@@ -12,7 +12,8 @@ let
       home.packages = lib.mkAfter (
         with pkgs;
         [
-          python314 # codex likes to use python for bulky tasks
+          # codex likes to run adhoc python scripts
+          python314
         ]
       );
     };

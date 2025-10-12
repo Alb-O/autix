@@ -30,14 +30,6 @@
     allfollow = {
       url = "github:spikespaz/allfollow";
     };
-    emacs-overlay = {
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
-      url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
-    };
     files = {
       url = "github:mightyiam/files";
     };
@@ -46,6 +38,14 @@
     };
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
+    };
+    git-sparta = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:Alb-O/git-sparta";
     };
     home-manager = {
       inputs = {

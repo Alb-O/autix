@@ -124,6 +124,43 @@ gc:
 
 
 # ================================
+# GIT-SPARTA - Submodule tooling
+# ================================
+
+# Run git-sparta with arbitrary arguments
+sparta-run *ARGS:
+    nix run .#git-sparta -- {{ARGS}}
+
+# Build the git-sparta package
+sparta-build:
+    nix build .#git-sparta
+
+# Interactive sparse pattern search for a tag (defaults to current repo)
+sparta-tags tag repo="." yes="false" theme="":
+    args=(generate-sparse-list "{{tag}}")
+    if [ "{{repo}}" != "." ]; then args+=("--repo" "{{repo}}"); fi
+    if [ "{{yes}}" = "true" ]; then args+=("--yes"); fi
+    if [ -n "{{theme}}" ]; then args+=(--theme "{{theme}}"); fi
+    nix run .#git-sparta -- "${args[@]}"
+
+# Configure a sparse-tagged submodule
+sparta-setup config="." yes="false" theme="":
+    args=(setup-submodule)
+    if [ "{{config}}" != "." ]; then args+=("--config-dir" "{{config}}"); fi
+    if [ "{{yes}}" = "true" ]; then args+=("--yes"); fi
+    if [ -n "{{theme}}" ]; then args+=(--theme "{{theme}}"); fi
+    nix run .#git-sparta -- "${args[@]}"
+
+# Tear down a sparse-tagged submodule
+sparta-teardown config="." yes="false" theme="":
+    args=(teardown-submodule)
+    if [ "{{config}}" != "." ]; then args+=("--config-dir" "{{config}}"); fi
+    if [ "{{yes}}" = "true" ]; then args+=("--yes"); fi
+    if [ -n "{{theme}}" ]; then args+=(--theme "{{theme}}"); fi
+    nix run .#git-sparta -- "${args[@]}"
+
+
+# ================================
 # Aliases
 # ================================
 # Aliases for common commands

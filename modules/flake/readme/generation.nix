@@ -51,6 +51,16 @@ let
     $ nix flake check
     ```
 
+    ### git-sparta Integration
+
+    Autix ships the local [`git-sparta`](git-sparta/README.md) tool for attribute-driven sparse
+    workflows. Helpful entry points:
+
+    - `nix run .#git-sparta -- --help` or `just sparta-run -- --help` for command discovery.
+    - `just sparta-tags tag=<name>` launches the interactive tag browser (add `repo=<path>` to scan another checkout, `yes=true` to bypass the TUI, and `theme=<name>` to pick a theme).
+    - `just sparta-setup` and `just sparta-teardown` wrap the submodule lifecycle commands.
+    - Git aliases (`git sparta`, `git sparta-tags`, etc.) forward directly to the packaged binary.
+
     ## License
 
     See [LICENSE](LICENSE) file.

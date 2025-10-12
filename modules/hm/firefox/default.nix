@@ -1,8 +1,7 @@
 { inputs, ... }:
 let
-  firefoxExtensions = pkgs:
-    with pkgs.nur.repos.rycee.firefox-addons;
-    [
+  firefoxExtensions =
+    pkgs: with pkgs.nur.repos.rycee.firefox-addons; [
       darkreader
       ublock-origin
       bitwarden
@@ -15,14 +14,13 @@ let
     ];
 
   hmModule =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     let
-      username = config.home.username;
+      inherit (config.home) username;
       homeDir = config.home.homeDirectory;
 
       xdgDirs = lib.attrByPath [ "xdg" "userDirs" ] { } config;
