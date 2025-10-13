@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  inputs,
+  ...
+}:
 let
   inherit (lib)
     attrByPath
@@ -13,20 +18,61 @@ let
   inherit (config.autix) aspects;
   aspectNames = attrNames aspects;
 
-  overlays = foldl' (acc: aspectName: acc // (aspects.${aspectName}.overlays or { })) { } aspectNames;
+  baseOverlays = foldl' (
+    acc: aspectName: acc // (aspects.${aspectName}.overlays or { })
+  ) { } aspectNames;
 
-  emptyPerTarget = {
+  emptyScope = {
     modules = [ ];
+    targets = [ ];
+    perTarget = { };
     unfreePackages = [ ];
     substituters = [ ];
     trustedPublicKeys = [ ];
   };
 
-  # Default empty scope with all possible fields
-  emptyScope = {
+  masterAspectNames = foldl' (
+    acc: aspectName:
+    let
+      scopeHome = attrByPath [ aspectName "home" ] emptyScope aspects;
+      scopeNixos = attrByPath [ aspectName "nixos" ] emptyScope aspects;
+    in
+    if (scopeHome.master or scopeNixos.master) then acc ++ [ aspectName ] else acc
+  ) [ ] aspectNames;
+
+  # Only generate overlays for aspects that don't already provide an overlay with the same key.
+  existingOverlayKeys = attrNames baseOverlays;
+
+  masterGeneratedOverlaysList = foldl' (
+    acc: aspectName:
+    if elem aspectName existingOverlayKeys then
+      acc
+    else
+      acc
+      ++ [
+        {
+          name = aspectName;
+          value =
+            final: _prev:
+            let
+              pkgs = builtins.getAttr final.system inputs.nixpkgs-master.legacyPackages;
+            in
+            builtins.listToAttrs [
+              {
+                name = aspectName;
+                value = builtins.getAttr aspectName pkgs;
+              }
+            ];
+        }
+      ]
+  ) [ ] masterAspectNames;
+
+  masterGeneratedOverlays = builtins.listToAttrs masterGeneratedOverlaysList;
+
+  overlays = baseOverlays // masterGeneratedOverlays;
+
+  emptyPerTarget = {
     modules = [ ];
-    targets = [ ];
-    perTarget = { };
     unfreePackages = [ ];
     substituters = [ ];
     trustedPublicKeys = [ ];
@@ -51,7 +97,6 @@ let
       ) aspects
     );
 
-  # Specialized collection functions using the generic collector
   modulesForScope = collectFromScope "modules";
   unfreeForScope = collectFromScope "unfreePackages";
   substitutorsForScope = collectFromScope "substituters";
@@ -70,4 +115,16 @@ in
 {
   _module.args.autixAspectHelpers = aspectHelpers;
   flake.overlays = overlays;
+
+  # Conditionally inject the nixpkgs master flake input when at least one
+  # aspect requested `master = true`.
+  flake-file =
+    if (builtins.length masterAspectNames) > 0 then
+      {
+        inputs = {
+          nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+        };
+      }
+    else
+      { };
 }

@@ -14,10 +14,11 @@ let
     ];
 
   hmModule =
-    { config
-    , lib
-    , pkgs
-    , ...
+    {
+      config,
+      lib,
+      pkgs,
+      ...
     }:
     let
       inherit (config.home) username;

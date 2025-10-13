@@ -59,6 +59,12 @@ let
         description = "List of identifiers (or '*') that enable this scope's modules.";
       };
 
+      master = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to use the master branch of nixpkgs for this scope.";
+      };
+
       perTarget = mkOption {
         type = types.attrsOf targetModulesType;
         default = { };
