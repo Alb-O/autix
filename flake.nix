@@ -83,6 +83,9 @@
     nixpkgs-lib = {
       follows = "nixpkgs";
     };
+    nixpkgs-master = {
+      url = "github:NixOS/nixpkgs/master";
+    };
     nur = {
       inputs = {
         nixpkgs = {

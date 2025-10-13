@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, inputs, ... }:
 let
   hmModule =
     { pkgs, config, ... }:
@@ -17,8 +17,18 @@ let
     };
 in
 {
+  flake-file = {
+    inputs = {
+      nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+    };
+  };
   autix.aspects.opencode = {
     description = "OpenCode configuration.";
+    overlays.opencode = (
+      final: prev: {
+        opencode = inputs.nixpkgs-master.legacyPackages.${final.system}.opencode;
+      }
+    );
     home = {
       targets = [ "*" ];
       modules = [ hmModule ];
