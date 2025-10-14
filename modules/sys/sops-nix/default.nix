@@ -1,8 +1,14 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 let
-  hmModule = {
-    imports = [ inputs.sops-nix.homeManagerModules.sops ];
-  };
+  hmModule =
+    { pkgs, ... }:
+    {
+      imports = [ inputs.sops-nix.homeManagerModules.sops ];
+      home.packages = with pkgs; lib.mkAfter [
+        sops
+        inputs.sops-nix.packages.${pkgs.system}.default
+      ];
+    };
 
   nixosModule = {
     imports = [ inputs.sops-nix.nixosModules.sops ];
