@@ -2,9 +2,13 @@
 let
   inherit (lib) mkDefault;
 
+  # The main home-manager module that configures git
   hmModule =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
+      sops.secrets."git/gitea/credentials" = {
+        path = "${builtins.getEnv "XDG_RUNTIME_DIR"}/git/gitea/credentials";
+      };
       programs.git = {
         enable = mkDefault true;
         lfs.enable = mkDefault true;
@@ -54,6 +58,8 @@ let
           help.autocorrect = 1;
           rerere.enabled = true;
           log.date = "relative";
+          # Access hyphenated attributes with quoted keys
+          credential.helper = "store --file " + config.sops.secrets."git/gitea/credentials".path;
           credential."https://github.com".helper = "${lib.getExe pkgs.gh} auth git-credential";
           credential."https://gist.github.com".helper = "${lib.getExe pkgs.gh} auth git-credential";
         };

@@ -1,13 +1,9 @@
-# SOPS configuration for managing secrets
-# Public key: age1rf75et6fud5duxrczv45vh05a6q0pvfep70h7cf33fdczku7jd2stem7rk
-
 keys:
-  # Albert's age key
   - &albert age1rf75et6fud5duxrczv45vh05a6q0pvfep70h7cf33fdczku7jd2stem7rk
 
 creation_rules:
   # Default rule for all secrets
-  - path_regex: secrets/.*\.yaml$
+  - path_regex: ^modules/profiles/[^/]+/(?:secrets/.*\.yaml|secrets\.yaml)$
     key_groups:
       - age:
           - *albert

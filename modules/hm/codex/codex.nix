@@ -24,6 +24,7 @@ in
     home = {
       targets = [ "*" ];
       modules = [ hmModule ];
+      master = true;
     };
   };
 }
