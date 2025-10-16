@@ -1,3 +1,4 @@
 /tmp
 /result
 *.log
+/.pre-commit-config.yaml
