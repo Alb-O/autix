@@ -12,16 +12,18 @@ let
     mkOption
     optionalAttrs
     replaceStrings
-    types;
+    types
+    ;
 
   sanitizeSecretName = name: replaceStrings [ "/" " " ] [ "-" "-" ] name;
   defaultSystemSecretPath = name: "/run/secrets/${sanitizeSecretName name}";
-  defaultSecretGroup = name: sanitizeSecretName name;
+  defaultSecretGroup = name: "sops-${sanitizeSecretName name}";
 
-  mkSharedSecretType = defaults:
+  mkSharedSecretType =
+    defaults:
     let
-      defaultSecretPath = defaults.defaultSecretPath;
-      defaultOwner = defaults.defaultOwner;
+      inherit (defaults) defaultSecretPath;
+      inherit (defaults) defaultOwner;
       defaultGroup = defaults.defaultGroup or defaultSecretGroup;
     in
     types.submodule (
@@ -89,14 +91,16 @@ let
       }
     );
 
-  sharedSecretsOption = defaults:
+  sharedSecretsOption =
+    defaults:
     mkOption {
       type = types.attrsOf (mkSharedSecretType defaults);
       default = { };
       description = "Reusable shared secret provisioning between NixOS and Home Manager.";
     };
 
-  mkSharedOptionsModule = getDefaults:
+  mkSharedOptionsModule =
+    getDefaults:
     { config, ... }:
     let
       defaults = getDefaults config;
@@ -106,15 +110,21 @@ let
     };
 
   hmModule =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     let
-      getSecretDirectory = cfg:
+      getSecretDirectory =
+        cfg:
         let
           stateHome = cfg.xdg.stateHome or "${cfg.home.homeDirectory}/.local/state";
         in
         "${stateHome}/autix/secrets";
 
-      defaultHomeSecretPath = cfg: name: "${getSecretDirectory cfg}/${sanitizeSecretName name}";
+      defaultHomeSecretPath = cfg: name: "${getSecretDirectory cfg}/${name}";
 
       homeDefaults = cfg: {
         defaultSecretPath = defaultHomeSecretPath cfg;
@@ -126,18 +136,16 @@ let
       cfg = config.autix.sops-nix.sharedSecrets;
       hasSecrets = attrValues cfg != [ ];
 
-      sopsSecretEntries =
-        mapAttrs'
-          (_: secretCfg:
-            lib.nameValuePair secretCfg.sopsKey (
-              {
-                mode = secretCfg.mode;
-                path = secretCfg.path;
-              }
-              // secretCfg.extraConfig
-            )
-          )
-          cfg;
+      sopsSecretEntries = mapAttrs' (
+        _: secretCfg:
+        lib.nameValuePair secretCfg.sopsKey (
+          {
+            inherit (secretCfg) mode;
+            inherit (secretCfg) path;
+          }
+          // secretCfg.extraConfig
+        )
+      ) cfg;
     in
     {
       imports = [
@@ -153,10 +161,9 @@ let
             inputs.sops-nix.packages.${pkgs.system}.default
           ];
 
-        home.activation.autix-sops-secret-directory =
-          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            install -m700 -d ${escapeShellArg secretDirectory}
-          '';
+        home.activation.autix-sops-secret-directory = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          install -m700 -d ${escapeShellArg secretDirectory}
+        '';
 
         sops.secrets = sopsSecretEntries;
       };
@@ -168,7 +175,8 @@ let
       inherit (lib)
         attrNames
         mkMerge
-        unique;
+        unique
+        ;
 
       hmUsers = attrNames (config.home-manager.users or { });
       cfg = config.autix.sops-nix.sharedSecrets;
@@ -179,43 +187,39 @@ let
         defaultGroup = defaultSecretGroup;
       };
 
-      hmMembers = cfg:
-        if cfg.includeHomeManagerUsers then hmUsers else [ ];
+      hmMembers = cfg: if cfg.includeHomeManagerUsers then hmUsers else [ ];
 
       needsUserSessions = cfg: cfg.enableNeededForUsers;
 
-      groupMembers =
-        foldl'
-          (acc: secretCfg:
-            let
-              members = unique (hmMembers secretCfg ++ secretCfg.extraGroupMembers);
-              group = secretCfg.group;
-            in
-            if group == null || members == [ ] then acc else acc // {
-              ${group} = unique ((acc.${group} or [ ]) ++ members);
-            }
-          )
-          { }
-          (attrValues cfg);
+      groupMembers = foldl' (
+        acc: secretCfg:
+        let
+          members = unique (hmMembers secretCfg ++ secretCfg.extraGroupMembers);
+          inherit (secretCfg) group;
+        in
+        if group == null || members == [ ] then
+          acc
+        else
+          acc
+          // {
+            ${group} = unique ((acc.${group} or [ ]) ++ members);
+          }
+      ) { } (attrValues cfg);
 
-      sopsSecretEntries =
-        mapAttrs'
-          (_: secretCfg:
-            lib.nameValuePair secretCfg.sopsKey (
-              mkMerge [
-                {
-                  mode = secretCfg.mode;
-                  path = secretCfg.path;
-                }
-                (optionalAttrs (secretCfg.group != null) { group = secretCfg.group; })
-                (optionalAttrs (needsUserSessions secretCfg) {
-                  neededForUsers = true;
-                })
-                secretCfg.extraConfig
-              ]
-            )
-          )
-          cfg;
+      sopsSecretEntries = mapAttrs' (
+        _: secretCfg:
+        lib.nameValuePair secretCfg.sopsKey (mkMerge [
+          {
+            inherit (secretCfg) mode;
+            inherit (secretCfg) path;
+          }
+          (optionalAttrs (secretCfg.group != null) { inherit (secretCfg) group; })
+          (optionalAttrs (needsUserSessions secretCfg) {
+            neededForUsers = true;
+          })
+          secretCfg.extraConfig
+        ])
+      ) cfg;
     in
     {
       imports = [

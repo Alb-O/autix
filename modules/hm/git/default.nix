@@ -1,7 +1,8 @@
 { lib, ... }:
 let
   inherit (lib)
-    mkDefault;
+    mkDefault
+    ;
 
   secretName = "git/gitea/credentials";
 
@@ -73,7 +74,7 @@ let
     };
 
   nixosModule =
-    { ... }:
+    _:
     {
       autix.sops-nix.sharedSecrets."${secretName}" = {
         mode = "0660";

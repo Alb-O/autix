@@ -164,6 +164,7 @@ Consumers can reference `config.autix.sops-nix.sharedSecrets."<identifier>"` to 
 derived defaults (such as the decrypted path or provisioned group) without recomputing them.
 
 Override any of the defaults by setting the corresponding option (`path`, `group`, `sopsKey`, etc.).
+
 - Unfree package permissions
 - Binary cache substituters and keys
 
