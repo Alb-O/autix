@@ -66,7 +66,7 @@ modules/
     ├── niri/            # Niri Wayland compositor and related tooling.
     ├── nix-settings/    # Shared Nix daemon and nixpkgs defaults.
     ├── shell-init/      # Ensure login shells hand over to fish with XDG-aware history.
-    ├── sops-nix/        # Atomic secret provisioning for NixOS based on sops.
+    ├── sops-nix/        # Atomic secret provisioning for NixOS with shared secret helper.
     ├── ssh/             # SSH client defaults and server hardening.
     ├── tty/             # kmscon font defaults for virtual consoles.
     ├── wayland/         # Wayland-first session defaults.
@@ -98,7 +98,7 @@ unit of functionality that can target specific hosts or profiles.
 | `fzf`            | Configure fzf with custom defaults.                                      | Home        |
 | `gdm`            | GNOME Display Manager.                                                   | NixOS       |
 | `gemini`         | Google Gemini CLI.                                                       | Home        |
-| `git`            | Git configuration with helpful defaults.                                 | Home        |
+| `git`            | Git configuration with helpful defaults.                                 | NixOS, Home |
 | `git-sparta`     | git-sparta CLI integration for git attribute sparse workflows & tagging. | Home        |
 | `gnome-services` | GNOME keyring and supporting services.                                   | NixOS       |
 | `graphical`      | Graphical desktop utilities bundle.                                      | Home        |
@@ -120,7 +120,7 @@ unit of functionality that can target specific hosts or profiles.
 | `polkit`         | Polkit agent for graphical sessions.                                     | Home        |
 | `shell-init`     | Ensure login shells hand over to fish with XDG-aware history.            | NixOS       |
 | `sillytavern`    | SillyTavern launcher and desktop entry.                                  | Home        |
-| `sops-nix`       | Atomic secret provisioning for NixOS based on sops.                      | NixOS, Home |
+| `sops-nix`       | Atomic secret provisioning for NixOS with shared secret helper.          | NixOS, Home |
 | `ssh`            | SSH client defaults and server hardening.                                | NixOS, Home |
 | `tty`            | kmscon font defaults for virtual consoles.                               | NixOS       |
 | `vscode`         | Visual Studio Code (unfree) enablement.                                  | Home        |
@@ -138,6 +138,30 @@ Each aspect can contribute:
 
 - Modules for NixOS or Home Manager
 - Overlays for package customization
+
+### sops-nix shared secret helper
+
+The `autix.sops-nix.sharedSecrets` option provisions reusable SOPS entries and filesystem
+permissions for both NixOS and Home Manager consumers. Secret identifiers support hierarchical
+paths – for example `"git/gitea/credentials"` – and defaults are derived automatically:
+
+- `sops.secrets` key defaults to the identifier (e.g. `git/gitea/credentials`).
+- The decrypted file path defaults to `/run/secrets/` plus a sanitized slug of the identifier
+  (forward slashes and spaces become hyphens).
+- The reader group defaults to the same slug and will be populated with matching Home Manager
+  users unless explicitly disabled.
+
+```nix
+autix.sops-nix.sharedSecrets."git/gitea/credentials" = {
+  mode = "0660";
+  extraGroupMembers = [ "git" ];
+};
+```
+
+Consumers can reference `config.autix.sops-nix.sharedSecrets."<identifier>"` to reuse the
+derived defaults (such as the decrypted path or provisioned group) without recomputing them.
+
+Override any of the defaults by setting the corresponding option (`path`, `group`, `sopsKey`, etc.).
 - Unfree package permissions
 - Binary cache substituters and keys
 
