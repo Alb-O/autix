@@ -146,10 +146,12 @@ permissions for both NixOS and Home Manager consumers. Secret identifiers suppor
 paths – for example `"git/gitea/credentials"` – and defaults are derived automatically:
 
 - `sops.secrets` key defaults to the identifier (e.g. `git/gitea/credentials`).
-- The decrypted file path defaults to `/run/secrets/` plus a sanitized slug of the identifier
-  (forward slashes and spaces become hyphens).
-- The reader group defaults to the same slug and will be populated with matching Home Manager
-  users unless explicitly disabled.
+- The decrypted file path defaults to `/run/secrets/<slug>` on NixOS and to
+  `${XDG_STATE_HOME:-~/.local/state}/autix/secrets/<slug>` in Home Manager, where `<slug>`
+  replaces forward slashes and spaces with hyphens.
+- On NixOS the reader group defaults to the same slug and will be populated with matching Home
+  Manager users unless explicitly disabled. Home Manager secrets omit group management because
+  the upstream module does not support it.
 
 ```nix
 autix.sops-nix.sharedSecrets."git/gitea/credentials" = {

@@ -2,6 +2,7 @@
 let
   inherit (lib)
     attrValues
+    escapeShellArg
     foldl'
     literalExample
     mapAttrs
@@ -14,10 +15,15 @@ let
     types;
 
   sanitizeSecretName = name: replaceStrings [ "/" " " ] [ "-" "-" ] name;
-  defaultSecretPath = name: "/run/secrets/${name}";
+  defaultSystemSecretPath = name: "/run/secrets/${sanitizeSecretName name}";
   defaultSecretGroup = name: sanitizeSecretName name;
 
-  sharedSecretType =
+  mkSharedSecretType = defaults:
+    let
+      defaultSecretPath = defaults.defaultSecretPath;
+      defaultOwner = defaults.defaultOwner;
+      defaultGroup = defaults.defaultGroup or defaultSecretGroup;
+    in
     types.submodule (
       { name, ... }:
       {
@@ -38,14 +44,15 @@ let
 
           owner = mkOption {
             type = types.str;
-            default = "root";
+            default = defaultOwner name;
+            defaultText = literalExample ''"${defaultOwner name}"'';
             description = "Filesystem owner for '${name}'.";
           };
 
           group = mkOption {
             type = types.nullOr types.str;
-            default = defaultSecretGroup name;
-            defaultText = literalExample ''"${defaultSecretGroup name}"'';
+            default = defaultGroup name;
+            defaultText = literalExample ''"${defaultGroup name}"'';
             description = "Group granted read access to '${name}'. Set to `null` to disable group provisioning.";
           };
 
@@ -82,30 +89,77 @@ let
       }
     );
 
-  sharedSecretsOption = mkOption {
-    type = types.attrsOf sharedSecretType;
-    default = { };
-    description = "Reusable shared secret provisioning between NixOS and Home Manager.";
-  };
+  sharedSecretsOption = defaults:
+    mkOption {
+      type = types.attrsOf (mkSharedSecretType defaults);
+      default = { };
+      description = "Reusable shared secret provisioning between NixOS and Home Manager.";
+    };
 
-  sharedOptionsModule = {
-    options.autix.sops-nix.sharedSecrets = sharedSecretsOption;
-  };
+  mkSharedOptionsModule = getDefaults:
+    { config, ... }:
+    let
+      defaults = getDefaults config;
+    in
+    {
+      options.autix.sops-nix.sharedSecrets = sharedSecretsOption defaults;
+    };
 
   hmModule =
-    { pkgs, ... }:
+    { config, lib, pkgs, ... }:
+    let
+      getSecretDirectory = cfg:
+        let
+          stateHome = cfg.xdg.stateHome or "${cfg.home.homeDirectory}/.local/state";
+        in
+        "${stateHome}/autix/secrets";
+
+      defaultHomeSecretPath = cfg: name: "${getSecretDirectory cfg}/${sanitizeSecretName name}";
+
+      homeDefaults = cfg: {
+        defaultSecretPath = defaultHomeSecretPath cfg;
+        defaultOwner = _: cfg.home.username;
+        defaultGroup = _: null;
+      };
+
+      secretDirectory = getSecretDirectory config;
+      cfg = config.autix.sops-nix.sharedSecrets;
+      hasSecrets = attrValues cfg != [ ];
+
+      sopsSecretEntries =
+        mapAttrs'
+          (_: secretCfg:
+            lib.nameValuePair secretCfg.sopsKey (
+              {
+                mode = secretCfg.mode;
+                path = secretCfg.path;
+              }
+              // secretCfg.extraConfig
+            )
+          )
+          cfg;
+    in
     {
       imports = [
-        sharedOptionsModule
+        (mkSharedOptionsModule homeDefaults)
         inputs.sops-nix.homeManagerModules.sops
       ];
 
-      config.home.packages =
-        with pkgs;
-        mkAfter [
-          sops
-          inputs.sops-nix.packages.${pkgs.system}.default
-        ];
+      config = mkIf hasSecrets {
+        home.packages =
+          with pkgs;
+          mkAfter [
+            sops
+            inputs.sops-nix.packages.${pkgs.system}.default
+          ];
+
+        home.activation.autix-sops-secret-directory =
+          lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+            install -m700 -d ${escapeShellArg secretDirectory}
+          '';
+
+        sops.secrets = sopsSecretEntries;
+      };
     };
 
   nixosModule =
@@ -118,6 +172,12 @@ let
 
       hmUsers = attrNames (config.home-manager.users or { });
       cfg = config.autix.sops-nix.sharedSecrets;
+
+      systemDefaults = _: {
+        defaultSecretPath = defaultSystemSecretPath;
+        defaultOwner = _: "root";
+        defaultGroup = defaultSecretGroup;
+      };
 
       hmMembers = cfg:
         if cfg.includeHomeManagerUsers then hmUsers else [ ];
@@ -144,7 +204,6 @@ let
             lib.nameValuePair secretCfg.sopsKey (
               mkMerge [
                 {
-                  owner = secretCfg.owner;
                   mode = secretCfg.mode;
                   path = secretCfg.path;
                 }
@@ -160,7 +219,7 @@ let
     in
     {
       imports = [
-        sharedOptionsModule
+        (mkSharedOptionsModule systemDefaults)
         inputs.sops-nix.nixosModules.sops
       ];
 
