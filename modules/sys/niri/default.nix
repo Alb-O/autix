@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ inputs, ... }:
 let
   niriConfig = builtins.readFile ./config.kdl;
 
@@ -11,7 +11,7 @@ let
         || builtins.elem "xdp-gnome-screencast" niriPackage.cargoBuildFeatures;
     in
     {
-      home.packages = lib.mkAfter [ niriPackage ];
+      home.packages = [ niriPackage ];
       xdg.configFile."niri/config.kdl" = {
         enable = true;
         source = pkgs.writeText "niri-config.kdl" niriConfig;

@@ -19,7 +19,7 @@ let
     in
     {
       config = {
-        environment.systemPackages = lib.mkAfter [ pkgs.cacert ];
+        environment.systemPackages = [ pkgs.cacert ];
         environment.variables = envVars;
         environment.sessionVariables = envVars;
 
@@ -35,7 +35,7 @@ let
     in
     {
       config = {
-        home.packages = lib.mkAfter [ pkgs.cacert ];
+        home.packages = [ pkgs.cacert ];
         home.sessionVariables = envVars;
 
         programs.git.extraConfig.http.sslCAInfo = lib.mkDefault bundlePath;

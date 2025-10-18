@@ -1,4 +1,4 @@
-{ lib, ... }:
+_:
 let
   hmModule =
     { config, pkgs, ... }:
@@ -14,7 +14,7 @@ let
       '';
     in
     {
-      home.packages = lib.mkAfter [
+      home.packages = [
         pkgs.sillytavern
         pkgs.kitty
       ];

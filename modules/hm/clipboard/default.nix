@@ -23,13 +23,11 @@ let
       };
     in
     {
-      home.packages = lib.mkAfter (
-        with pkgs;
+      home.packages = with pkgs;
         [
           wl-clipboard
           cliphist
-        ]
-      );
+        ];
 
       systemd.user.services.cliphist = clipboardService;
       home.sessionVariables = {

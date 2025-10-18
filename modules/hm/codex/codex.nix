@@ -1,4 +1,4 @@
-{ lib, ... }:
+_:
 let
   hmModule =
     { pkgs, ... }:
@@ -9,13 +9,11 @@ let
           approval_policy = "never";
         };
       };
-      home.packages = lib.mkAfter (
-        with pkgs;
+      home.packages = with pkgs;
         [
           # codex likes to run adhoc python scripts
           python314
-        ]
-      );
+        ];
     };
 in
 {

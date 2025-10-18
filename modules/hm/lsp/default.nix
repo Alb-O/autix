@@ -132,12 +132,11 @@ let
         };
 
         # Install all LSP packages that are defined
-        home.packages = lib.mkAfter (
+        home.packages =
           (lib.filter (p: p != null) (
             lib.mapAttrsToList (_name: server: server.package) config.autix.lsp.servers
           ))
-          ++ config.autix.lsp.packages
-        );
+          ++ config.autix.lsp.packages;
       };
     };
   optionsModule = {

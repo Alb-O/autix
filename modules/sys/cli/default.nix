@@ -1,4 +1,4 @@
-{ lib, ... }:
+_:
 let
   packages =
     pkgs: with pkgs; [
@@ -20,7 +20,7 @@ let
   hmModule =
     { pkgs, ... }:
     {
-      home.packages = lib.mkAfter (packages pkgs);
+      home.packages = packages pkgs;
     };
 in
 {

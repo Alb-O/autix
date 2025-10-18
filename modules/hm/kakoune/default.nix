@@ -22,14 +22,12 @@ let
           recursive = true;
         };
       };
-      home.packages = lib.mkAfter (
-        with pkgs;
+      home.packages = with pkgs;
         [
           kakoune-lsp
           kak-tree-sitter
           kamp
-        ]
-      );
+        ];
     };
 in
 {

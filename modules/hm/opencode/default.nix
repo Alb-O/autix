@@ -12,7 +12,7 @@ let
             enable = true;
             inherit (opencodeConf) settings;
           };
-          home.packages = lib.mkAfter opencodeConf.packages;
+          home.packages = opencodeConf.packages;
         };
     };
 in

@@ -29,7 +29,7 @@ let
   hmModule =
     { lib, pkgs, ... }:
     {
-      home.packages = lib.mkAfter [ pkgs.wslu ];
+      home.packages = [ pkgs.wslu ];
 
       home.sessionVariables = {
         WSLENV = lib.mkDefault "NIX_PATH/u";

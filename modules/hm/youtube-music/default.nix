@@ -1,9 +1,9 @@
-{ lib, ... }:
+_:
 let
   hmModule =
     { pkgs, ... }:
     {
-      home.packages = lib.mkAfter (with pkgs; [ youtube-music ]);
+      home.packages = with pkgs; [ youtube-music ];
     };
 in
 {

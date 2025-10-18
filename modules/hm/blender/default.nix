@@ -143,7 +143,7 @@ let
       '';
     in
     {
-      home.packages = lib.mkAfter [ blenderDaily ];
+      home.packages = [ blenderDaily ];
     };
 in
 {

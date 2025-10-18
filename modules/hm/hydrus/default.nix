@@ -1,7 +1,7 @@
 _:
 let
   hmModule =
-    { lib, pkgs, ... }:
+    { pkgs, ... }:
     let
       hydrusClient = pkgs.writeShellScriptBin "hydrus-client" ''
         set -euo pipefail
@@ -14,7 +14,7 @@ let
       '';
     in
     {
-      home.packages = lib.mkAfter [ hydrusClient ];
+      home.packages = [ hydrusClient ];
     };
 in
 {

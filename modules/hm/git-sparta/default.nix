@@ -1,9 +1,9 @@
-{ lib, inputs, ... }:
+{ inputs, ... }:
 let
   hmModule =
     { pkgs, ... }:
     {
-      home.packages = lib.mkAfter [
+      home.packages = [
         inputs.git-sparta.packages.${pkgs.system}.git-sparta
       ];
     };

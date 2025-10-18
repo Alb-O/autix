@@ -1,7 +1,7 @@
 _:
 let
   hmModule =
-    { lib, pkgs, ... }:
+    { pkgs, ... }:
     let
       nh = pkgs.writeShellScriptBin "nh" ''
             set -euo pipefail
@@ -259,7 +259,7 @@ let
       '';
     in
     {
-      home.packages = lib.mkAfter [ nh ];
+      home.packages = [ nh ];
     };
 in
 {

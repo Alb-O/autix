@@ -1,9 +1,9 @@
-{ lib, ... }:
+_:
 let
   hmModule =
     { pkgs, ... }:
     {
-      home.packages = lib.mkAfter (with pkgs; [ gemini-cli-bin ]);
+      home.packages = with pkgs; [ gemini-cli-bin ];
     };
 in
 {

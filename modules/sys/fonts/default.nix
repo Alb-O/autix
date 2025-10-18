@@ -94,11 +94,10 @@ let
     };
 
   hmModule =
-    {
-      pkgs,
-      config,
-      lib,
-      ...
+    { pkgs
+    , config
+    , lib
+    , ...
     }:
     let
       cfg = config.autix.fonts;
@@ -106,7 +105,7 @@ let
     in
     {
       config = {
-        home.packages = lib.mkAfter cfg.packages;
+        home.packages = cfg.packages;
 
         fonts.fontconfig = {
           enable = true;

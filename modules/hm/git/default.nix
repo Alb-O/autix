@@ -11,7 +11,10 @@ let
     { pkgs, config, ... }:
     {
       sops.secrets."${giteaCredentials}" = { };
-
+      home.packages = with pkgs; [
+        difftastic
+        git-toolbelt
+      ];
       programs.git = {
         enable = mkDefault true;
         lfs.enable = mkDefault true;
@@ -37,6 +40,7 @@ let
           "target/"
         ];
         extraConfig = {
+          diff.external = "${pkgs.difftastic}/bin/difft";
           init.defaultBranch = "main";
           core = {
             editor = "kak";

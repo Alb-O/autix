@@ -99,12 +99,11 @@ let
         };
 
         # Install all formatter packages that are defined
-        home.packages = lib.mkAfter (
+        home.packages =
           (lib.filter (p: p != null) (
             lib.mapAttrsToList (_name: formatter: formatter.package) config.autix.formatter.formatters
           ))
-          ++ config.autix.formatter.packages
-        );
+          ++ config.autix.formatter.packages;
       };
     };
   optionsModule = {

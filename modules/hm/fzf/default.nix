@@ -1,4 +1,4 @@
-{ lib, ... }:
+_:
 let
   hmModule =
     { config, pkgs, ... }:
@@ -6,7 +6,7 @@ let
       localShare = "${config.home.homeDirectory}/.local/share";
     in
     {
-      home.packages = lib.mkAfter [ pkgs.fzf ];
+      home.packages = [ pkgs.fzf ];
 
       home.file."${localShare}/rc/fzf.sh" = {
         text = ''
