@@ -23,11 +23,10 @@ let
       };
     in
     {
-      home.packages = with pkgs;
-        [
-          wl-clipboard
-          cliphist
-        ];
+      home.packages = with pkgs; [
+        wl-clipboard
+        cliphist
+      ];
 
       systemd.user.services.cliphist = clipboardService;
       home.sessionVariables = {
