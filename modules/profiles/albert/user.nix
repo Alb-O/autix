@@ -12,8 +12,10 @@ let
       home.stateVersion = lib.mkDefault "24.05";
 
       programs.git = {
-        userName = lib.mkDefault name;
-        userEmail = lib.mkDefault email;
+        settings.user = {
+          name = lib.mkDefault name;
+          email = lib.mkDefault email;
+        };
       };
 
       sops = {

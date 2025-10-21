@@ -38,7 +38,7 @@ let
         home.packages = [ pkgs.cacert ];
         home.sessionVariables = envVars;
 
-        programs.git.extraConfig.http.sslCAInfo = lib.mkDefault bundlePath;
+        programs.git.settings.http.sslCAInfo = lib.mkDefault bundlePath;
       };
     };
 in
