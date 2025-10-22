@@ -1,3 +1,5 @@
 {
-  "window.title": "${rootName}"
+  "window.title": "${rootName}",
+  "nixEnvSelector.nixFile": "${workspaceFolder}/flake.nix",
+  "nixEnvSelector.useFlakes": true
 }
