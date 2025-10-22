@@ -1,14 +1,12 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   confFiles = [
     ./lsp.nix
     ./formatter.nix
-    ./mcp.nix
     ./agent.nix
   ];
   load =
