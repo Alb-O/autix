@@ -7,7 +7,7 @@ let
     };
 in
 {
-  autix.aspects.gemini = {
+  autix.aspects.ast-grep = {
     description = "Fast and polyglot tool for code searching, linting, rewriting at large scale";
     home = {
       targets = [ "*" ];
