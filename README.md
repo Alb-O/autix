@@ -139,37 +139,6 @@ Each aspect can contribute:
 - Modules for NixOS or Home Manager
 - Overlays for package customization
 
-### sops-nix shared secret helper
-
-The `autix.sops-nix.sharedSecrets` option provisions reusable SOPS entries and filesystem
-permissions for both NixOS and Home Manager consumers. Secret identifiers support hierarchical
-paths – for example `"git/gitea/credentials"` – and defaults are derived automatically:
-
-- `sops.secrets` key defaults to the identifier (e.g. `git/gitea/credentials`).
-- The decrypted file path defaults to `/run/secrets/<slug>` on NixOS and to
-  `${XDG_STATE_HOME:-~/.local/state}/autix/secrets/<slug>` in Home Manager, where `<slug>`
-  replaces forward slashes and spaces with hyphens.
-- On NixOS the reader group defaults to the same slug and will be populated with matching Home
-  Manager users unless explicitly disabled. Home Manager secrets omit group management because
-  the upstream module does not support it.
-
-```nix
-autix.sops-nix.sharedSecrets."git/gitea/credentials" = {
-  mode = "0660";
-  extraGroupMembers = [ "git" ];
-};
-```
-
-Consumers can reference `config.autix.sops-nix.sharedSecrets."<identifier>"` to reuse the
-derived defaults (such as the decrypted path or provisioned group) without recomputing them.
-
-Override any of the defaults by setting the corresponding option (`path`, `group`, `sopsKey`, etc.).
-
-- Unfree package permissions
-- Binary cache substituters and keys
-
-See [`modules/aspect/options.nix`](modules/aspect/options.nix) for the full aspect schema.
-
 ## Home Manager Profiles
 
 Profiles define Home Manager configurations. Each profile specifies:
