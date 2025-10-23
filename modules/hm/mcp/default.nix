@@ -1,10 +1,78 @@
 { lib, ... }:
 let
+  computeServerArtifacts = cfg:
+    let
+      serverSettings =
+        lib.mapAttrs
+          (
+            _: server:
+              let
+                base = {
+                  inherit (server) type enabled;
+                };
+                remoteAttrs =
+                  if server.type == "remote" then
+                    (lib.optionalAttrs (server.url != null) { url = server.url; })
+                    // {
+                      headers =
+                        lib.mapAttrs (
+                          _: value:
+                          if lib.isAttrs value && value ? secret then
+                            value.placeholder
+                          else
+                            value
+                        ) server.headers;
+                    }
+                  else
+                    { };
+                localAttrs =
+                  if server.type == "local" then
+                    { command = server.command; }
+                  else
+                    { };
+              in
+              base // remoteAttrs // localAttrs
+          )
+          cfg.servers;
+
+      serverPackages =
+        lib.filter (pkg: pkg != null) (
+          lib.mapAttrsToList (_: server: server.package) cfg.servers
+        );
+
+      secretBindings =
+        lib.flatten (
+          lib.mapAttrsToList
+            (
+              serverName: server:
+                lib.mapAttrsToList
+                  (
+                    headerName: header:
+                      if lib.isAttrs header && header ? secret then
+                        [
+                          {
+                            path = [ "mcp" serverName "headers" headerName ];
+                            secret = header.secret;
+                            default = header.placeholder;
+                          }
+                        ]
+                      else
+                        [ ]
+                  )
+                  server.headers
+            )
+            cfg.servers
+        );
+    in
+    {
+      inherit serverSettings serverPackages secretBindings;
+    };
+
   hmModule =
     { pkgs, config, ... }:
     let
       cfg = config.autix.mcp;
-      artifacts = config.autix.mcpHelpers.computeServerArtifacts cfg;
+      artifacts = computeServerArtifacts cfg;
     in
     {
       config = {
@@ -32,7 +100,10 @@ let
           packages = [ ];
         };
 
-        sops.secrets = lib.genAttrs artifacts.secretNames (_: { });
+        autix.secrets.secrets.mcp = {
+          enabled = true;
+          bindings = artifacts.secretBindings;
+        };
 
         autix.opencode = {
           settings = {
@@ -56,7 +127,6 @@ in
       modules = [
         optionsModule
         hmModule
-        ./helpers.nix
       ];
     };
   };

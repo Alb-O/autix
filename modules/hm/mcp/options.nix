@@ -1,23 +1,5 @@
 { lib, ... }:
 let
-  headerType =
-    lib.types.either lib.types.str (
-      lib.types.submodule {
-        options = {
-          secret = lib.mkOption {
-            type = lib.types.str;
-            description = "SOPS secret name whose contents will be used for this header value.";
-          };
-
-          placeholder = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-            description = "Fallback value to use when the secret is not available (e.g. during pure evaluation).";
-          };
-        };
-      }
-    );
-
   serverType =
     lib.types.submodule (
       { name, ... }:
@@ -48,7 +30,22 @@ let
           };
 
           headers = lib.mkOption {
-            type = lib.types.attrsOf headerType;
+            type = lib.types.attrsOf (lib.types.either lib.types.str (
+              lib.types.submodule {
+                options = {
+                  secret = lib.mkOption {
+                    type = lib.types.str;
+                    description = "SOPS secret name whose contents will be used for this header value.";
+                  };
+
+                  placeholder = lib.mkOption {
+                    type = lib.types.str;
+                    default = "";
+                    description = "Fallback value to use when the secret is not available (e.g. during pure evaluation).";
+                  };
+                };
+              }
+            ));
             default = { };
             description = "Headers to send when connecting to the remote MCP server.";
           };
@@ -81,14 +78,5 @@ in
       default = [ ];
       description = "Additional MCP-related packages to install.";
     };
-  };
-
-  options.autix.mcpHelpers = lib.mkOption {
-    type = lib.types.attrsOf lib.types.anything;
-    default = {
-      computeServerArtifacts = cfg: builtins.throw "autix.mcpHelpers.computeServerArtifacts is not available — make sure modules/hm/mcp/helpers.nix is included by the aspect (import-tree).";
-      placeholderFor = secret: builtins.throw "autix.mcpHelpers.placeholderFor is not available — make sure modules/hm/mcp/helpers.nix is included by the aspect (import-tree).";
-    };
-    description = "Runtime helper functions published by the mcp helpers module (placeholder defaults provided).";
   };
 }

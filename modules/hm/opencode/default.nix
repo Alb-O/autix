@@ -13,9 +13,7 @@ let
         }
         // cfg.settings;
 
-  # Require the shared placeholder helper published by the mcp helpers
-  # module. This simplifies the module and avoids duplicated logic.
-  placeholderFor = config.autix.mcpHelpers.placeholderFor;
+  placeholderFor = config.autix.secretsHelpers.placeholderFor;
 
       applySecretBinding =
         acc: binding:
