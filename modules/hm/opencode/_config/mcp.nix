@@ -3,7 +3,8 @@
   settings = {
     inherit (config.autix) mcp;
     tools = {
-      "Mcp-Nixos*" = false;
+      "mcp-nixos_*" = false;
+      "context7_*" = false;
     };
   };
 }
