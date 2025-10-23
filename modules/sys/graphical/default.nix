@@ -8,8 +8,9 @@ let
     ];
 
   hmModule =
-    { pkgs
-    , ...
+    {
+      pkgs,
+      ...
     }:
     {
       home.packages = packages pkgs;

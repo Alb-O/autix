@@ -3,67 +3,74 @@ let
   inherit (config.text.readme) parts;
 
   readmeContent = ''
-    # Autix
+      # Autix
 
-    A modular NixOS and Home Manager configuration using the aspect system.
+      A modular NixOS and Home Manager configuration using the aspect system.
 
-    ${parts.project-structure or ""}
+      ${parts.project-structure or ""}
 
-    ${parts.aspects or ""}
+      ${parts.aspects or ""}
 
-    ${parts.profiles or ""}
+      ${parts.profiles or ""}
 
     ${parts.hosts or ""}
 
-    ## Usage
+      ## Usage
 
-    ### Regenerate flake.nix
+      ### Common commands
 
-    This project uses [flake-file](https://github.com/vic/flake-file) for modular flake management:
+      ```console
+      $ just regen   # Regenerate generated files and format the tree
+      $ just check   # Run regen followed by nix flake check --no-update-lock-file
+      ```
 
-    ```console
-    $ nix run .#write-flake
-    ```
+      ### Regenerate flake.nix
 
-    ### Update dependencies
+      This project uses [flake-file](https://github.com/vic/flake-file) for modular flake management:
 
-    ```console
-    $ nix flake update
-    ```
+      ```console
+      $ nix run .#write-flake
+      ```
 
-    ### Format code
+      ### Update dependencies
 
-    ```console
-    $ nix fmt
-    ```
+      ```console
+      $ nix flake update
+      ```
 
-    ### Generate files
+      ### Format code
 
-    This README and other generated files are kept in sync with Nix definitions:
+      ```console
+      $ nix fmt
+      ```
 
-    ```console
-    $ nix run .#write-files
-    ```
+      ### Generate files
 
-    ### Check everything
+      This README and other generated files are kept in sync with Nix definitions:
 
-    ```console
-    $ nix flake check
-    ```
+      ```console
+      $ nix run .#write-files
+      ```
 
-    ### git-sparta Integration
+      ### Check everything
 
-    Autix ships the local [`git-sparta`](git-sparta/README.md) tool for attribute-driven sparse
-    workflows. Helpful entry points:
+      ```console
+      $ nix flake check
+      ```
 
-    - `nix run .#git-sparta -- --help` or `just sparta-run -- --help` for command discovery.
-    - `just sparta-tags tag=<name>` launches the interactive tag browser (add `repo=<path>` to scan another checkout, `yes=true` to bypass the TUI, and `theme=<name>` to pick a theme).
-    - `just sparta-setup` and `just sparta-teardown` wrap the submodule lifecycle commands.
-    - Git aliases (`git sparta`, `git sparta-tags`, etc.) forward directly to the packaged binary.
+      ### git-sparta Integration
 
-    ## License
+      Autix ships the local [`git-sparta`](git-sparta/README.md) tool for attribute-driven sparse
+      workflows. Helpful entry points:
 
-    See [LICENSE](LICENSE) file.
+      - `nix run .#git-sparta -- --help` or `just sparta-run -- --help` for command discovery.
+      - `just sparta-tags tag=<name>` launches the interactive tag browser (add `repo=<path>` to scan another checkout, `yes=true` to bypass the TUI, and `theme=<name>` to pick a theme).
+      - `just sparta-setup` and `just sparta-teardown` wrap the submodule lifecycle commands.
+      - Git aliases (`git sparta`, `git sparta-tags`, etc.) forward directly to the packaged binary.
+
+      ## License
+
+      See [LICENSE](LICENSE) file.
   '';
 in
 {

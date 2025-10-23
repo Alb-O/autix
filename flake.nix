@@ -40,21 +40,49 @@
       url = "github:hercules-ci/flake-parts";
     };
     git-sparta = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:Alb-O/git-sparta";
     };
     home-manager = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:nix-community/home-manager";
     };
     import-tree = {
       url = "github:vic/import-tree";
     };
+    mcp-servers-nix = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:natsukium/mcp-servers-nix";
+    };
     niri-flake = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:sodiboo/niri-flake";
     };
     nix-auto-follow = {
       url = "github:fzakaria/nix-auto-follow";
     };
     nixos-wsl = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:nix-community/NixOS-WSL";
     };
     nixpkgs = {
@@ -67,9 +95,19 @@
       url = "github:NixOS/nixpkgs/master";
     };
     nur = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:nix-community/NUR";
     };
     sops-nix = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:Mic92/sops-nix";
     };
     systems = {

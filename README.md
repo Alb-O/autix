@@ -15,6 +15,7 @@ modules/
 │   ├── nixconfig.nix
 │   └── readme/
 ├── hm/
+│   ├── ast-grep/        # Fast and polyglot tool for code searching, linting, rewriting at large scale
 │   ├── blender/         # Helper script for Blender daily builds.
 │   ├── clipboard/       # Wayland clipboard manager service.
 │   ├── codex/           # Codex CLI tooling.
@@ -31,12 +32,14 @@ modules/
 │   ├── lazygit/         # Lazygit configuration.
 │   ├── lsp/             # Shared Language Server Protocol tooling.
 │   ├── mako/            # Mako notification daemon for graphical profiles.
+│   ├── mcp/             # MCP Servers configuration.
 │   ├── mpv/             # MPV media player defaults.
 │   ├── nh/              # Utility script collection for nohup helper (nh).
 │   ├── nushell/         # Nushell - A new type of shell.
 │   ├── opencode/        # OpenCode configuration.
 │   ├── polkit/          # Polkit agent for graphical sessions.
 │   ├── sillytavern/     # SillyTavern launcher and desktop entry.
+│   ├── tmux/            # Tmux, primarily for agents interactive usage.
 │   ├── vscode/          # Visual Studio Code (unfree) enablement.
 │   ├── xdg/             # XDG base directory layout and session tweaks.
 │   ├── yazi/            # Setup Yazi terminal file manager.
@@ -54,7 +57,6 @@ modules/
 │   └── options.nix
 └── sys/
     ├── cli/             # Common CLI tooling bundle.
-    ├── dev/             # Development language servers and toolchain bundle.
     ├── essential/       # Baseline essential packages for all profiles and hosts.
     ├── fonts/           # Shared font bundle and defaults.
     ├── gdm/             # GNOME Display Manager.
@@ -66,7 +68,7 @@ modules/
     ├── niri/            # Niri Wayland compositor and related tooling.
     ├── nix-settings/    # Shared Nix daemon and nixpkgs defaults.
     ├── shell-init/      # Ensure login shells hand over to fish with XDG-aware history.
-    ├── sops-nix/        # Atomic secret provisioning for NixOS with shared secret helper.
+    ├── sops-nix/        # Atomic secret provisioning for NixOS based on sops.
     ├── ssh/             # SSH client defaults and server hardening.
     ├── tty/             # kmscon font defaults for virtual consoles.
     ├── wayland/         # Wayland-first session defaults.
@@ -83,88 +85,63 @@ unit of functionality that can target specific hosts or profiles.
 
 ### Aspect Details
 
-| Aspect           | Description                                                              | Scopes      |
-| ---------------- | ------------------------------------------------------------------------ | ----------- |
-| `albert`         | Base user configuration for Albert O'Shea.                               | NixOS, Home |
-| `blender`        | Helper script for Blender daily builds.                                  | Home        |
-| `cli`            | Common CLI tooling bundle.                                               | Home        |
-| `clipboard`      | Wayland clipboard manager service.                                       | Home        |
-| `codex`          | Codex CLI tooling.                                                       | Home        |
-| `dev`            | Development language servers and toolchain bundle.                       | Home        |
-| `essential`      | Baseline essential packages for all profiles and hosts.                  | NixOS, Home |
-| `firefox`        | Firefox config, including policies, profiles and NUR overlay extensions. | Home        |
-| `fonts`          | Shared font bundle and defaults.                                         | NixOS, Home |
-| `formatter`      | Formatter definitions and helper packages.                               | Home        |
-| `fzf`            | Configure fzf with custom defaults.                                      | Home        |
-| `gdm`            | GNOME Display Manager.                                                   | NixOS       |
-| `gemini`         | Google Gemini CLI.                                                       | Home        |
-| `git`            | Git configuration with helpful defaults.                                 | NixOS, Home |
-| `git-sparta`     | git-sparta CLI integration for git attribute sparse workflows & tagging. | Home        |
-| `gnome-services` | GNOME keyring and supporting services.                                   | NixOS       |
-| `graphical`      | Graphical desktop utilities bundle.                                      | Home        |
-| `hydrus`         | Hydrus client launcher with Wayland-friendly defaults.                   | Home        |
-| `kakoune`        | Kakoune editor configuration and plugins.                                | Home        |
-| `keyboard`       | Swap Caps Lock and Escape via keyd.                                      | NixOS       |
-| `kitty`          | Kitty terminal with themed configuration.                                | Home        |
-| `lazygit`        | Lazygit configuration.                                                   | Home        |
-| `lsp`            | Shared Language Server Protocol tooling.                                 | Home        |
-| `mako`           | Mako notification daemon for graphical profiles.                         | Home        |
-| `mpv`            | MPV media player defaults.                                               | Home        |
-| `netshare`       | NFS/CIFS client tooling.                                                 | NixOS       |
-| `networking`     | Networking defaults for NetworkManager.                                  | NixOS, Home |
-| `nh`             | Utility script collection for nohup helper (nh).                         | Home        |
-| `niri`           | Niri Wayland compositor and related tooling.                             | NixOS, Home |
-| `nix-settings`   | Shared Nix daemon and nixpkgs defaults.                                  | NixOS       |
-| `nushell`        | Nushell - A new type of shell.                                           | Home        |
-| `opencode`       | OpenCode configuration.                                                  | Home        |
-| `polkit`         | Polkit agent for graphical sessions.                                     | Home        |
-| `shell-init`     | Ensure login shells hand over to fish with XDG-aware history.            | NixOS       |
-| `sillytavern`    | SillyTavern launcher and desktop entry.                                  | Home        |
-| `sops-nix`       | Atomic secret provisioning for NixOS with shared secret helper.          | NixOS, Home |
-| `ssh`            | SSH client defaults and server hardening.                                | NixOS, Home |
-| `tty`            | kmscon font defaults for virtual consoles.                               | NixOS       |
-| `vscode`         | Visual Studio Code (unfree) enablement.                                  | Home        |
-| `wayland`        | Wayland-first session defaults.                                          | NixOS, Home |
-| `workspace`      | Session environment defaults for shells and direnv.                      | Home        |
-| `wsl`            | NixOS-WSL integration for Windows Subsystem for Linux.                   | NixOS, Home |
-| `xdg`            | XDG base directory layout and session tweaks.                            | Home        |
-| `yazi`           | Setup Yazi terminal file manager.                                        | Home        |
-| `youtube-music`  | Electron wrapper around YouTube Music                                    | Home        |
-| `zk`             | Zettelkasten CLI (zk) configuration.                                     | Home        |
-| `zoxide`         | Enable zoxide jump navigation.                                           | Home        |
+| Aspect           | Description                                                                  | Scopes      |
+| ---------------- | ---------------------------------------------------------------------------- | ----------- |
+| `albert`         | Base user configuration for Albert O'Shea.                                   | NixOS, Home |
+| `ast-grep`       | Fast and polyglot tool for code searching, linting, rewriting at large scale | Home        |
+| `blender`        | Helper script for Blender daily builds.                                      | Home        |
+| `cli`            | Common CLI tooling bundle.                                                   | Home        |
+| `clipboard`      | Wayland clipboard manager service.                                           | Home        |
+| `codex`          | Codex CLI tooling.                                                           | Home        |
+| `essential`      | Baseline essential packages for all profiles and hosts.                      | NixOS, Home |
+| `firefox`        | Firefox config, including policies, profiles and NUR overlay extensions.     | Home        |
+| `fonts`          | Shared font bundle and defaults.                                             | NixOS, Home |
+| `formatter`      | Formatter definitions and helper packages.                                   | Home        |
+| `fzf`            | Configure fzf with custom defaults.                                          | Home        |
+| `gdm`            | GNOME Display Manager.                                                       | NixOS       |
+| `gemini`         | Google Gemini CLI.                                                           | Home        |
+| `git`            | Git configuration with helpful defaults.                                     | Home        |
+| `git-sparta`     | git-sparta CLI integration for git attribute sparse workflows & tagging.     | Home        |
+| `gnome-services` | GNOME keyring and supporting services.                                       | NixOS       |
+| `graphical`      | Graphical desktop utilities bundle.                                          | Home        |
+| `hydrus`         | Hydrus client launcher with Wayland-friendly defaults.                       | Home        |
+| `kakoune`        | Kakoune editor configuration and plugins.                                    | Home        |
+| `keyboard`       | Swap Caps Lock and Escape via keyd.                                          | NixOS       |
+| `kitty`          | Kitty terminal with themed configuration.                                    | Home        |
+| `lazygit`        | Lazygit configuration.                                                       | Home        |
+| `lsp`            | Shared Language Server Protocol tooling.                                     | Home        |
+| `mako`           | Mako notification daemon for graphical profiles.                             | Home        |
+| `mcp`            | MCP Servers configuration.                                                   | Home        |
+| `mpv`            | MPV media player defaults.                                                   | Home        |
+| `netshare`       | NFS/CIFS client tooling.                                                     | NixOS       |
+| `networking`     | Networking defaults for NetworkManager.                                      | NixOS, Home |
+| `nh`             | Utility script collection for nohup helper (nh).                             | Home        |
+| `niri`           | Niri Wayland compositor and related tooling.                                 | NixOS, Home |
+| `nix-settings`   | Shared Nix daemon and nixpkgs defaults.                                      | NixOS       |
+| `nushell`        | Nushell - A new type of shell.                                               | Home        |
+| `opencode`       | OpenCode configuration.                                                      | Home        |
+| `polkit`         | Polkit agent for graphical sessions.                                         | Home        |
+| `shell-init`     | Ensure login shells hand over to fish with XDG-aware history.                | NixOS       |
+| `sillytavern`    | SillyTavern launcher and desktop entry.                                      | Home        |
+| `sops-nix`       | Atomic secret provisioning for NixOS based on sops.                          | NixOS, Home |
+| `ssh`            | SSH client defaults and server hardening.                                    | NixOS, Home |
+| `tmux`           | Tmux, primarily for agents interactive usage.                                | Home        |
+| `tty`            | kmscon font defaults for virtual consoles.                                   | NixOS       |
+| `vscode`         | Visual Studio Code (unfree) enablement.                                      | Home        |
+| `wayland`        | Wayland-first session defaults.                                              | NixOS, Home |
+| `workspace`      | Session environment defaults for shells and direnv.                          | Home        |
+| `wsl`            | NixOS-WSL integration for Windows Subsystem for Linux.                       | NixOS, Home |
+| `xdg`            | XDG base directory layout and session tweaks.                                | Home        |
+| `yazi`           | Setup Yazi terminal file manager.                                            | Home        |
+| `youtube-music`  | Electron wrapper around YouTube Music                                        | Home        |
+| `zk`             | Zettelkasten CLI (zk) configuration.                                         | Home        |
+| `zoxide`         | Enable zoxide jump navigation.                                               | Home        |
 
 Aspects are defined in `modules/` directories and automatically aggregated by the build system.
 Each aspect can contribute:
 
 - Modules for NixOS or Home Manager
 - Overlays for package customization
-
-### sops-nix shared secret helper
-
-The `autix.sops-nix.sharedSecrets` option provisions reusable SOPS entries and filesystem
-permissions for both NixOS and Home Manager consumers. Secret identifiers support hierarchical
-paths – for example `"git/gitea/credentials"` – and defaults are derived automatically:
-
-- `sops.secrets` key defaults to the identifier (e.g. `git/gitea/credentials`).
-- The decrypted file path defaults to `/run/secrets/<slug>` on NixOS and to
-  `${XDG_STATE_HOME:-~/.local/state}/autix/secrets/<slug>` in Home Manager, where `<slug>`
-  replaces forward slashes and spaces with hyphens.
-- On NixOS the reader group defaults to the same slug and will be populated with matching Home
-  Manager users unless explicitly disabled. Home Manager secrets omit group management because
-  the upstream module does not support it.
-
-```nix
-autix.sops-nix.sharedSecrets."git/gitea/credentials" = {
-  mode = "0660";
-  extraGroupMembers = [ "git" ];
-};
-```
-
-Consumers can reference `config.autix.sops-nix.sharedSecrets."<identifier>"` to reuse the
-derived defaults (such as the decrypted path or provisioned group) without recomputing them.
-
-Override any of the defaults by setting the corresponding option (`path`, `group`, `sopsKey`, etc.).
-
 - Unfree package permissions
 - Binary cache substituters and keys
 
@@ -207,6 +184,13 @@ $ nixos-rebuild switch --flake .#<hostname>
 See [`modules/sys/hosts/options.nix`](modules/sys/hosts/options.nix) for host options.
 
 ## Usage
+
+### Common commands
+
+```console
+$ just regen   # Regenerate generated files and format the tree
+$ just check   # Run regen followed by nix flake check --no-update-lock-file
+```
 
 ### Regenerate flake.nix
 

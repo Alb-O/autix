@@ -92,9 +92,23 @@ home-switch-wsl:
 # SHARED - Dev helpers
 # ================================
 
-# Formats code using configured formatter
+# Formats source tree with treefmt
 fmt:
     nix run .#fmt
+
+# Regenerates derived files (README, etc.) and formats the tree
+regen:
+    nix run .#write-files
+    nix fmt
+
+# Full QA: regenerate, format, then run flake checks without mutating the lock file
+check:
+    just regen
+    nix flake check --no-update-lock-file
+
+# Regenerates flake.nix via flake-file
+write-flake:
+    nix run .#write-flake
 
 # Updates all flake inputs
 update:

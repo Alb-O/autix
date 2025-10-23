@@ -33,9 +33,9 @@ let
 in
 {
   flake-file = {
-    inputs = {
-      emacs-overlay.url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
-      emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    inputs.emacs-overlay = {
+      url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   autix.aspects.emacs = {

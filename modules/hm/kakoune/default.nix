@@ -22,12 +22,11 @@ let
           recursive = true;
         };
       };
-      home.packages = with pkgs;
-        [
-          kakoune-lsp
-          kak-tree-sitter
-          kamp
-        ];
+      home.packages = with pkgs; [
+        kakoune-lsp
+        kak-tree-sitter
+        kamp
+      ];
     };
 in
 {

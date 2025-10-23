@@ -94,10 +94,11 @@ let
     };
 
   hmModule =
-    { pkgs
-    , config
-    , lib
-    , ...
+    {
+      pkgs,
+      config,
+      lib,
+      ...
     }:
     let
       cfg = config.autix.fonts;

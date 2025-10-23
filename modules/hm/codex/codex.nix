@@ -9,11 +9,10 @@ let
           approval_policy = "never";
         };
       };
-      home.packages = with pkgs;
-        [
-          # codex likes to run adhoc python scripts
-          python314
-        ];
+      home.packages = with pkgs; [
+        # codex likes to run adhoc python scripts
+        python314
+      ];
     };
 in
 {
