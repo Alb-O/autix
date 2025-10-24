@@ -4,26 +4,31 @@
       nixer = {
         disabled = false;
         description = ''
-          Upstream nix researcher agent, give it a nix research task, ask it to use `mcp-nixos`.
-          Ask it to be thorough and use the `mcp-nixos`  tool many times, it will report back.
+          Upstream nix researcher agent, give it a nix research task.
+          IMPORTANT: You must ask it to use `mcp-nixos` tools in your description of the task.
+          Ask it to be thorough and use the `mcp-nixos` tool many times, it will report back.
         '';
         mode = "subagent";
         prompt = ''
           Use the Mcp-Nixos tools (e.g. nixos_search, nixos_info, home_manager_search) to query up-to-date packages & options.
-          Report back with correct technical details, or otherwise depending on your task.
+          Report back with correct technical details from official sources, or otherwise depending on your task.
         '';
         tools = {
           write = false;
           edit = false;
+          patch = false;
           bash = false;
+          webfetch = false;
+          "atomic_*" = false;
           "mcp-nixos_*" = true;
         };
       };
       docfinder = {
         disabled = false;
         description = ''
-          Technical documentation researcher agent, give it any techincal research task (e.g. libraries, APIs, languages), ask it to use `context7`.
-          Ask it to be thorough and use this tool many times, it will report back.
+          Technical documentation researcher agent, give it any techincal research task (e.g. libraries, APIs, languages).
+          IMPORTANT: You must ask it to use `context7` tools in your description of the task.
+          Ask it to be thorough and use the `context7` tools many times, it will report back.
         '';
         mode = "subagent";
         prompt = ''
@@ -33,7 +38,10 @@
         tools = {
           write = false;
           edit = false;
+          patch = false;
           bash = false;
+          webfetch = false;
+          "atomic_*" = false;
           "context7_*" = true;
         };
       };

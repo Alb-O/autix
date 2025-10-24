@@ -2,3 +2,4 @@
 /result
 *.log
 /.pre-commit-config.yaml
+.decrypted~*
