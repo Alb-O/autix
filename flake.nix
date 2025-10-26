@@ -27,6 +27,9 @@
   };
 
   inputs = {
+    den = {
+      url = "github:vic/den";
+    };
     files = {
       url = "github:mightyiam/files";
     };

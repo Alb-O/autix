@@ -45,21 +45,20 @@ let
   };
 in
 {
-  autix.aspects.${userName} = {
-    description = "Base user configuration for ${name}.";
-    home = {
-      targets = [
-        "albert-desktop"
-        "albert-wsl"
-      ];
-      modules = [ hmModule ];
+  flake.aspects =
+    { aspects, ... }:
+    {
+      ${userName} = {
+        description = "Base user configuration for ${name}.";
+        includes = with aspects; [
+          workspace
+          git
+          fzf
+        ];
+        homeManager.imports = [ hmModule ];
+        nixos.imports = [ nixosModule ];
+      };
     };
-    nixos = {
-      targets = [
-        "desktop"
-        "wsl"
-      ];
-      modules = [ nixosModule ];
-    };
-  };
+
+  autix.home.legacyBuilder.enable = false;
 }

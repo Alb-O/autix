@@ -13,17 +13,21 @@ let
         cargoBin
       ];
 
-      home.sessionVariables = lib.mkMerge [
-        {
-          USERNAME = lib.mkDefault config.home.username;
-          EDITOR = lib.mkDefault "kak";
-          TERMINAL = lib.mkDefault "kitty";
-          TERM_PROGRAM = lib.mkDefault "kitty";
-        }
-        (lib.mkIf (config.autix.home.profile.name != null) {
-          HOSTNAME = lib.mkDefault config.autix.home.profile.name;
-        })
-      ];
+      home.sessionVariables =
+        let
+          profileName = lib.attrByPath [ "autix" "home" "profile" "name" ] null config;
+        in
+        lib.mkMerge [
+          {
+            USERNAME = lib.mkDefault config.home.username;
+            EDITOR = lib.mkDefault "kak";
+            TERMINAL = lib.mkDefault "kitty";
+            TERM_PROGRAM = lib.mkDefault "kitty";
+          }
+          (lib.mkIf (profileName != null) {
+            HOSTNAME = lib.mkDefault profileName;
+          })
+        ];
 
       programs.direnv = {
         enable = true;
@@ -35,11 +39,8 @@ let
     };
 in
 {
-  autix.aspects.workspace = {
+  flake.aspects.workspace = {
     description = "Session environment defaults for shells and direnv.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager.imports = [ hmModule ];
   };
 }

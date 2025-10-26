@@ -39,11 +39,8 @@ let
     };
 in
 {
-  autix.aspects.fzf = {
+  flake.aspects.fzf = {
     description = "Configure fzf with custom defaults.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager.imports = [ hmModule ];
   };
 }

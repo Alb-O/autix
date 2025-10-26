@@ -1,9 +1,8 @@
-{
-  lib,
-  inputs,
-  config,
-  autixAspectHelpers,
-  ...
+{ lib
+, inputs
+, config
+, autixAspectHelpers
+, ...
 }:
 let
   inherit (lib)
@@ -16,6 +15,9 @@ let
     ;
 
   inherit (config.autix.home) profiles;
+  # TODO: wire this up to `autix.home.legacyBuilder.enable` once
+  # coexistence with den's home builder is solved.
+  legacyBuilderEnabled = false;
 
   # Single module that declares AND sets profile metadata
   profileMetaModule = profileName: profile: _: {
@@ -42,9 +44,12 @@ let
 
   modulesForProfile =
     profileName: profile:
-    [ (profileMetaModule profileName profile) ]
-    ++ autixAspectHelpers.modulesForScope "home" profileName
-    ++ profile.extraModules;
+    if !(profile.buildWithLegacyHomeManager or true) then
+      [ ]
+    else
+      [ (profileMetaModule profileName profile) ]
+      ++ autixAspectHelpers.modulesForScope "home" profileName
+      ++ profile.extraModules;
 
   buildProfile =
     profileName: profile:
@@ -71,9 +76,18 @@ let
       modules = modulesForProfile profileName profile;
     };
 in
-{
-  flake.homeConfigurations = mapAttrs buildProfile profiles;
-  _module.args.autixHomeProfileComputed = {
-    inherit modulesForProfile;
-  };
-}
+(
+  {
+    _module.args.autixHomeProfileComputed = {
+      inherit modulesForProfile;
+    };
+  }
+    // lib.optionalAttrs legacyBuilderEnabled (
+    let
+      legacyProfiles = lib.filterAttrs (_: profile: profile.buildWithLegacyHomeManager) profiles;
+    in
+    lib.optionalAttrs (legacyProfiles != { }) {
+      flake.homeConfigurations = mapAttrs buildProfile legacyProfiles;
+    }
+  )
+)

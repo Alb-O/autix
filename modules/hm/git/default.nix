@@ -53,11 +53,8 @@ let
     };
 in
 {
-  autix.aspects.git = {
+  flake.aspects.git = {
     description = "Git configuration with helpful defaults.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager.imports = [ hmModule ];
   };
 }

@@ -1,10 +1,9 @@
-{
-  inputs,
-  lib,
-  config,
-  autixAspectHelpers,
-  autixHomeProfileComputed,
-  ...
+{ inputs
+, lib
+, config
+, autixAspectHelpers
+, autixHomeProfileComputed
+, ...
 }:
 let
   inherit (lib)
@@ -31,22 +30,27 @@ let
       let
         profileName = host.profile;
         profile = ensureProfile profileName;
-        userName = profile.user;
-        hmModules = autixHomeProfileComputed.modulesForProfile profileName profile;
       in
-      [
-        inputs.home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.${userName}.imports = hmModules;
-          };
-          environment.systemPackages = mkAfter [
-            inputs.home-manager.packages.${host.system}.home-manager
-          ];
-        }
-      ];
+      if !(profile.buildWithLegacyHomeManager or true) then
+        [ ]
+      else
+        let
+          userName = profile.user;
+          hmModules = autixHomeProfileComputed.modulesForProfile profileName profile;
+        in
+        [
+          inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.${userName}.imports = hmModules;
+            };
+            environment.systemPackages = mkAfter [
+              inputs.home-manager.packages.${host.system}.home-manager
+            ];
+          }
+        ];
 
   defaultsModule = hostName: host: {
     networking.hostName = hostName;

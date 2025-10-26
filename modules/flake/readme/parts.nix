@@ -10,23 +10,25 @@ let
 
   aspectsTable =
     let
-      rows = mapAttrsToList (
-        name: aspect:
-        let
-          hasNixos = (aspect.nixos.modules or [ ]) != [ ] || (aspect.nixos.targets or [ ]) != [ ];
-          hasHome = (aspect.home.modules or [ ]) != [ ] || (aspect.home.targets or [ ]) != [ ];
-          scopes =
-            if hasNixos && hasHome then
-              "NixOS, Home"
-            else if hasNixos then
-              "NixOS"
-            else if hasHome then
-              "Home"
-            else
-              "None";
-        in
-        "| `${name}` | ${aspect.description or "—"} | ${scopes} |"
-      ) aspects;
+      rows = mapAttrsToList
+        (
+          name: aspect:
+            let
+              hasNixos = (aspect.nixos.modules or [ ]) != [ ] || (aspect.nixos.targets or [ ]) != [ ];
+              hasHome = (aspect.home.modules or [ ]) != [ ] || (aspect.home.targets or [ ]) != [ ];
+              scopes =
+                if hasNixos && hasHome then
+                  "NixOS, Home"
+                else if hasNixos then
+                  "NixOS"
+                else if hasHome then
+                  "Home"
+                else
+                  "None";
+            in
+            "| `${name}` | ${aspect.description or "—"} | ${scopes} |"
+        )
+        aspects;
     in
     concatStringsSep "\n" rows;
 in
@@ -67,6 +69,7 @@ in
       - User account
       - System architecture
       - Additional custom modules
+      - Whether to use the legacy builder or the new `den` + `flake-aspects` pipeline
 
       Available profiles:
       ${concatStringsSep "\n" (
@@ -78,7 +81,7 @@ in
       $ nix build .#homeConfigurations.<profile>.activationPackage
       ```
 
-      See [`modules/hm/+profiles/options.nix`](modules/hm/+profiles/options.nix) for profile options.
+      See [`modules/profiles/options.nix`](modules/profiles/options.nix) for profile options.
     '';
 
     hosts = ''

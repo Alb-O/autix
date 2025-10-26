@@ -10,6 +10,7 @@ in
   autix.os.hosts.desktop = {
     system = "x86_64-linux";
     profile = "albert-desktop";
+    aspect = "desktop";
     extraModules = [ desktopModule ];
   };
 }
