@@ -6,31 +6,30 @@ let
     concatStringsSep
     mapAttrsToList
     ;
-  inherit (config.autix) aspects;
 
   aspectsTable =
     let
-      rows = mapAttrsToList
-        (
-          name: aspect:
-            let
-              hasNixos = (aspect.nixos.modules or [ ]) != [ ] || (aspect.nixos.targets or [ ]) != [ ];
-              hasHome = (aspect.home.modules or [ ]) != [ ] || (aspect.home.targets or [ ]) != [ ];
-              scopes =
-                if hasNixos && hasHome then
-                  "NixOS, Home"
-                else if hasNixos then
-                  "NixOS"
-                else if hasHome then
-                  "Home"
-                else
-                  "None";
-            in
-            "| `${name}` | ${aspect.description or "—"} | ${scopes} |"
-        )
-        aspects;
+      describeScopes =
+        aspect:
+        let
+          classes = mapAttrsToList (class: _module: class) (
+            removeAttrs aspect [
+              "description"
+              "includes"
+              "provides"
+              "__functor"
+            ]
+          );
+        in
+        if classes == [ ] then "—" else concatStringsSep ", " classes;
     in
-    concatStringsSep "\n" rows;
+    concatStringsSep "\n" (
+      mapAttrsToList
+        (
+          name: aspect: "| `${name}` | ${aspect.description or "—"} | ${describeScopes aspect} |"
+        )
+        config.flake.aspects
+    );
 in
 {
   options.text.readme.parts = mkOption {
@@ -43,8 +42,8 @@ in
     aspects = ''
       ## Aspects
 
-      Autix uses a modular **aspect system** for configuration. Each aspect represents a logical
-      unit of functionality that can target specific hosts or profiles.
+      Autix uses `flake.aspects` for all dendritic composition. Each aspect represents a logical
+      unit of functionality that can target specific hosts or users.
 
       ### Aspect Details
 
@@ -52,49 +51,25 @@ in
       |--------|-------------|--------|
       ${aspectsTable}
 
-      Aspects are defined in `modules/` directories and automatically aggregated by the build system.
-      Each aspect can contribute:
-      - Modules for NixOS or Home Manager
-      - Overlays for package customization
-      - Unfree package permissions
-      - Binary cache substituters and keys
-
-      See [`modules/aspect/options.nix`](modules/aspect/options.nix) for the full aspect schema.
+      Aspects are defined in `modules/aspects/**`. Each aspect can contribute modules for any
+      dendritic class (`nixos`, `homeManager`, etc.) and declare dependencies through `includes`.
     '';
 
     profiles = ''
-      ## Home Manager Profiles
+      ## Hosts & Homes via den
 
-      Profiles define Home Manager configurations. Each profile specifies:
-      - User account
-      - System architecture
-      - Additional custom modules
-      - Whether to use the legacy builder or the new `den` + `flake-aspects` pipeline
+      Host and user bindings are declared with [`den`](https://github.com/vic/den).
+      Each host entry references the aspect tree that should be composed for the
+      operating system and its users.
 
-      Available profiles:
-      ${concatStringsSep "\n" (
-        mapAttrsToList (name: profile: "- **${name}**: User `${profile.user}`") config.autix.home.profiles
-      )}
-
-      Build a profile:
-      ```console
-      $ nix build .#homeConfigurations.<profile>.activationPackage
-      ```
-
-      See [`modules/profiles/options.nix`](modules/profiles/options.nix) for profile options.
-    '';
-
-    hosts = ''
-      ## NixOS Hosts
-
-      Host configurations for NixOS systems:
+      Active hosts:
       ${concatStringsSep "\n" (
         mapAttrsToList (
-          name: host:
-          "- **${name}**: ${host.system}${
-            if host.profile != null then ", profile: `${host.profile}`" else ""
-          }"
-        ) config.autix.os.hosts
+          system: hosts:
+          concatStringsSep "\n" (
+            mapAttrsToList (name: host: "- **${name}** (${system}) — aspect `${host.aspect}`") hosts
+          )
+        ) config.den.hosts
       )}
 
       Build a host configuration:
@@ -102,7 +77,19 @@ in
       $ nixos-rebuild switch --flake .#<hostname>
       ```
 
-      See [`modules/sys/hosts/options.nix`](modules/sys/hosts/options.nix) for host options.
+      Standalone homes can be registered in `den.homes` when needed.
+    '';
+
+    hosts = ''
+      ## Aspect Topology
+
+      The dendritic graph is orchestrated with `flake.aspects`. Host aspects stitch
+      together system modules, while user aspects (such as `albert`) pull in
+      Home Manager features.
+
+      See [`modules/aspects/hosts.nix`](modules/aspects/hosts.nix) and
+      [`modules/aspects/users/albert.nix`](modules/aspects/users/albert.nix) for the
+      entry points used by `den`.
     '';
 
     project-structure = ''

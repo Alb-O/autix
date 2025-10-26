@@ -15,11 +15,8 @@ in
       git-sparta.inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  autix.aspects.git-sparta = {
+  flake.aspects.git-sparta = {
     description = "git-sparta CLI integration for git attribute sparse workflows & tagging.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

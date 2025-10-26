@@ -18,11 +18,8 @@ let
     };
 in
 {
-  autix.aspects.hydrus = {
+  flake.aspects.hydrus = {
     description = "Hydrus client launcher with Wayland-friendly defaults.";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

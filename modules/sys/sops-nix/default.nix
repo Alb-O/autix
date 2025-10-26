@@ -23,16 +23,10 @@ in
       sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  autix.aspects.sops-nix = {
+  flake.aspects.sops-nix = {
     description = "Atomic secret provisioning for NixOS based on sops.";
     overlays.sops-nix = inputs.sops-nix.overlays.default;
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    homeManager = hmModule;
+    nixos = nixosModule;
   };
 }

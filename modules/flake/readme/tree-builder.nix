@@ -1,8 +1,7 @@
-{
-  lib,
-  self,
-  config,
-  ...
+{ lib
+, self
+, config
+, ...
 }:
 let
   inherit (lib)
@@ -18,10 +17,8 @@ let
     replicate
     ;
 
-  inherit (config.autix) aspects;
-
   # Create mapping from directory names to aspect descriptions
-  aspectDescriptions = mapAttrs (_: aspect: aspect.description or "") aspects;
+  aspectDescriptions = mapAttrs (_: aspect: aspect.description or "") config.flake.aspects;
 
   modPath = self + "/modules";
 
@@ -40,32 +37,38 @@ let
   topLevelCount = builtins.length topLevelNames;
 
   # Calculate max name length for top-level dirs
-  maxTopLevelLen = foldl' (
-    max: name:
-    let
-      len = builtins.stringLength name + 1;
-    in
-    if len > max then len else max
-  ) 0 topLevelNames;
+  maxTopLevelLen = foldl'
+    (
+      max: name:
+        let
+          len = builtins.stringLength name + 1;
+        in
+        if len > max then len else max
+    ) 0
+    topLevelNames;
 
   # Calculate max name length for subdirs in each top-level dir
-  maxSubLengthPerDir = mapAttrs (
-    name: type:
-    let
-      fullPath = modPath + "/${name}";
-      subDirs = if type == "directory" then readDirFiltered fullPath else { };
-      subNames = builtins.attrNames subDirs;
-    in
-    foldl' (
-      max: subName:
-      let
-        subType = subDirs.${subName};
-        suffix = if subType == "directory" then "/" else "";
-        len = builtins.stringLength subName + builtins.stringLength suffix;
-      in
-      if len > max then len else max
-    ) 0 subNames
-  ) topLevelDirs;
+  maxSubLengthPerDir = mapAttrs
+    (
+      name: type:
+        let
+          fullPath = modPath + "/${name}";
+          subDirs = if type == "directory" then readDirFiltered fullPath else { };
+          subNames = builtins.attrNames subDirs;
+        in
+        foldl'
+          (
+            max: subName:
+              let
+                subType = subDirs.${subName};
+                suffix = if subType == "directory" then "/" else "";
+                len = builtins.stringLength subName + builtins.stringLength suffix;
+              in
+              if len > max then len else max
+          ) 0
+          subNames
+    )
+    topLevelDirs;
 
   maxSubLen = foldl' (max: len: if len > max then len else max) 0 (attrValues maxSubLengthPerDir);
 
@@ -95,23 +98,25 @@ let
       mainLine = "${prefix} ${nameWithSlash}${comment}";
 
       # Generate lines for subdirs
-      subLines = imap0 (
-        subIdx: subName:
-        let
-          subIsLast = subIdx == (subCount - 1);
-          subPrefix = if subIsLast then "└──" else "├──";
-          subType = subDirs.${subName};
-          suffix = if subType == "directory" then "/" else "";
+      subLines = imap0
+        (
+          subIdx: subName:
+            let
+              subIsLast = subIdx == (subCount - 1);
+              subPrefix = if subIsLast then "└──" else "├──";
+              subType = subDirs.${subName};
+              suffix = if subType == "directory" then "/" else "";
 
-          # Alignment padding for subdir
-          nameWithSuffix = "${subName}${suffix}";
-          nameLen = builtins.stringLength nameWithSuffix;
-          padding = concatStrings (replicate (maxSubLen - nameLen) " ");
-          subAspectDesc = aspectDescriptions.${subName} or "";
-          subComment = if subAspectDesc != "" then "${padding}  # ${subAspectDesc}" else "";
-        in
-        "${continueBar}${subPrefix} ${nameWithSuffix}${subComment}"
-      ) subNames;
+              # Alignment padding for subdir
+              nameWithSuffix = "${subName}${suffix}";
+              nameLen = builtins.stringLength nameWithSuffix;
+              padding = concatStrings (replicate (maxSubLen - nameLen) " ");
+              subAspectDesc = aspectDescriptions.${subName} or "";
+              subComment = if subAspectDesc != "" then "${padding}  # ${subAspectDesc}" else "";
+            in
+            "${continueBar}${subPrefix} ${nameWithSuffix}${subComment}"
+        )
+        subNames;
     in
     [ mainLine ] ++ subLines;
 

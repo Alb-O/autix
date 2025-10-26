@@ -1,10 +1,16 @@
 _:
 let
   hmModule =
-    { config, ... }:
+    { fontBundle ? null
+    , ...
+    }:
     let
-      fontBundle = config.autix.fonts;
-      terminalFont = fontBundle.roles.terminal;
+      bundle =
+        if fontBundle == null then
+          builtins.throw "flake.aspects.kitty requires the fonts aspect to be included"
+        else
+          fontBundle;
+      terminalFont = bundle.roles.terminal;
       fontName = terminalFont.family.name;
       fontSize = terminalFont.size;
       fontStyle = terminalFont.family.style;
@@ -80,11 +86,8 @@ let
     };
 in
 {
-  autix.aspects.kitty = {
+  flake.aspects.kitty = {
     description = "Kitty terminal with themed configuration.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

@@ -1,10 +1,16 @@
 _:
 let
   nixosModule =
-    { config, ... }:
+    { fontBundle ? null
+    , ...
+    }:
     let
-      fontBundle = config.autix.fonts;
-      displayFont = fontBundle.roles.displayManager;
+      bundle =
+        if fontBundle == null then
+          builtins.throw "flake.aspects.tty requires the fonts aspect to be included"
+        else
+          fontBundle;
+      displayFont = bundle.roles.displayManager;
       monoFamily = displayFont.family;
     in
     {
@@ -21,11 +27,8 @@ let
     };
 in
 {
-  autix.aspects.tty = {
+  flake.aspects.tty = {
     description = "kmscon font defaults for virtual consoles.";
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

@@ -7,11 +7,8 @@ let
     };
 in
 {
-  autix.aspects.gemini = {
+  flake.aspects.gemini = {
     description = "Google Gemini CLI.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

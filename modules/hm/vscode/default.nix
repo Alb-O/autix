@@ -5,12 +5,8 @@ let
   };
 in
 {
-  autix.aspects.vscode = {
+  flake.aspects.vscode = {
     description = "Visual Studio Code (unfree) enablement.";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-      unfreePackages = [ "code" ];
-    };
+    homeManager = hmModule;
   };
 }

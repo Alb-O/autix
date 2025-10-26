@@ -24,11 +24,8 @@ let
     };
 in
 {
-  autix.aspects.polkit = {
+  flake.aspects.polkit = {
     description = "Polkit agent for graphical sessions.";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

@@ -10,11 +10,8 @@ let
     };
 in
 {
-  autix.aspects.netshare = {
+  flake.aspects.netshare = {
     description = "NFS/CIFS client tooling.";
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

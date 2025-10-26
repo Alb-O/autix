@@ -1,11 +1,10 @@
 { inputs, ... }:
 let
   hmModule =
-    {
-      pkgs,
-      config,
-      lib,
-      ...
+    { pkgs
+    , config
+    , lib
+    , ...
     }:
     let
       pruneValue =
@@ -20,13 +19,14 @@ let
             prunedList = builtins.filter (v: v != null) (builtins.map pruneValue value);
           in
           if prunedList == [ ] then null else prunedList
-        else if builtins.isString value && value == "" then null
-        else if value == null then null
-        else value;
+        else if builtins.isString value && value == "" then
+          null
+        else if value == null then
+          null
+        else
+          value;
 
-      pruneMcpServer =
-        server:
-        lib.filterAttrs (_: v: v != null) (lib.mapAttrs (_: pruneValue) server);
+      pruneMcpServer = server: lib.filterAttrs (_: v: v != null) (lib.mapAttrs (_: pruneValue) server);
     in
     {
       options.autix.mcp = lib.mkOption {
@@ -103,12 +103,9 @@ in
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  autix.aspects.mcp = {
+  flake.aspects.mcp = {
     description = "MCP Servers configuration.";
     overlays.mcp = inputs.mcp-servers-nix.overlays.default;
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

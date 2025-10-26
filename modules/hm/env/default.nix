@@ -41,6 +41,6 @@ in
 {
   flake.aspects.workspace = {
     description = "Session environment defaults for shells and direnv.";
-    homeManager.imports = [ hmModule ];
+    homeManager = hmModule;
   };
 }

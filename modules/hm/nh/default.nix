@@ -263,11 +263,8 @@ let
     };
 in
 {
-  autix.aspects.nh = {
+  flake.aspects.nh = {
     description = "Utility script collection for nohup helper (nh).";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

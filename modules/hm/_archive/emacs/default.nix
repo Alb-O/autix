@@ -38,12 +38,9 @@ in
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  autix.aspects.emacs = {
+  flake.aspects.emacs = {
     description = "Emacs editor configured with the emacs-overlay.";
     overlays.emacs = inputs.emacs-overlay.overlays.emacs;
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

@@ -133,7 +133,7 @@
     },
     "flake-parts_2": {
       "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib"
+        "nixpkgs-lib": "nixpkgs-lib_2"
       },
       "locked": {
         "lastModified": 1760948891,
@@ -151,7 +151,7 @@
     },
     "flake-parts_3": {
       "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib"
+        "nixpkgs-lib": "nixpkgs-lib_3"
       },
       "locked": {
         "lastModified": 1760948891,
@@ -421,22 +421,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-master": {
-      "locked": {
-        "lastModified": 1761454495,
-        "narHash": "sha256-9wuL5AJEy43r3shsOOo64M9fouCe1xR8qJ6v1hpy72o=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "794ee3ad044521e8f76683b2b789d41781d58ddd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "master",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1761173472,
@@ -524,7 +508,6 @@
         "nixpkgs-lib": [
           "nixpkgs"
         ],
-        "nixpkgs-master": "nixpkgs-master",
         "nur": "nur",
         "sops-nix": "sops-nix",
         "systems": "systems_2",

@@ -4,22 +4,22 @@ let
 
   # Custom package that downloads pre-built binary from GitHub releases
   zedBinaryPackage =
-    {
-      lib,
-      stdenv,
-      fetchurl,
-      autoPatchelfHook,
-      makeWrapper,
-      alsa-lib,
-      fontconfig,
-      libxkbcommon,
-      mesa,
-      openssl,
-      vulkan-loader,
-      wayland,
-      libGL,
-      xorg,
-      zlib,
+    { lib
+    , stdenv
+    , fetchurl
+    , autoPatchelfHook
+    , makeWrapper
+    , alsa-lib
+    , fontconfig
+    , libxkbcommon
+    , mesa
+    , openssl
+    , vulkan-loader
+    , wayland
+    , libGL
+    , xorg
+    , zlib
+    ,
     }:
     stdenv.mkDerivation {
       pname = "zed-editor";
@@ -98,11 +98,8 @@ let
     };
 in
 {
-  autix.aspects.zed = {
+  flake.aspects.zed = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter (binary release).";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

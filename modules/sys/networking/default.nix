@@ -14,16 +14,10 @@ let
   };
 in
 {
-  autix.aspects.networking = {
+  flake.aspects.networking = {
     description = "Networking defaults for NetworkManager.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    homeManager = hmModule;
+    nixos = nixosModule;
   };
 
   flake = {

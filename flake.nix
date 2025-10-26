@@ -21,11 +21,6 @@
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
-  nixConfig = {
-    extra-substituters = [ ];
-    extra-trusted-public-keys = [ ];
-  };
-
   inputs = {
     den = {
       url = "github:vic/den";
@@ -93,9 +88,6 @@
     };
     nixpkgs-lib = {
       follows = "nixpkgs";
-    };
-    nixpkgs-master = {
-      url = "github:NixOS/nixpkgs/master";
     };
     nur = {
       inputs = {

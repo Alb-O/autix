@@ -7,11 +7,8 @@ let
     };
 in
 {
-  autix.aspects.ast-grep = {
+  flake.aspects.ast-grep = {
     description = "Fast and polyglot tool for code searching, linting, rewriting at large scale";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

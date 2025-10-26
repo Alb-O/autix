@@ -46,16 +46,10 @@ in
       niri-flake.inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  autix.aspects.niri = {
+  flake.aspects.niri = {
     description = "Niri Wayland compositor and related tooling.";
     overlays.niri = inputs.niri-flake.overlays.niri;
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
-    nixos = {
-      targets = [ "desktop" ];
-      modules = [ nixosModule ];
-    };
+    homeManager = hmModule;
+    nixos = nixosModule;
   };
 }

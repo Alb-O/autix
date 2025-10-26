@@ -174,14 +174,14 @@ let
   };
 in
 {
-  autix.aspects.lsp = {
+  flake.aspects.lsp = {
     description = "Shared Language Server Protocol tooling.";
-    home = {
-      targets = [ "*" ];
-      modules = [
-        optionsModule
-        hmModule
-      ];
-    };
+    homeManager.imports = [
+
+      optionsModule
+
+      hmModule
+
+    ];
   };
 }

@@ -8,20 +8,16 @@ let
     ];
 
   hmModule =
-    {
-      pkgs,
-      ...
+    { pkgs
+    , ...
     }:
     {
       home.packages = packages pkgs;
     };
 in
 {
-  autix.aspects.graphical = {
+  flake.aspects.graphical = {
     description = "Graphical desktop utilities bundle.";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

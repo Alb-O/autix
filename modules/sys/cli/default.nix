@@ -24,11 +24,8 @@ let
     };
 in
 {
-  autix.aspects.cli = {
+  flake.aspects.cli = {
     description = "Common CLI tooling bundle.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

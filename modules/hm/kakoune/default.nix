@@ -30,11 +30,8 @@ let
     };
 in
 {
-  autix.aspects.kakoune = {
+  flake.aspects.kakoune = {
     description = "Kakoune editor configuration and plugins.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

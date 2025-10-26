@@ -7,11 +7,8 @@ let
   };
 in
 {
-  autix.aspects.tmux = {
+  flake.aspects.tmux = {
     description = "Tmux, primarily for agents interactive usage.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

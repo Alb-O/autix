@@ -1,10 +1,16 @@
 _:
 let
   hmModule =
-    { config, ... }:
+    { fontBundle ? null
+    , ...
+    }:
     let
-      fontBundle = config.autix.fonts;
-      notificationFont = fontBundle.roles.notifications;
+      bundle =
+        if fontBundle == null then
+          builtins.throw "flake.aspects.mako requires the fonts aspect to be included"
+        else
+          fontBundle;
+      notificationFont = bundle.roles.notifications;
       fontName = notificationFont.family.name;
       fontSize = notificationFont.size;
     in
@@ -28,11 +34,8 @@ let
     };
 in
 {
-  autix.aspects.mako = {
+  flake.aspects.mako = {
     description = "Mako notification daemon for graphical profiles.";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

@@ -1,7 +1,11 @@
 { inputs, ... }:
 let
   firefoxExtensions =
-    pkgs: with pkgs.nur.repos.rycee.firefox-addons; [
+    pkgs:
+    let
+      nurPkgs = pkgs.extend inputs.nur.overlays.default;
+    in
+    with nurPkgs.nur.repos.rycee.firefox-addons; [
       darkreader
       ublock-origin
       bitwarden
@@ -14,11 +18,10 @@ let
     ];
 
   hmModule =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     let
       inherit (config.home) username;
@@ -41,6 +44,8 @@ let
       searchConfig = import ./_config/search.nix { inherit lib pkgs; };
     in
     {
+      nixpkgs.overlays = lib.mkDefault [ inputs.nur.overlays.default ];
+
       programs.firefox = {
         enable = true;
         inherit (policiesConfig) policies;
@@ -89,12 +94,9 @@ in
       nur.inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  autix.aspects.firefox = {
+  flake.aspects.firefox = {
     description = "Firefox config, including policies, profiles and NUR overlay extensions.";
     overlays.nur = inputs.nur.overlays.default;
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

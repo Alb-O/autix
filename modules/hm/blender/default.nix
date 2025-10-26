@@ -147,11 +147,8 @@ let
     };
 in
 {
-  autix.aspects.blender = {
+  flake.aspects.blender = {
     description = "Helper script for Blender daily builds.";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

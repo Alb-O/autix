@@ -30,12 +30,8 @@ let
     };
 in
 {
-  autix.aspects.opencode = {
+  flake.aspects.opencode = {
     description = "OpenCode configuration.";
-    home = {
-      master = true;
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

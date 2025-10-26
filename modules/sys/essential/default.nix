@@ -27,15 +27,9 @@ let
     };
 in
 {
-  autix.aspects.essential = {
+  flake.aspects.essential = {
     description = "Baseline essential packages for all profiles and hosts.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    homeManager = hmModule;
+    nixos = nixosModule;
   };
 }

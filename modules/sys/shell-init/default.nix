@@ -18,11 +18,8 @@ let
     };
 in
 {
-  autix.aspects.shell-init = {
+  flake.aspects.shell-init = {
     description = "Ensure login shells hand over to fish with XDG-aware history.";
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

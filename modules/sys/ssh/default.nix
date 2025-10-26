@@ -29,15 +29,9 @@ let
   };
 in
 {
-  autix.aspects.ssh = {
+  flake.aspects.ssh = {
     description = "SSH client defaults and server hardening.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    homeManager = hmModule;
+    nixos = nixosModule;
   };
 }

@@ -3,13 +3,12 @@
 , ...
 }:
 {
-  imports =
-    [
-      inputs.flake-file.flakeModules.dendritic
-      inputs.files.flakeModules.default
-      inputs.flake-aspects.flakeModule
-    ]
-    ++ lib.optionals (inputs ? den) [ inputs.den.flakeModule ];
+  imports = [
+    inputs.flake-file.flakeModules.dendritic
+    inputs.files.flakeModules.default
+    inputs.flake-aspects.flakeModule
+  ]
+  ++ lib.optionals (inputs ? den) [ inputs.den.flakeModule ];
 
   flake-file = {
     do-not-edit = ''

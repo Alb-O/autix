@@ -55,6 +55,6 @@ in
 {
   flake.aspects.git = {
     description = "Git configuration with helpful defaults.";
-    homeManager.imports = [ hmModule ];
+    homeManager = hmModule;
   };
 }

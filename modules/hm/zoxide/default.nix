@@ -11,11 +11,8 @@ let
   };
 in
 {
-  autix.aspects.zoxide = {
+  flake.aspects.zoxide = {
     description = "Enable zoxide jump navigation.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

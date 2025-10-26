@@ -1,19 +1,25 @@
-# Autix
+  # Autix
 
-A modular NixOS and Home Manager configuration using the aspect system.
+  A modular NixOS and Home Manager configuration using the aspect system.
 
-## Project Structure
+  ## Project Structure
 
 ```
 modules/
-├── aspect/
-│   ├── aggregate.nix
-│   └── options.nix
+├── aspects/
+│   ├── hosts/
+│   ├── hosts.nix
+│   ├── shared/
+│   └── users/
+├── den/
+│   ├── home-config.nix
+│   ├── homes.nix
+│   └── hosts.nix
 ├── flake/
 │   ├── core.nix
 │   ├── formatter.nix
-│   ├── nixconfig.nix
-│   └── readme/
+│   ├── readme/
+│   └── upstreams.nix
 ├── hm/
 │   ├── ast-grep/        # Fast and polyglot tool for code searching, linting, rewriting at large scale
 │   ├── blender/         # Helper script for Blender daily builds.
@@ -46,15 +52,6 @@ modules/
 │   ├── youtube-music/   # Electron wrapper around YouTube Music
 │   ├── zk/              # Zettelkasten CLI (zk) configuration.
 │   └── zoxide/          # Enable zoxide jump navigation.
-├── hosts/
-│   ├── compose.nix
-│   ├── desktop/
-│   ├── options.nix
-│   └── wsl/             # NixOS-WSL integration for Windows Subsystem for Linux.
-├── profiles/
-│   ├── albert/          # Base user configuration for Albert O'Shea.
-│   ├── default.nix
-│   └── options.nix
 └── sys/
     ├── cli/             # Common CLI tooling bundle.
     ├── essential/       # Baseline essential packages for all profiles and hosts.
@@ -78,164 +75,156 @@ modules/
 Files/directories prefixed with `_` or `.` are ignored by auto-import.
 All `.nix` files in `modules/` are automatically imported as flake-parts modules.
 
-## Aspects
 
-Autix uses a modular **aspect system** for configuration. Each aspect represents a logical
-unit of functionality that can target specific hosts or profiles.
+  ## Aspects
+
+Autix uses `flake.aspects` for all dendritic composition. Each aspect represents a logical
+unit of functionality that can target specific hosts or users.
 
 ### Aspect Details
 
-| Aspect           | Description                                                                  | Scopes      |
-| ---------------- | ---------------------------------------------------------------------------- | ----------- |
-| `albert`         | Base user configuration for Albert O'Shea.                                   | NixOS, Home |
-| `ast-grep`       | Fast and polyglot tool for code searching, linting, rewriting at large scale | Home        |
-| `blender`        | Helper script for Blender daily builds.                                      | Home        |
-| `cli`            | Common CLI tooling bundle.                                                   | Home        |
-| `clipboard`      | Wayland clipboard manager service.                                           | Home        |
-| `codex`          | Codex CLI tooling.                                                           | Home        |
-| `essential`      | Baseline essential packages for all profiles and hosts.                      | NixOS, Home |
-| `firefox`        | Firefox config, including policies, profiles and NUR overlay extensions.     | Home        |
-| `fonts`          | Shared font bundle and defaults.                                             | NixOS, Home |
-| `formatter`      | Formatter definitions and helper packages.                                   | Home        |
-| `fzf`            | Configure fzf with custom defaults.                                          | Home        |
-| `gdm`            | GNOME Display Manager.                                                       | NixOS       |
-| `gemini`         | Google Gemini CLI.                                                           | Home        |
-| `git`            | Git configuration with helpful defaults.                                     | Home        |
-| `git-sparta`     | git-sparta CLI integration for git attribute sparse workflows & tagging.     | Home        |
-| `gnome-services` | GNOME keyring and supporting services.                                       | NixOS       |
-| `graphical`      | Graphical desktop utilities bundle.                                          | Home        |
-| `hydrus`         | Hydrus client launcher with Wayland-friendly defaults.                       | Home        |
-| `kakoune`        | Kakoune editor configuration and plugins.                                    | Home        |
-| `keyboard`       | Swap Caps Lock and Escape via keyd.                                          | NixOS       |
-| `kitty`          | Kitty terminal with themed configuration.                                    | Home        |
-| `lazygit`        | Lazygit configuration.                                                       | Home        |
-| `lsp`            | Shared Language Server Protocol tooling.                                     | Home        |
-| `mako`           | Mako notification daemon for graphical profiles.                             | Home        |
-| `mcp`            | MCP Servers configuration.                                                   | Home        |
-| `mpv`            | MPV media player defaults.                                                   | Home        |
-| `netshare`       | NFS/CIFS client tooling.                                                     | NixOS       |
-| `networking`     | Networking defaults for NetworkManager.                                      | NixOS, Home |
-| `nh`             | Utility script collection for nohup helper (nh).                             | Home        |
-| `niri`           | Niri Wayland compositor and related tooling.                                 | NixOS, Home |
-| `nix-settings`   | Shared Nix daemon and nixpkgs defaults.                                      | NixOS       |
-| `nushell`        | Nushell - A new type of shell.                                               | Home        |
-| `opencode`       | OpenCode configuration.                                                      | Home        |
-| `polkit`         | Polkit agent for graphical sessions.                                         | Home        |
-| `shell-init`     | Ensure login shells hand over to fish with XDG-aware history.                | NixOS       |
-| `sillytavern`    | SillyTavern launcher and desktop entry.                                      | Home        |
-| `sops-nix`       | Atomic secret provisioning for NixOS based on sops.                          | NixOS, Home |
-| `ssh`            | SSH client defaults and server hardening.                                    | NixOS, Home |
-| `tmux`           | Tmux, primarily for agents interactive usage.                                | Home        |
-| `tty`            | kmscon font defaults for virtual consoles.                                   | NixOS       |
-| `vscode`         | Visual Studio Code (unfree) enablement.                                      | Home        |
-| `wayland`        | Wayland-first session defaults.                                              | NixOS, Home |
-| `workspace`      | Session environment defaults for shells and direnv.                          | Home        |
-| `wsl`            | NixOS-WSL integration for Windows Subsystem for Linux.                       | NixOS, Home |
-| `xdg`            | XDG base directory layout and session tweaks.                                | Home        |
-| `yazi`           | Setup Yazi terminal file manager.                                            | Home        |
-| `youtube-music`  | Electron wrapper around YouTube Music                                        | Home        |
-| `zk`             | Zettelkasten CLI (zk) configuration.                                         | Home        |
-| `zoxide`         | Enable zoxide jump navigation.                                               | Home        |
+| Aspect | Description | Scopes |
+|--------|-------------|--------|
+| `albert` | Base user configuration for Albert O'Shea. | homeManager, name, nixos |
+| `ast-grep` | Fast and polyglot tool for code searching, linting, rewriting at large scale | homeManager, name |
+| `blender` | Helper script for Blender daily builds. | homeManager, name |
+| `cli` | Common CLI tooling bundle. | homeManager, name |
+| `clipboard` | Wayland clipboard manager service. | homeManager, name |
+| `codex` | Codex CLI tooling. | homeManager, name |
+| `default` | — | home, host, user |
+| `essential` | Baseline essential packages for all profiles and hosts. | homeManager, name, nixos |
+| `firefox` | Firefox config, including policies, profiles and NUR overlay extensions. | homeManager, name, overlays |
+| `fonts` | Shared font bundle and defaults. | homeManager, name, nixos |
+| `formatter` | Formatter definitions and helper packages. | homeManager, name |
+| `fzf` | Configure fzf with custom defaults. | homeManager, name |
+| `gdm` | GNOME Display Manager. | name, nixos |
+| `gemini` | Google Gemini CLI. | homeManager, name |
+| `git` | Git configuration with helpful defaults. | homeManager, name |
+| `git-sparta` | git-sparta CLI integration for git attribute sparse workflows & tagging. | homeManager, name |
+| `gnome-services` | GNOME keyring and supporting services. | name, nixos |
+| `graphical` | Graphical desktop utilities bundle. | homeManager, name |
+| `host-desktop` | Aspect tree for the primary desktop host. | name, nixos |
+| `host-wsl` | Aspect tree for the WSL-based environment. | name, nixos |
+| `hydrus` | Hydrus client launcher with Wayland-friendly defaults. | homeManager, name |
+| `kakoune` | Kakoune editor configuration and plugins. | homeManager, name |
+| `keyboard` | Swap Caps Lock and Escape via keyd. | name, nixos |
+| `kitty` | Kitty terminal with themed configuration. | homeManager, name |
+| `lazygit` | Lazygit configuration. | homeManager, name |
+| `lsp` | Shared Language Server Protocol tooling. | homeManager, name |
+| `mako` | Mako notification daemon for graphical profiles. | homeManager, name |
+| `mcp` | MCP Servers configuration. | homeManager, name, overlays |
+| `mpv` | MPV media player defaults. | homeManager, name |
+| `netshare` | NFS/CIFS client tooling. | name, nixos |
+| `networking` | Networking defaults for NetworkManager. | homeManager, name, nixos |
+| `nh` | Utility script collection for nohup helper (nh). | homeManager, name |
+| `niri` | Niri Wayland compositor and related tooling. | homeManager, name, nixos, overlays |
+| `nix-settings` | Shared Nix daemon and nixpkgs defaults. | name, nixos |
+| `nushell` | Nushell - A new type of shell. | homeManager, name |
+| `opencode` | OpenCode configuration. | homeManager, name |
+| `polkit` | Polkit agent for graphical sessions. | homeManager, name |
+| `shell-init` | Ensure login shells hand over to fish with XDG-aware history. | name, nixos |
+| `sillytavern` | SillyTavern launcher and desktop entry. | homeManager, name |
+| `sops-nix` | Atomic secret provisioning for NixOS based on sops. | homeManager, name, nixos, overlays |
+| `ssh` | SSH client defaults and server hardening. | homeManager, name, nixos |
+| `state-version` | Shared stateVersion policy. | homeManager, name, nixos |
+| `tmux` | Tmux, primarily for agents interactive usage. | homeManager, name |
+| `tty` | kmscon font defaults for virtual consoles. | name, nixos |
+| `vscode` | Visual Studio Code (unfree) enablement. | homeManager, name |
+| `wayland` | Wayland-first session defaults. | homeManager, name, nixos |
+| `workspace` | Session environment defaults for shells and direnv. | homeManager, name |
+| `wsl` | NixOS-WSL integration for Windows Subsystem for Linux. | homeManager, name, nixos |
+| `xdg` | XDG base directory layout and session tweaks. | homeManager, name |
+| `yazi` | Setup Yazi terminal file manager. | homeManager, name |
+| `youtube-music` | Electron wrapper around YouTube Music | homeManager, name |
+| `zk` | Zettelkasten CLI (zk) configuration. | homeManager, name |
+| `zoxide` | Enable zoxide jump navigation. | homeManager, name |
 
-Aspects are defined in `modules/` directories and automatically aggregated by the build system.
-Each aspect can contribute:
+Aspects are defined in `modules/aspects/**`. Each aspect can contribute modules for any
+dendritic class (`nixos`, `homeManager`, etc.) and declare dependencies through `includes`.
 
-- Modules for NixOS or Home Manager
-- Overlays for package customization
-- Unfree package permissions
-- Binary cache substituters and keys
 
-See [`modules/aspect/options.nix`](modules/aspect/options.nix) for the full aspect schema.
+  ## Hosts & Homes via den
 
-## Home Manager Profiles
+Host and user bindings are declared with [`den`](https://github.com/vic/den).
+Each host entry references the aspect tree that should be composed for the
+operating system and its users.
 
-Profiles define Home Manager configurations. Each profile specifies:
-
-- User account
-- System architecture
-- Additional custom modules
-
-Available profiles:
-
-- **albert-desktop**: User `albert`
-- **albert-wsl**: User `albert`
-
-Build a profile:
-
-```console
-$ nix build .#homeConfigurations.<profile>.activationPackage
-```
-
-See [`modules/hm/+profiles/options.nix`](modules/hm/+profiles/options.nix) for profile options.
-
-## NixOS Hosts
-
-Host configurations for NixOS systems:
-
-- **desktop**: x86_64-linux, profile: `albert-desktop`
-- **wsl**: x86_64-linux, profile: `albert-wsl`
+Active hosts:
+- **desktop** (x86_64-linux) — aspect `host-desktop`
+- **wsl** (x86_64-linux) — aspect `host-wsl`
 
 Build a host configuration:
-
 ```console
 $ nixos-rebuild switch --flake .#<hostname>
 ```
 
-See [`modules/sys/hosts/options.nix`](modules/sys/hosts/options.nix) for host options.
+Standalone homes can be registered in `den.homes` when needed.
 
-## Usage
 
-### Common commands
+## Aspect Topology
 
-```console
-$ just regen   # Regenerate generated files and format the tree
-$ just check   # Run regen followed by nix flake check --no-update-lock-file
-```
+The dendritic graph is orchestrated with `flake.aspects`. Host aspects stitch
+together system modules, while user aspects (such as `albert`) pull in
+Home Manager features.
 
-### Regenerate flake.nix
+See [`modules/aspects/hosts.nix`](modules/aspects/hosts.nix) and
+[`modules/aspects/users/albert.nix`](modules/aspects/users/albert.nix) for the
+entry points used by `den`.
 
-This project uses [flake-file](https://github.com/vic/flake-file) for modular flake management:
 
-```console
-$ nix run .#write-flake
-```
+  ## Usage
 
-### Update dependencies
+  ### Common commands
 
-```console
-$ nix flake update
-```
+  ```console
+  $ just regen   # Regenerate generated files and format the tree
+  $ just check   # Run regen followed by nix flake check --no-update-lock-file
+  ```
 
-### Format code
+  ### Regenerate flake.nix
 
-```console
-$ nix fmt
-```
+  This project uses [flake-file](https://github.com/vic/flake-file) for modular flake management:
 
-### Generate files
+  ```console
+  $ nix run .#write-flake
+  ```
 
-This README and other generated files are kept in sync with Nix definitions:
+  ### Update dependencies
 
-```console
-$ nix run .#write-files
-```
+  ```console
+  $ nix flake update
+  ```
 
-### Check everything
+  ### Format code
 
-```console
-$ nix flake check
-```
+  ```console
+  $ nix fmt
+  ```
 
-### git-sparta Integration
+  ### Generate files
 
-Autix ships the local [`git-sparta`](git-sparta/README.md) tool for attribute-driven sparse
-workflows. Helpful entry points:
+  This README and other generated files are kept in sync with Nix definitions:
 
-- `nix run .#git-sparta -- --help` or `just sparta-run -- --help` for command discovery.
-- `just sparta-tags tag=<name>` launches the interactive tag browser (add `repo=<path>` to scan another checkout, `yes=true` to bypass the TUI, and `theme=<name>` to pick a theme).
-- `just sparta-setup` and `just sparta-teardown` wrap the submodule lifecycle commands.
-- Git aliases (`git sparta`, `git sparta-tags`, etc.) forward directly to the packaged binary.
+  ```console
+  $ nix run .#write-files
+  ```
 
-## License
+  ### Check everything
 
-See [LICENSE](LICENSE) file.
+  ```console
+  $ nix flake check
+  ```
+
+  ### git-sparta Integration
+
+  Autix ships the local [`git-sparta`](git-sparta/README.md) tool for attribute-driven sparse
+  workflows. Helpful entry points:
+
+  - `nix run .#git-sparta -- --help` or `just sparta-run -- --help` for command discovery.
+  - `just sparta-tags tag=<name>` launches the interactive tag browser (add `repo=<path>` to scan another checkout, `yes=true` to bypass the TUI, and `theme=<name>` to pick a theme).
+  - `just sparta-setup` and `just sparta-teardown` wrap the submodule lifecycle commands.
+  - Git aliases (`git sparta`, `git sparta-tags`, etc.) forward directly to the packaged binary.
+
+  ## License
+
+  See [LICENSE](LICENSE) file.

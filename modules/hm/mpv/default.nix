@@ -45,11 +45,8 @@ let
   };
 in
 {
-  autix.aspects.mpv = {
+  flake.aspects.mpv = {
     description = "MPV media player defaults.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

@@ -1,10 +1,9 @@
 { self, lib, ... }:
 let
   nixosModule =
-    {
-      pkgs,
-      config,
-      ...
+    { pkgs
+    , config
+    , ...
     }:
     {
       nix = {
@@ -32,11 +31,8 @@ let
     };
 in
 {
-  autix.aspects.nix-settings = {
+  flake.aspects.nix-settings = {
     description = "Shared Nix daemon and nixpkgs defaults.";
-    nixos = {
-      targets = [ "*" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

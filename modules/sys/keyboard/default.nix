@@ -18,11 +18,8 @@ let
   };
 in
 {
-  autix.aspects.keyboard = {
+  flake.aspects.keyboard = {
     description = "Swap Caps Lock and Escape via keyd.";
-    nixos = {
-      targets = [ "desktop" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

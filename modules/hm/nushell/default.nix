@@ -5,11 +5,8 @@ let
   };
 in
 {
-  autix.aspects.nushell = {
+  flake.aspects.nushell = {
     description = "Nushell - A new type of shell.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

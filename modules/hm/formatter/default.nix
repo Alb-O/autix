@@ -141,14 +141,14 @@ let
   };
 in
 {
-  autix.aspects.formatter = {
+  flake.aspects.formatter = {
     description = "Formatter definitions and helper packages.";
-    home = {
-      targets = [ "*" ];
-      modules = [
-        optionsModule
-        hmModule
-      ];
-    };
+    homeManager.imports = [
+
+      optionsModule
+
+      hmModule
+
+    ];
   };
 }

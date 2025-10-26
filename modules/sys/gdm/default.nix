@@ -10,11 +10,8 @@ let
   };
 in
 {
-  autix.aspects.gdm = {
+  flake.aspects.gdm = {
     description = "GNOME Display Manager.";
-    nixos = {
-      targets = [ "desktop" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

@@ -41,11 +41,8 @@ let
     };
 in
 {
-  autix.aspects.sillytavern = {
+  flake.aspects.sillytavern = {
     description = "SillyTavern launcher and desktop entry.";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

@@ -41,6 +41,6 @@ in
 {
   flake.aspects.fzf = {
     description = "Configure fzf with custom defaults.";
-    homeManager.imports = [ hmModule ];
+    homeManager = hmModule;
   };
 }

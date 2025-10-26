@@ -1,7 +1,5 @@
-{ lib, ... }:
+_:
 let
-  inherit (lib) mkOption types;
-
   mkFontBundle =
     pkgs:
     let
@@ -94,75 +92,37 @@ let
     };
 
   hmModule =
-    {
-      pkgs,
-      config,
-      lib,
-      ...
-    }:
+    { pkgs, ... }:
     let
-      cfg = config.autix.fonts;
-      inherit (lib) mkDefault;
+      bundle = mkFontBundle pkgs;
     in
     {
-      config = {
-        home.packages = cfg.packages;
-
-        fonts.fontconfig = {
-          enable = true;
-          defaultFonts = cfg.defaults;
-        };
-        # Ensure sensible per-module default using pkgs
-        autix = {
-          fonts = mkDefault (mkFontBundle pkgs);
-        };
+      home.packages = bundle.packages;
+      fonts.fontconfig = {
+        enable = true;
+        defaultFonts = bundle.defaults;
       };
+      _module.args.fontBundle = bundle;
     };
 
   nixosModule =
-    { pkgs, config, ... }:
+    { pkgs, ... }:
     let
-      cfg = config.autix.fonts;
-      inherit (lib) mkDefault;
+      bundle = mkFontBundle pkgs;
     in
     {
-      config = {
-        fonts.packages = cfg.packages;
-
-        fonts.fontconfig = {
-          enable = true;
-          defaultFonts = cfg.defaults;
-        };
-        autix = {
-          fonts = mkDefault (mkFontBundle pkgs);
-        };
+      fonts.packages = bundle.packages;
+      fonts.fontconfig = {
+        enable = true;
+        defaultFonts = bundle.defaults;
       };
+      _module.args.fontBundle = bundle;
     };
-  # Top-level options module exported so option normalization happens
-  optionsModule = {
-    options.autix.fonts = mkOption {
-      type = types.attrs;
-      default = { };
-      description = "autix font bundle available to aspects.";
-    };
-  };
 in
 {
-  autix.aspects.fonts = {
+  flake.aspects.fonts = {
     description = "Shared font bundle and defaults.";
-    home = {
-      targets = [ "*" ];
-      modules = [
-        optionsModule
-        hmModule
-      ];
-    };
-    nixos = {
-      targets = [ "*" ];
-      modules = [
-        optionsModule
-        nixosModule
-      ];
-    };
+    homeManager = hmModule;
+    nixos = nixosModule;
   };
 }

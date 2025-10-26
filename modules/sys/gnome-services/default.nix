@@ -18,11 +18,8 @@ let
     };
 in
 {
-  autix.aspects."gnome-services" = {
+  flake.aspects."gnome-services" = {
     description = "GNOME keyring and supporting services.";
-    nixos = {
-      targets = [ "desktop" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

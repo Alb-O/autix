@@ -49,15 +49,9 @@ in
     };
   };
 
-  autix.aspects.wsl = {
+  flake.aspects.wsl = {
     description = "NixOS-WSL integration for Windows Subsystem for Linux.";
-    home = {
-      targets = [ "albert-wsl" ];
-      modules = [ hmModule ];
-    };
-    nixos = {
-      targets = [ "wsl" ];
-      modules = [ nixosModule ];
-    };
+    homeManager = hmModule;
+    nixos = nixosModule;
   };
 }

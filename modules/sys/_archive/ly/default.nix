@@ -13,11 +13,8 @@ let
   };
 in
 {
-  autix.aspects.ly = {
+  flake.aspects.ly = {
     description = "Ly TTY display manager.";
-    nixos = {
-      targets = [ "desktop" ];
-      modules = [ nixosModule ];
-    };
+    nixos = nixosModule;
   };
 }

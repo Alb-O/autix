@@ -120,11 +120,8 @@ let
   };
 in
 {
-  autix.aspects.lazygit = {
+  flake.aspects.lazygit = {
     description = "Lazygit configuration.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

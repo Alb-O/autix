@@ -11,10 +11,11 @@ let
       mkVars = prefix: mapping: lib.mapAttrs (_: value: "${prefix}/${value}") mapping;
 
       sessionVars =
-        mkVars stateHome {
-          HISTFILE = "bash/history";
-          PYTHON_HISTORY = "python/python_history";
-        }
+        mkVars stateHome
+          {
+            HISTFILE = "bash/history";
+            PYTHON_HISTORY = "python/python_history";
+          }
         // mkVars dataHome {
           CARGO_HOME = "cargo";
           DOTNET_CLI_HOME = "dotnet";
@@ -148,11 +149,8 @@ let
     };
 in
 {
-  autix.aspects.xdg = {
+  flake.aspects.xdg = {
     description = "XDG base directory layout and session tweaks.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

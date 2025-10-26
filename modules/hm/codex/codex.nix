@@ -16,12 +16,8 @@ let
     };
 in
 {
-  autix.aspects.codex = {
+  flake.aspects.codex = {
     description = "Codex CLI tooling.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-      master = true;
-    };
+    homeManager = hmModule;
   };
 }

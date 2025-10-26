@@ -19,11 +19,8 @@ let
     };
 in
 {
-  autix.aspects.yazi = {
+  flake.aspects.yazi = {
     description = "Setup Yazi terminal file manager.";
-    home = {
-      targets = [ "*" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }

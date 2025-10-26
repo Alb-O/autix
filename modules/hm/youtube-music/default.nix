@@ -7,11 +7,8 @@ let
     };
 in
 {
-  autix.aspects.youtube-music = {
+  flake.aspects.youtube-music = {
     description = "Electron wrapper around YouTube Music";
-    home = {
-      targets = [ "albert-desktop" ];
-      modules = [ hmModule ];
-    };
+    homeManager = hmModule;
   };
 }
