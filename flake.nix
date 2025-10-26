@@ -27,6 +27,9 @@
   };
 
   inputs = {
+    den = {
+      url = "github:vic/den";
+    };
     files = {
       url = "github:mightyiam/files";
     };
@@ -37,6 +40,11 @@
       url = "github:vic/flake-file";
     };
     flake-parts = {
+      inputs = {
+        nixpkgs-lib = {
+          follows = "nixpkgs-lib";
+        };
+      };
       url = "github:hercules-ci/flake-parts";
     };
     git-sparta = {
@@ -75,6 +83,11 @@
       url = "github:sodiboo/niri-flake";
     };
     nix-auto-follow = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:fzakaria/nix-auto-follow";
     };
     nixos-wsl = {
@@ -114,6 +127,11 @@
       url = "github:nix-systems/default";
     };
     treefmt-nix = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
       url = "github:numtide/treefmt-nix";
     };
   };
