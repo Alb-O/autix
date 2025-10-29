@@ -55,6 +55,14 @@
       };
       url = "github:Alb-O/git-sparta";
     };
+    helium-browser = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:ominit/helium-browser-flake";
+    };
     home-manager = {
       inputs = {
         nixpkgs = {
@@ -73,14 +81,6 @@
         };
       };
       url = "github:natsukium/mcp-servers-nix";
-    };
-    niri-flake = {
-      inputs = {
-        nixpkgs = {
-          follows = "nixpkgs";
-        };
-      };
-      url = "github:sodiboo/niri-flake";
     };
     nix-auto-follow = {
       inputs = {

@@ -7,7 +7,7 @@ let
     };
 in
 {
-  autix.aspects.gemini = {
+  autix.aspects.node = {
     description = "NodeJS";
     home = {
       targets = [ "*" ];
