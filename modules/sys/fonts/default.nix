@@ -43,7 +43,7 @@ let
       packages = with pkgs; [
         noto-fonts
         noto-fonts-cjk-sans
-        noto-fonts-emoji
+        noto-fonts-color-emoji
         nerd-fonts.jetbrains-mono
         inter
         crimson-pro
@@ -94,11 +94,10 @@ let
     };
 
   hmModule =
-    {
-      pkgs,
-      config,
-      lib,
-      ...
+    { pkgs
+    , config
+    , lib
+    , ...
     }:
     let
       cfg = config.autix.fonts;

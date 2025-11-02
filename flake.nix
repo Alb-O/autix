@@ -115,6 +115,14 @@
       };
       url = "github:nix-community/NUR";
     };
+    opencode-flake = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:Alb-O/opencode-flake";
+    };
     sops-nix = {
       inputs = {
         nixpkgs = {

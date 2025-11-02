@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ inputs, lib, ... }:
 let
   hmModule =
     { pkgs, config, ... }:
@@ -18,7 +18,10 @@ let
       config = lib.mkMerge [
         {
           sops.secrets."context7/api-key" = { };
-          programs.opencode.enable = true;
+          programs.opencode = {
+            package = inputs.opencode-flake.packages."${pkgs.system}".default;
+            enable = true;
+          };
         }
         (lib.mkIf hasSettings {
           sops.templates."opencode-config" = {
@@ -27,13 +30,19 @@ let
           };
         })
       ];
+
     };
 in
 {
+  flake-file = {
+    inputs.opencode-flake = {
+      url = "github:Alb-O/opencode-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
   autix.aspects.opencode = {
-    description = "OpenCode configuration.";
+    description = "My OpenCode Flake.";
     home = {
-      master = true;
       targets = [ "*" ];
       modules = [ hmModule ];
     };

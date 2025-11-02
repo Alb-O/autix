@@ -1,4 +1,4 @@
-{ inputs, ... }:
+_:
 let
   niriConfig = builtins.readFile ./config.kdl;
   hmModule =
@@ -11,8 +11,7 @@ let
     };
 
   nixosModule =
-    { lib
-    , pkgs
+    { pkgs
     , ...
     }:
     {

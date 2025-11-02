@@ -8,7 +8,7 @@ let
       ffmpeg
       gh
       onefetch
-      poppler_utils
+      poppler-utils
       ripgrep
       rucola
       unipicker
