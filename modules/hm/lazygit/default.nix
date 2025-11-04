@@ -39,10 +39,6 @@ let
         };
         git = {
           useExternalDiffGitConfig = true;
-          paging = {
-            colorArg = "always";
-            pager = "";
-          };
           commit = {
             signOff = false;
             autoWrapCommitMessage = true;
