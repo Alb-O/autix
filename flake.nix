@@ -121,7 +121,7 @@
           follows = "nixpkgs";
         };
       };
-      url = "github:Alb-O/opencode-flake";
+      url = "github:Alb-O/opencode";
     };
     sops-nix = {
       inputs = {
