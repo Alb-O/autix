@@ -3,3 +3,4 @@
 *.log
 /.pre-commit-config.yaml
 .decrypted~*
+*.local.*
