@@ -11,8 +11,9 @@ let
     };
 
   nixosModule =
-    { pkgs
-    , ...
+    {
+      pkgs,
+      ...
     }:
     {
       programs.niri = {

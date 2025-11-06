@@ -36,8 +36,8 @@ in
 {
   flake-file = {
     inputs.opencode-flake = {
-      url = "github:Alb-O/opencode";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:sst/opencode";
+      #inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   autix.aspects.opencode = {

@@ -3,11 +3,7 @@ let
   hmModule =
     { config, ... }:
     let
-      fontBundle = config.autix.fonts;
-      terminalFont = fontBundle.roles.terminal;
-      fontName = terminalFont.family.name;
-      fontSize = terminalFont.size;
-      fontStyle = terminalFont.family.style;
+      fonts = config.autix.fonts;
     in
     {
       xdg.configFile."kitty/tab_bar.py" = {
@@ -17,8 +13,8 @@ let
         enable = true;
 
         extraConfig = ''
-          font_family family='${fontName}' style='${fontStyle}'
-          font_size ${toString fontSize}'';
+          font_family family='${fonts.mono.name}' style='${fonts.mono.style}'
+          font_size ${toString fonts.mono.sizes.normal}'';
 
         settings = {
           shell_integration = "enabled";

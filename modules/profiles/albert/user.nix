@@ -33,6 +33,7 @@ let
         "networkmanager"
         "audio"
         "video"
+        "libvirtd"
       ];
       description = name;
       initialPassword = "changeme";

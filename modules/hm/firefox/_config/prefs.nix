@@ -38,7 +38,8 @@
       "K00ILysCaEq8+bEqV/3nuw=="
       # Twitter
       "T9nJot5PurhJSy8n038xGA=="
-    ] (_: 1);
+    ]
+      (_: 1);
 
     # Disable some telemetry
     "app.shield.optoutstudies.enabled" = false;
@@ -77,6 +78,7 @@
     # Layout
     "browser.uiCustomization.state" = builtins.readFile ./ui-customization-state.json;
     "browser.uidensity" = 1; # Compact mode
+    "layout.css.devPixelsPerPx" = 1;
 
     # Enable sidebar/vertical tabs
     "sidebar.visibility" = "always-show";
