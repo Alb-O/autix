@@ -2,17 +2,10 @@ _:
 let
   hmModule =
     { config, ... }:
-    let
-      fontBundle = config.autix.fonts;
-      notificationFont = fontBundle.roles.notifications;
-      fontName = notificationFont.family.name;
-      fontSize = notificationFont.size;
-    in
     {
       services.mako = {
         enable = true;
         settings = {
-          font = "${fontName} ${builtins.toString fontSize}";
           width = 400;
           height = 150;
           margin = "10";

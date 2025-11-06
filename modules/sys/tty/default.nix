@@ -3,20 +3,18 @@ let
   nixosModule =
     { config, ... }:
     let
-      fontBundle = config.autix.fonts;
-      displayFont = fontBundle.roles.displayManager;
-      monoFamily = displayFont.family;
+      fonts = config.autix.fonts;
     in
     {
       services.kmscon = {
         enable = true;
         fonts = [
           {
-            inherit (monoFamily) name;
-            inherit (monoFamily) package;
+            inherit (fonts.mono) name;
+            inherit (fonts.mono) package;
           }
         ];
-        extraConfig = "font-size=${toString displayFont.size}";
+        extraConfig = "font-size=18";
       };
     };
 in

@@ -1,10 +1,11 @@
 { inputs, ... }:
 let
   hmModule =
-    { pkgs
-    , config
-    , lib
-    , ...
+    {
+      pkgs,
+      config,
+      lib,
+      ...
     }:
     let
       pruneValue =

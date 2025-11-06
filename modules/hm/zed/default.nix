@@ -1,25 +1,25 @@
 _:
 let
-  version = "0.206.6";
+  version = "0.212.5";
 
   # Custom package that downloads pre-built binary from GitHub releases
   zedBinaryPackage =
-    {
-      lib,
-      stdenv,
-      fetchurl,
-      autoPatchelfHook,
-      makeWrapper,
-      alsa-lib,
-      fontconfig,
-      libxkbcommon,
-      mesa,
-      openssl,
-      vulkan-loader,
-      wayland,
-      libGL,
-      xorg,
-      zlib,
+    { lib
+    , stdenv
+    , fetchurl
+    , autoPatchelfHook
+    , makeWrapper
+    , alsa-lib
+    , fontconfig
+    , libxkbcommon
+    , mesa
+    , openssl
+    , vulkan-loader
+    , wayland
+    , libGL
+    , xorg
+    , zlib
+    ,
     }:
     stdenv.mkDerivation {
       pname = "zed-editor";
@@ -27,7 +27,7 @@ let
 
       src = fetchurl {
         url = "https://github.com/zed-industries/zed/releases/download/v${version}/zed-linux-x86_64.tar.gz";
-        sha256 = "2372e13a23a0699c394078157279632026cffe727d347ba01e961b5ee18ff0e5";
+        sha256 = "sha256-cya+wQcj+4VveLuTYm/7pqhvR89qYQnAyGQNhLsk/4M=";
       };
 
       nativeBuildInputs = [
