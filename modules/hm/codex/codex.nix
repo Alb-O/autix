@@ -5,9 +5,9 @@ let
     {
       programs.codex = {
         enable = true;
-        settings = {
-          approval_policy = "never";
-        };
+        # settings = {
+        #   approval_policy = "never";
+        # };
       };
       home.packages = with pkgs; [
         # codex likes to run adhoc python scripts
@@ -17,11 +17,12 @@ let
 in
 {
   autix.aspects.codex = {
-    description = "Codex CLI tooling.";
+    description = "OpenAI's Codex CLI";
     home = {
       targets = [ "*" ];
       modules = [ hmModule ];
-      master = true;
+      # Build times are painful on master with no cache
+      # master = true;
     };
   };
 }

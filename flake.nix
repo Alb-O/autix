@@ -82,6 +82,14 @@
       };
       url = "github:natsukium/mcp-servers-nix";
     };
+    neovim-nightly-overlay = {
+      inputs = {
+        nixpkgs = {
+          follows = "nixpkgs";
+        };
+      };
+      url = "github:nix-community/neovim-nightly-overlay";
+    };
     nix-auto-follow = {
       inputs = {
         nixpkgs = {
@@ -121,7 +129,7 @@
           follows = "nixpkgs";
         };
       };
-      url = "github:Alb-O/opencode";
+      url = "github:Alb-O/opencode/nix-support";
     };
     sops-nix = {
       inputs = {

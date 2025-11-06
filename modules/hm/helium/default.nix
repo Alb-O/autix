@@ -15,13 +15,11 @@ in
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  autix.aspects.helium =
-    _:
-    {
-      description = "Helium Browser Flake";
-      home = {
-        targets = [ "albert-desktop" ];
-        modules = [ hmModule ];
-      };
+  autix.aspects.helium = _: {
+    description = "Helium Browser Flake";
+    home = {
+      targets = [ "albert-desktop" ];
+      modules = [ hmModule ];
     };
+  };
 }

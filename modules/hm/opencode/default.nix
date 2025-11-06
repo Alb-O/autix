@@ -36,7 +36,7 @@ in
 {
   flake-file = {
     inputs.opencode-flake = {
-      url = "github:Alb-O/opencode";
+      url = "github:Alb-O/opencode/nix-support";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

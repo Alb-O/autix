@@ -1,4 +1,4 @@
-{ lib, ... }:
+_:
 let
   packages =
     pkgs: with pkgs; [
