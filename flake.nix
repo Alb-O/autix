@@ -27,9 +27,7 @@
   };
 
   inputs = {
-    den.url = "github:vic/den";
     files.url = "github:mightyiam/files";
-    flake-aspects.url = "github:vic/flake-aspects";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
       inputs.nixpkgs-lib.follows = "nixpkgs-lib";
@@ -67,7 +65,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/NUR";
     };
-    opencode-flake.url = "github:sst/opencode";
+    opencode-flake = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:sst/opencode/v1.0.134";
+    };
     sops-nix = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:Mic92/sops-nix";

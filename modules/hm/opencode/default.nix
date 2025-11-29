@@ -36,12 +36,12 @@ in
 {
   flake-file = {
     inputs.opencode-flake = {
-      url = "github:sst/opencode";
-      #inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:sst/opencode/v1.0.134";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   autix.aspects.opencode = {
-    description = "My OpenCode Flake.";
+    description = " The AI coding agent built for the terminal.";
     home = {
       targets = [ "*" ];
       modules = [ hmModule ];

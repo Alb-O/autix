@@ -10,6 +10,7 @@ let
     ./formatter.nix
     ./mcp.nix
     ./agent.nix
+    ./plugin.nix
   ];
   load =
     path:
