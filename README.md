@@ -1,5 +1,7 @@
 # Autix
 
+⚠️ Moved to [impire](https://github.com/Alb-O/impire)!
+
 A modular NixOS and Home Manager configuration using the aspect system.
 
 ## Project Structure
